@@ -1,0 +1,1403 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Offline Learning | SmartLearn</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #081a3b, #24528A);
+            color: white;
+            padding: 18px 35px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #35B957;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+
+            background: rgba(255, 255, 255, 0.12);
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        /* MAIN CONTAINER */
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+
+            margin: 30px auto;
+        }
+
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: #667085;
+            margin-bottom: 25px;
+        }
+
+        /* OFFLINE STATUS */
+
+        .offline-status {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 20px 24px;
+
+            margin-bottom: 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-icon {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            background: #eaf8ee;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+        }
+
+        .status-title {
+            font-weight: bold;
+            font-size: 17px;
+
+            margin-bottom: 4px;
+        }
+
+        .status-text {
+            color: #737e91;
+            font-size: 13px;
+        }
+
+        .status-badge {
+            background: #35B957;
+            color: white;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* STATISTICS */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 14px;
+
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 28px;
+
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 27px;
+
+            font-weight: bold;
+
+            color: #24528A;
+
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #737e91;
+
+            font-size: 13px;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-box input {
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border: 1px solid #d8dee9;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #24528A;
+
+            box-shadow: 0 0 0 3px rgba(36, 82, 138, 0.1);
+        }
+
+        /* CONTENT GRID */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns: 2fr 1fr;
+
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .card h2 {
+            color: #173b70;
+
+            font-size: 21px;
+
+            margin-bottom: 18px;
+        }
+
+        /* COURSE */
+
+        .course {
+            border: 1px solid #e5e9f0;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            margin-bottom: 15px;
+
+            transition: 0.3s;
+        }
+
+        .course:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+
+            transform: translateY(-1px);
+        }
+
+        .course-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+        .course-title {
+            font-size: 17px;
+
+            font-weight: bold;
+
+            color: #172033;
+        }
+
+        .offline-tag {
+            background: #eaf8ee;
+
+            color: #248443;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+        }
+
+        .course-description {
+            color: #737e91;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            margin-bottom: 13px;
+        }
+
+        .progress-container {
+            background: #edf0f5;
+
+            height: 8px;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            background: #35B957;
+
+            border-radius: 10px;
+        }
+
+        .course-footer {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .progress-text {
+            font-size: 12px;
+
+            color: #737e91;
+        }
+
+        .continue-btn {
+            border: none;
+
+            background: #24528A;
+
+            color: white;
+
+            padding: 8px 14px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+        }
+
+        .continue-btn:hover {
+            background: #173b70;
+        }
+
+        /* SAVED CONTENT */
+
+        .saved-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 13px 0;
+
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .saved-item:last-child {
+            border-bottom: none;
+        }
+
+        .saved-icon {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 9px;
+
+            background: #eef3fa;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 19px;
+        }
+
+        .saved-info {
+            flex: 1;
+        }
+
+        .saved-title {
+            font-weight: bold;
+
+            font-size: 14px;
+
+            margin-bottom: 3px;
+        }
+
+        .saved-type {
+            color: #8a94a6;
+
+            font-size: 12px;
+        }
+
+        .open-btn {
+            border: none;
+
+            background: #eef3fa;
+
+            color: #24528A;
+
+            padding: 7px 11px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+        }
+
+        .open-btn:hover {
+            background: #24528A;
+
+            color: white;
+        }
+
+        /* STORAGE */
+
+        .storage-box {
+            margin-top: 5px;
+        }
+
+        .storage-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+        }
+
+        .storage-bar {
+            height: 10px;
+
+            background: #edf0f5;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .storage-used {
+            width: 45%;
+
+            height: 100%;
+
+            background: #35B957;
+
+            border-radius: 10px;
+        }
+
+        .storage-info {
+            color: #737e91;
+
+            font-size: 12px;
+
+            margin-top: 8px;
+        }
+
+        /* SYNC */
+
+        .sync-btn {
+            width: 100%;
+
+            border: none;
+
+            background: #35B957;
+
+            color: white;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            margin-top: 15px;
+
+            transition: 0.3s;
+        }
+
+        .sync-btn:hover {
+            background: #2d9f4b;
+
+            transform: translateY(-1px);
+        }
+
+        /* DOWNLOAD */
+
+        .download-btn {
+            border: none;
+
+            background: #24528A;
+
+            color: white;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            margin-top: 5px;
+        }
+
+        .download-btn:hover {
+            background: #173b70;
+        }
+
+        /* EMPTY */
+
+        .empty-message {
+            text-align: center;
+
+            color: #8a94a6;
+
+            padding: 25px;
+
+            display: none;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .offline-status {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="logo">
+        Smart<span>Learn</span> Offline
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="back-btn">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+    <h1 class="page-title">
+        📥 Offline Learning
+    </h1>
+
+    <p class="page-description">
+        Continue learning your courses, videos, notes and quizzes even without an internet connection.
+    </p>
+
+
+    <!-- OFFLINE STATUS -->
+
+    <div class="offline-status">
+
+        <div class="status-left">
+
+            <div class="status-icon">
+                📡
+            </div>
+
+            <div>
+
+                <div class="status-title">
+                    Offline Mode
+                </div>
+
+                <div class="status-text" id="connectionText">
+                    Your downloaded learning content is available offline.
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="status-badge" id="statusBadge">
+            Offline Ready
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📚
+            </div>
+
+            <div class="stat-number" id="courseCount">
+                4
+            </div>
+
+            <div class="stat-label">
+                Offline Courses
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🎥
+            </div>
+
+            <div class="stat-number">
+                12
+            </div>
+
+            <div class="stat-label">
+                Saved Videos
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📝
+            </div>
+
+            <div class="stat-number">
+                8
+            </div>
+
+            <div class="stat-label">
+                Saved Notes
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🧠
+            </div>
+
+            <div class="stat-number">
+                6
+            </div>
+
+            <div class="stat-label">
+                Offline Quizzes
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 Search your offline learning content..."
+            onkeyup="searchContent()"
+        >
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="content-grid">
+
+        <!-- LEFT -->
+
+        <section>
+
+            <!-- COURSES -->
+
+            <div class="card">
+
+                <h2>
+                    📚 Downloaded Courses
+                </h2>
+
+
+                <div id="courseList">
+
+                    <div class="course">
+
+                        <div class="course-header">
+
+                            <div class="course-title">
+                                Python Programming
+                            </div>
+
+                            <span class="offline-tag">
+                                Available Offline
+                            </span>
+
+                        </div>
+
+                        <div class="course-description">
+                            Learn Python programming from basics to advanced concepts.
+                        </div>
+
+                        <div class="progress-container">
+
+                            <div
+                                class="progress-bar"
+                                style="width: 75%;">
+                            </div>
+
+                        </div>
+
+                        <div class="course-footer">
+
+                            <span class="progress-text">
+                                75% completed
+                            </span>
+
+                            <button
+                                class="continue-btn"
+                                onclick="continueCourse('Python Programming')">
+                                Continue
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="course">
+
+                        <div class="course-header">
+
+                            <div class="course-title">
+                                Django Web Development
+                            </div>
+
+                            <span class="offline-tag">
+                                Available Offline
+                            </span>
+
+                        </div>
+
+                        <div class="course-description">
+                            Build powerful web applications using Django and Python.
+                        </div>
+
+                        <div class="progress-container">
+
+                            <div
+                                class="progress-bar"
+                                style="width: 60%;">
+                            </div>
+
+                        </div>
+
+                        <div class="course-footer">
+
+                            <span class="progress-text">
+                                60% completed
+                            </span>
+
+                            <button
+                                class="continue-btn"
+                                onclick="continueCourse('Django Web Development')">
+                                Continue
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="course">
+
+                        <div class="course-header">
+
+                            <div class="course-title">
+                                Artificial Intelligence
+                            </div>
+
+                            <span class="offline-tag">
+                                Available Offline
+                            </span>
+
+                        </div>
+
+                        <div class="course-description">
+                            Explore artificial intelligence and machine learning concepts.
+                        </div>
+
+                        <div class="progress-container">
+
+                            <div
+                                class="progress-bar"
+                                style="width: 40%;">
+                            </div>
+
+                        </div>
+
+                        <div class="course-footer">
+
+                            <span class="progress-text">
+                                40% completed
+                            </span>
+
+                            <button
+                                class="continue-btn"
+                                onclick="continueCourse('Artificial Intelligence')">
+                                Continue
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="course">
+
+                        <div class="course-header">
+
+                            <div class="course-title">
+                                Web Development
+                            </div>
+
+                            <span class="offline-tag">
+                                Available Offline
+                            </span>
+
+                        </div>
+
+                        <div class="course-description">
+                            Learn HTML, CSS, JavaScript and modern web development.
+                        </div>
+
+                        <div class="progress-container">
+
+                            <div
+                                class="progress-bar"
+                                style="width: 85%;">
+                            </div>
+
+                        </div>
+
+                        <div class="course-footer">
+
+                            <span class="progress-text">
+                                85% completed
+                            </span>
+
+                            <button
+                                class="continue-btn"
+                                onclick="continueCourse('Web Development')">
+                                Continue
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="courseEmpty" class="empty-message">
+                    No matching offline course found.
+                </div>
+
+            </div>
+
+
+            <!-- SAVED CONTENT -->
+
+            <div class="card">
+
+                <h2>
+                    💾 Saved Learning Content
+                </h2>
+
+
+                <div id="savedContent">
+
+                    <div class="saved-item">
+
+                        <div class="saved-icon">
+                            🎥
+                        </div>
+
+                        <div class="saved-info">
+
+                            <div class="saved-title">
+                                Python Lesson 1
+                            </div>
+
+                            <div class="saved-type">
+                                Video • 18 minutes
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="open-btn"
+                            onclick="openContent('Python Lesson 1')">
+                            Open
+                        </button>
+
+                    </div>
+
+
+                    <div class="saved-item">
+
+                        <div class="saved-icon">
+                            📝
+                        </div>
+
+                        <div class="saved-info">
+
+                            <div class="saved-title">
+                                Python Variables Notes
+                            </div>
+
+                            <div class="saved-type">
+                                Notes
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="open-btn"
+                            onclick="openContent('Python Variables Notes')">
+                            Open
+                        </button>
+
+                    </div>
+
+
+                    <div class="saved-item">
+
+                        <div class="saved-icon">
+                            🧠
+                        </div>
+
+                        <div class="saved-info">
+
+                            <div class="saved-title">
+                                Python Basics Quiz
+                            </div>
+
+                            <div class="saved-type">
+                                Quiz • 10 Questions
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="open-btn"
+                            onclick="openContent('Python Basics Quiz')">
+                            Open
+                        </button>
+
+                    </div>
+
+
+                    <div class="saved-item">
+
+                        <div class="saved-icon">
+                            📄
+                        </div>
+
+                        <div class="saved-info">
+
+                            <div class="saved-title">
+                                Django Study Material
+                            </div>
+
+                            <div class="saved-type">
+                                PDF • 24 pages
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="open-btn"
+                            onclick="openContent('Django Study Material')">
+                            Open
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT -->
+
+        <aside>
+
+            <!-- STORAGE -->
+
+            <div class="card">
+
+                <h2>
+                    💾 Offline Storage
+                </h2>
+
+                <div class="storage-box">
+
+                    <div class="storage-header">
+
+                        <span>
+                            Storage Used
+                        </span>
+
+                        <strong>
+                            4.5 GB / 10 GB
+                        </strong>
+
+                    </div>
+
+                    <div class="storage-bar">
+
+                        <div class="storage-used"></div>
+
+                    </div>
+
+                    <div class="storage-info">
+                        5.5 GB storage remaining.
+                    </div>
+
+                </div>
+
+                <button
+                    class="sync-btn"
+                    onclick="syncProgress()">
+                    🔄 Sync Progress
+                </button>
+
+            </div>
+
+
+            <!-- DOWNLOAD -->
+
+            <div class="card">
+
+                <h2>
+                    📥 Download Content
+                </h2>
+
+                <p style="color:#737e91; font-size:14px; line-height:1.6; margin-bottom:15px;">
+                    Download your learning materials before going offline.
+                </p>
+
+                <button
+                    class="download-btn"
+                    onclick="downloadContent()">
+                    ⬇ Download for Offline
+                </button>
+
+            </div>
+
+
+            <!-- OFFLINE FEATURES -->
+
+            <div class="card">
+
+                <h2>
+                    ⚡ Offline Features
+                </h2>
+
+                <div class="saved-item">
+
+                    <div class="saved-icon">
+                        🎥
+                    </div>
+
+                    <div class="saved-info">
+
+                        <div class="saved-title">
+                            Watch Videos
+                        </div>
+
+                        <div class="saved-type">
+                            Without internet
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="saved-item">
+
+                    <div class="saved-icon">
+                        📝
+                    </div>
+
+                    <div class="saved-info">
+
+                        <div class="saved-title">
+                            Read Notes
+                        </div>
+
+                        <div class="saved-type">
+                            Saved locally
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="saved-item">
+
+                    <div class="saved-icon">
+                        🧠
+                    </div>
+
+                    <div class="saved-info">
+
+                        <div class="saved-title">
+                            Take Quizzes
+                        </div>
+
+                        <div class="saved-type">
+                            Progress saved
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="saved-item">
+
+                    <div class="saved-icon">
+                        📊
+                    </div>
+
+                    <div class="saved-info">
+
+                        <div class="saved-title">
+                            Track Progress
+                        </div>
+
+                        <div class="saved-type">
+                            Sync later
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    /* CHECK INTERNET CONNECTION */
+
+    function updateConnectionStatus() {
+
+        const badge = document.getElementById("statusBadge");
+
+        const text = document.getElementById("connectionText");
+
+        if (navigator.onLine) {
+
+            badge.textContent = "Online";
+
+            badge.style.background = "#35B957";
+
+            text.textContent =
+                "Internet connection is available. Your offline progress can be synchronized.";
+
+        } else {
+
+            badge.textContent = "Offline";
+
+            badge.style.background = "#24528A";
+
+            text.textContent =
+                "You are offline. Your downloaded learning content is still available.";
+
+        }
+    }
+
+
+    window.addEventListener("online", updateConnectionStatus);
+
+    window.addEventListener("offline", updateConnectionStatus);
+
+    updateConnectionStatus();
+
+
+    /* CONTINUE COURSE */
+
+    function continueCourse(courseName) {
+
+        alert(
+            "Opening " +
+            courseName +
+            " in Offline Mode."
+        );
+
+    }
+
+
+    /* OPEN SAVED CONTENT */
+
+    function openContent(contentName) {
+
+        alert(
+            contentName +
+            " is available for offline learning."
+        );
+
+    }
+
+
+    /* SYNC */
+
+    function syncProgress() {
+
+        if (!navigator.onLine) {
+
+            alert(
+                "You are currently offline. Connect to the internet to sync your progress."
+            );
+
+            return;
+        }
+
+        alert(
+            "Your offline learning progress has been synchronized successfully!"
+        );
+
+    }
+
+
+    /* DOWNLOAD */
+
+    function downloadContent() {
+
+        alert(
+            "Your selected learning content is being prepared for offline use."
+        );
+
+    }
+
+
+    /* SEARCH */
+
+    function searchContent() {
+
+        const searchValue =
+            document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const courses =
+            document.querySelectorAll(".course");
+
+        let found = false;
+
+
+        courses.forEach(function(course) {
+
+            const text =
+                course.textContent.toLowerCase();
+
+            if (text.includes(searchValue)) {
+
+                course.style.display = "block";
+
+                found = true;
+
+            } else {
+
+                course.style.display = "none";
+
+            }
+
+        });
+
+
+        const emptyMessage =
+            document.getElementById("courseEmpty");
+
+
+        if (!found && searchValue !== "") {
+
+            emptyMessage.style.display = "block";
+
+        } else {
+
+            emptyMessage.style.display = "none";
+
+        }
+
+    }
+
+
+    /* SAVE OFFLINE PREFERENCE */
+
+    localStorage.setItem(
+        "smartlearnOfflineEnabled",
+        "true"
+    );
+
+</script>
+
+</body>
+</html>

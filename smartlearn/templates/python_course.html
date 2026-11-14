@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Python Programming | SmartLearn</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #24528A, #35B957);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            margin: 0 0 12px;
+            font-size: 36px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: rgba(255,255,255,0.18);
+            padding: 12px 18px;
+            border-radius: 10px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .card h2 {
+            color: #24528A;
+            margin-top: 0;
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #35B957;
+        }
+
+        .module {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .module-title {
+            background: #f8fafc;
+            padding: 18px;
+            font-weight: bold;
+            color: #24528A;
+            font-size: 18px;
+        }
+
+        .lessons {
+            padding: 12px 20px;
+        }
+
+        .lesson {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .lesson:last-child {
+            border-bottom: none;
+        }
+
+        .lesson a {
+            color: #24528A;
+            text-decoration: none;
+        }
+
+        .lesson a:hover {
+            color: #35B957;
+        }
+
+        .locked {
+            color: #888;
+        }
+
+        .ai-box {
+            background: #eef7ff;
+            border-left: 5px solid #24528A;
+        }
+
+        .buttons {
+            margin-top: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #24528A;
+            color: white;
+        }
+
+        .secondary {
+            background: #e8f5ec;
+            color: #24528A;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- COURSE HEADER -->
+    <div class="hero">
+
+        <h1>🐍 Python Programming</h1>
+
+        <p>
+            Learn Python from the basics and build your programming
+            skills step by step with SmartLearn.
+        </p>
+
+        <div class="stats">
+
+            <div class="stat">
+                ⭐ Beginner
+            </div>
+
+            <div class="stat">
+                ⏱ 20+ Hours
+            </div>
+
+            <div class="stat">
+                📚 10 Modules
+            </div>
+
+            <div class="stat">
+                🏆 Certificate
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+    <div class="card">
+
+        <h2>📊 Course Progress</h2>
+
+        <p>
+            <strong>0%</strong> Complete
+        </p>
+
+        <div class="progress-bg">
+            <div class="progress-bar"></div>
+        </div>
+
+    </div>
+
+
+    <!-- COURSE CONTENT -->
+    <div class="card">
+
+        <h2>📚 Course Content</h2>
+
+
+        <!-- MODULE 1 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 1 — Python Fundamentals
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson">
+                    🎥
+                    <a href="{% url 'lesson1' %}">
+                        Lesson 1: What is Python?
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    ▶️ Lesson 2: Installing Python & VS Code
+                </div>
+
+                <div class="lesson">
+                    ▶️ Lesson 3: Your First Python Program
+                </div>
+
+                <div class="lesson">
+                    ▶️ Lesson 4: Python Syntax & Indentation
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 2 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 2 — Variables & Data Types
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 Variables</div>
+                <div class="lesson locked">🔒 Numbers</div>
+                <div class="lesson locked">🔒 Strings</div>
+                <div class="lesson locked">🔒 Boolean Values</div>
+                <div class="lesson locked">🔒 Type Conversion</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 3 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 3 — Operators
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 Arithmetic Operators</div>
+                <div class="lesson locked">🔒 Comparison Operators</div>
+                <div class="lesson locked">🔒 Logical Operators</div>
+                <div class="lesson locked">🔒 Assignment Operators</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 4 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 4 — Decision Making
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 if Statement</div>
+                <div class="lesson locked">🔒 if-else</div>
+                <div class="lesson locked">🔒 elif</div>
+                <div class="lesson locked">🔒 Nested Conditions</div>
+
+            </div>
+
+        </div>
+
+        
+        <!-- MODULE 5 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 5 — Loops
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 for Loop</div>
+                <div class="lesson locked">🔒 while Loop</div>
+                <div class="lesson locked">🔒 range()</div>
+                <div class="lesson locked">🔒 break & continue</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 6 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 6 — Data Collections
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 Lists</div>
+                <div class="lesson locked">🔒 Tuples</div>
+                <div class="lesson locked">🔒 Sets</div>
+                <div class="lesson locked">🔒 Dictionaries</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 7 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 7 — Functions
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 Creating Functions</div>
+                <div class="lesson locked">🔒 Parameters & Arguments</div>
+                <div class="lesson locked">🔒 Return Values</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 8 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 8 — Working with Files
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 Opening Files</div>
+                <div class="lesson locked">🔒 Reading Files</div>
+                <div class="lesson locked">🔒 Writing Files</div>
+                <div class="lesson locked">🔒 Updating File Content</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 9 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 9 — Error Handling
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">🔒 What are Errors?</div>
+                <div class="lesson locked">🔒 try</div>
+                <div class="lesson locked">🔒 except</div>
+                <div class="lesson locked">🔒 finally</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULE 10 -->
+        <div class="module">
+
+            <div class="module-title">
+                Module 10 — Mini Project 🚀
+            </div>
+
+            <div class="lessons">
+
+                <div class="lesson locked">
+                    🔒 Student Record Management System
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI SECTION -->
+    <div class="card ai-box">
+
+        <h2>🤖 SmartLearn AI</h2>
+
+        <p>
+            Need help understanding this course?
+            SmartLearn AI will help explain difficult topics,
+            provide examples and guide your learning.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#" class="btn primary">
+                Ask AI 🤖
+            </a>
+
+            <a href="{% url 'dashboard' %}" class="btn secondary">
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

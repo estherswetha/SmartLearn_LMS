@@ -1,0 +1,680 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+.question-page {
+    max-width: 950px;
+    margin: 35px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+}
+
+.question-header {
+    background: #202020;
+    color: white;
+    padding: 22px 28px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.question-header h2 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.question-header p {
+    margin-bottom: 0;
+    color: #d1d5db;
+}
+
+.question-page label {
+    display: block;
+    font-weight: 600;
+    margin: 17px 0 8px;
+    color: #172554;
+}
+
+.question-page input,
+.question-page select,
+.question-page textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d4dbea;
+    border-radius: 7px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.question-page textarea {
+    resize: vertical;
+}
+
+.question-page input:focus,
+.question-page select:focus,
+.question-page textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.help-text {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 6px;
+    white-space: pre-line;
+}
+
+.field-error,
+.errorlist {
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.errorlist {
+    list-style: none;
+    padding: 0;
+}
+
+.template-info {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 18px 0;
+    color: #1e3a8a;
+    line-height: 1.6;
+}
+
+.question-preview {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 25px;
+}
+
+.question-preview h3 {
+    margin-top: 0;
+    color: #172554;
+}
+
+.preview-question {
+    font-size: 16px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.preview-option {
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 10px 13px;
+    border-radius: 6px;
+    margin: 8px 0;
+}
+
+.question-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.btn-save {
+    background: #2029d8;
+    color: white;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn-save:hover {
+    background: #1720b5;
+}
+
+.btn-cancel {
+    background: #777;
+    color: white;
+    padding: 13px 25px;
+    border-radius: 7px;
+    text-decoration: none;
+}
+
+.btn-cancel:hover {
+    background: #555;
+}
+
+.messages {
+    padding: 12px;
+    background: #eaf8ef;
+    color: #16753b;
+    border-radius: 7px;
+}
+
+@media(max-width:600px) {
+    .question-page {
+        padding: 18px;
+        margin: 15px;
+    }
+
+    .question-header {
+        padding: 18px;
+    }
+
+    .question-actions {
+        flex-direction: column;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        text-align: center;
+        width: 100%;
+    }
+}
+</style>
+
+
+<div class="question-page">
+
+    <!-- HEADER -->
+
+    <div class="question-header">
+
+        <h2>Question Builder</h2>
+
+        <p>
+            Assessment: <strong>{{ assessment.title }}</strong>
+        </p>
+
+    </div>
+
+
+    <!-- DJANGO MESSAGES -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <p class="messages">
+                {{ message }}
+            </p>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- QUESTION FORM -->
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <!-- QUESTION TYPE -->
+
+        <label for="id_question_type">
+            Question Type
+        </label>
+
+        {{ form.question_type }}
+
+        {{ form.question_type.errors }}
+
+
+        <!-- QUESTION TEXT -->
+
+        <label for="id_question_text">
+            Enter Your Question
+        </label>
+
+        {{ form.question_text }}
+
+        {{ form.question_text.errors }}
+
+
+        <!-- DYNAMIC INSTRUCTIONS -->
+
+        <div class="template-info" id="question-help">
+
+            Choose a question type to see its instructions.
+
+        </div>
+
+
+        <!-- OPTIONS SECTION -->
+
+        <div id="options-section">
+
+            <label id="options-label">
+                Options / Matching Pairs
+            </label>
+
+            {{ form.options_text }}
+
+            <div class="help-text" id="options-help">
+
+                Enter one option per line.
+
+            </div>
+
+            {{ form.options_text.errors }}
+
+        </div>
+
+
+        <!-- CORRECT ANSWER -->
+
+        <div id="answer-section">
+
+            <label id="answer-label">
+                Correct Answer / Evaluation Guidance
+            </label>
+
+            {{ form.correct_answer }}
+
+            {{ form.correct_answer.errors }}
+
+        </div>
+
+
+        <!-- MARKS -->
+
+        <label for="id_marks">
+            Marks
+        </label>
+
+        {{ form.marks }}
+
+        {{ form.marks.errors }}
+
+
+        <!-- NON FIELD ERRORS -->
+
+        {% if form.non_field_errors %}
+
+            <div class="field-error">
+
+                {{ form.non_field_errors }}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- QUESTION PREVIEW -->
+
+        <div class="question-preview">
+
+            <h3>Question Preview</h3>
+
+            <p class="preview-question" id="preview-question">
+
+                Your question will appear here.
+
+            </p>
+
+            <div id="preview-options"></div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="question-actions">
+
+            <button
+                type="submit"
+                class="btn-save">
+
+                Save Question
+
+            </button>
+
+
+            <a
+                href="{% url 'assessments:detail' assessment.pk %}"
+                class="btn-cancel">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- DYNAMIC QUESTION SCRIPT -->
+
+<script>
+
+const questionType =
+    document.getElementById("id_question_type");
+
+const questionInput =
+    document.getElementById("id_question_text");
+
+const optionsInput =
+    document.getElementById("id_options_text");
+
+const answerInput =
+    document.getElementById("id_correct_answer");
+
+
+const optionsSection =
+    document.getElementById("options-section");
+
+const answerSection =
+    document.getElementById("answer-section");
+
+
+const optionsLabel =
+    document.getElementById("options-label");
+
+const optionsHelp =
+    document.getElementById("options-help");
+
+const answerLabel =
+    document.getElementById("answer-label");
+
+const questionHelp =
+    document.getElementById("question-help");
+
+
+const previewQuestion =
+    document.getElementById("preview-question");
+
+const previewOptions =
+    document.getElementById("preview-options");
+
+
+// ==========================================
+// QUESTION TYPE TEMPLATES
+// ==========================================
+
+const questionTemplates = {
+
+    mcq: {
+
+        question:
+            "Multiple Choice: Enter your question and provide at least two options. Students select one correct answer.",
+
+        options:
+            "Enter one option per line.\nExample:\nPython\nJava\nC++\nJavaScript",
+
+        answer:
+            "Enter the exact correct option.",
+
+        showOptions: true,
+        showAnswer: true
+
+    },
+
+
+    true_false: {
+
+        question:
+            "True / False: Create a statement that students must identify as True or False.",
+
+        options: "",
+
+        answer:
+            "Enter either True or False.",
+
+        showOptions: false,
+        showAnswer: true
+
+    },
+
+
+    short: {
+
+        question:
+            "Short Answer: Students enter a short text response.",
+
+        options: "",
+
+        answer:
+            "Enter the expected answer.",
+
+        showOptions: false,
+        showAnswer: true
+
+    },
+
+
+    long: {
+
+        question:
+            "Descriptive: Students write a detailed explanation. Evaluation guidance is only for the teacher.",
+
+        options: "",
+
+        answer:
+            "Enter teacher-only evaluation guidance or important key points.",
+
+        showOptions: false,
+        showAnswer: true
+
+    },
+
+
+    coding: {
+
+        question:
+            "Coding Challenge: Ask students to write a program. You can provide expected output or evaluation guidance.",
+
+        options: "",
+
+        answer:
+            "Enter the expected solution or teacher-only evaluation guidance.",
+
+        showOptions: false,
+        showAnswer: true
+
+    },
+
+
+    fill: {
+
+        question:
+            "Fill in the Blanks: Use underscores in your question to indicate the missing word.",
+
+        options: "",
+
+        answer:
+            "Enter the missing word or expected answer.",
+
+        showOptions: false,
+        showAnswer: true
+
+    },
+
+
+    matching: {
+
+        question:
+            "Match the Following: Enter matching pairs using the Left = Right format.",
+
+        options:
+            "Example:\nHTML = Structure\nCSS = Styling\nPython = Programming",
+
+        answer: "",
+
+        showOptions: true,
+        showAnswer: false
+
+    }
+
+};
+
+
+// ==========================================
+// UPDATE QUESTION TEMPLATE
+// ==========================================
+
+function updateQuestionTemplate() {
+
+    const type = questionType.value;
+
+    const selected = questionTemplates[type];
+
+    if (!selected) {
+        return;
+    }
+
+
+    optionsSection.style.display =
+        selected.showOptions ? "block" : "none";
+
+    answerSection.style.display =
+        selected.showAnswer ? "block" : "none";
+
+
+    optionsLabel.textContent =
+        type === "matching"
+        ? "Matching Pairs"
+        : "Answer Options";
+
+
+    answerLabel.textContent = {
+
+        mcq: "Correct Answer",
+
+        true_false: "Correct Answer",
+
+        short: "Expected Answer",
+
+        long: "Teacher Evaluation Guidance",
+
+        coding: "Expected Solution / Evaluation Guidance",
+
+        fill: "Expected Missing Word",
+
+        matching: "Correct Matching Pairs"
+
+    }[type];
+
+
+    questionHelp.textContent =
+        selected.question;
+
+    optionsHelp.textContent =
+        selected.options;
+
+
+    updatePreview();
+
+}
+
+
+// ==========================================
+// QUESTION PREVIEW
+// ==========================================
+
+function updatePreview() {
+
+    previewQuestion.textContent =
+        questionInput.value ||
+        "Your question will appear here.";
+
+
+    previewOptions.innerHTML = "";
+
+    let options = [];
+
+
+    const type = questionType.value;
+
+
+    if (type === "mcq") {
+
+        options = optionsInput.value.split("\n");
+
+    }
+
+
+    else if (type === "true_false") {
+
+        options = ["True", "False"];
+
+    }
+
+
+    else if (type === "matching") {
+
+        options = optionsInput.value.split("\n");
+
+    }
+
+
+    options.forEach(function(option) {
+
+        option = option.trim();
+
+        if (option) {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "preview-option";
+
+            div.textContent =
+                type === "matching"
+                ? option
+                : "○ " + option;
+
+            previewOptions.appendChild(div);
+
+        }
+
+    });
+
+}
+
+
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
+
+questionType.addEventListener(
+    "change",
+    updateQuestionTemplate
+);
+
+
+questionInput.addEventListener(
+    "input",
+    updatePreview
+);
+
+
+optionsInput.addEventListener(
+    "input",
+    updatePreview
+);
+
+
+// ==========================================
+// INITIALIZE PAGE
+// ==========================================
+
+updateQuestionTemplate();
+
+</script>
+
+{% endblock %}

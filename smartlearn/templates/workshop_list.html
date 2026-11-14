@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLearn Workshops</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 24px 7%;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dbeafe;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            margin-bottom: 25px;
+        }
+
+        .workshop-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .workshop-card {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px #0000000d;
+        }
+
+        .workshop-card h2 {
+            margin-top: 0;
+            color: #1d4ed8;
+        }
+
+        .description {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 11px 16px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .empty {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🎓 SmartLearn Workshops</h1>
+        <p>Learn new skills, explore ideas, and grow your knowledge.</p>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>Explore Workshops</h2>
+            <p>Discover upcoming workshops and register to participate.</p>
+            <a class="button" href="{% url 'create_workshop' %}">
+                + Create Workshop
+            </a>
+        </section>
+
+        {% if workshops %}
+            <section class="workshop-list">
+                {% for workshop in workshops %}
+                    <article class="workshop-card">
+                        <h2>{{ workshop.title }}</h2>
+
+                        <p class="description">
+                            {{ workshop.description|default:"Learn and practice new skills in this workshop."|truncatewords:25 }}
+                        </p>
+
+                        {% if workshop.start_date %}
+                            <p><strong>Date:</strong> {{ workshop.start_date }}</p>
+                        {% endif %}
+
+                        {% if workshop.start_time %}
+                            <p><strong>Time:</strong> {{ workshop.start_time }}</p>
+                        {% endif %}
+
+                        {% if workshop.instructor %}
+                            <p><strong>Instructor:</strong> {{ workshop.instructor }}</p>
+                        {% endif %}
+
+                        <a class="button"
+                           href="{% url 'workshop_detail' workshop.pk %}">
+                            View Workshop
+                        </a>
+                    </article>
+                {% endfor %}
+            </section>
+        {% else %}
+            <div class="empty">
+                <h3>No workshops available yet</h3>
+                <p>Create your first workshop to get started.</p>
+            </div>
+        {% endif %}
+    </main>
+
+    <footer>
+        © SmartLearn LMS — Learn something new every day.
+    </footer>
+</body>
+</html>

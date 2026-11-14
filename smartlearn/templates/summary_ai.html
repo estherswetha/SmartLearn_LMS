@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Summary AI | SmartLearn</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #081a3b,
+                #24528A
+            );
+
+            color: white;
+
+            padding: 35px;
+
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .header p {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #24528A;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 230px;
+            resize: vertical;
+
+            border: 2px solid #d8dfeb;
+            border-radius: 12px;
+
+            padding: 15px;
+
+            font-size: 15px;
+            line-height: 1.6;
+
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #24528A;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        select {
+            padding: 12px 15px;
+            border: 1px solid #ccd4e0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #24528A;
+            color: white;
+        }
+
+        .green {
+            background: #35B957;
+            color: white;
+        }
+
+        .dark {
+            background: #102a5b;
+            color: white;
+        }
+
+        .light {
+            background: #eef3f9;
+            color: #24528A;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .result {
+            background: #f7faff;
+            border-left: 5px solid #24528A;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            white-space: pre-wrap;
+
+            line-height: 1.7;
+
+            min-height: 120px;
+        }
+
+        .concepts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .concept {
+            background: #e9f2ff;
+            color: #24528A;
+
+            padding: 10px 15px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+        }
+
+        .question-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .question-box input {
+            flex: 1;
+
+            padding: 14px;
+
+            border: 2px solid #d8dfeb;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        .question-box input:focus {
+            border-color: #24528A;
+        }
+
+        .feature-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 15px;
+        }
+
+        .feature {
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background: #f5f8fc;
+
+            border: 1px solid #e2e8f0;
+        }
+
+        .feature strong {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #24528A;
+        }
+
+        .status {
+            margin-top: 12px;
+
+            font-weight: bold;
+
+            color: #24528A;
+        }
+
+        .back {
+            display: inline-block;
+
+            text-decoration: none;
+
+            background: #102a5b;
+
+            color: white;
+
+            padding: 12px 18px;
+
+            border-radius: 10px;
+
+            margin-bottom: 25px;
+        }
+
+        .voice-status {
+            margin-top: 10px;
+            color: #35B957;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+
+            .question-box {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>🧠 Summary AI</h1>
+
+    <p>
+        Your Personal AI Study Understanding Assistant
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <a href="{% url 'dashboard' %}"
+       class="back">
+
+        ← Back to Dashboard
+
+    </a>
+
+
+    <!-- STUDY MATERIAL -->
+
+    <div class="card">
+
+        <h2>
+            📚 Study Material
+        </h2>
+
+        <textarea
+            id="material"
+            placeholder="Paste your lesson, notes, textbook content, article, programming material or study material here..."></textarea>
+
+
+        <div class="controls">
+
+            <select id="level">
+
+                <option value="Beginner">
+                    🌱 Beginner
+                </option>
+
+                <option value="Intermediate">
+                    📘 Intermediate
+                </option>
+
+                <option value="Advanced">
+                    🎓 Advanced
+                </option>
+
+            </select>
+
+
+            <select id="language">
+
+                <option value="English">
+                    🇬🇧 English
+                </option>
+
+                <option value="Tamil">
+                    🇮🇳 Tamil
+                </option>
+
+                <option value="Hindi">
+                    🇮🇳 Hindi
+                </option>
+
+                <option value="Telugu">
+                    🇮🇳 Telugu
+                </option>
+
+                <option value="Malayalam">
+                    🇮🇳 Malayalam
+                </option>
+
+                <option value="Kannada">
+                    🇮🇳 Kannada
+                </option>
+
+                <option value="French">
+                    🇫🇷 French
+                </option>
+
+                <option value="German">
+                    🇩🇪 German
+                </option>
+
+                <option value="Spanish">
+                    🇪🇸 Spanish
+                </option>
+
+                <option value="Japanese">
+                    🇯🇵 Japanese
+                </option>
+
+            </select>
+
+
+            <button
+                class="primary"
+                onclick="analyzeMaterial()">
+
+                🧠 Analyze Material
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="status"
+            class="status">
+        </div>
+
+    </div>
+
+
+
+    <!-- SMART SUMMARY -->
+
+    <div class="card">
+
+        <h2>
+            📝 Smart Summary
+        </h2>
+
+        <div
+            id="summaryResult"
+            class="result">
+
+            Your AI summary will appear here.
+
+        </div>
+
+    </div>
+
+
+
+    <!-- KEY CONCEPTS -->
+
+    <div class="card">
+
+        <h2>
+            🎯 Key Concepts
+        </h2>
+
+        <div
+            id="conceptResult"
+            class="result">
+
+            Important concepts will appear here.
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ASK DOUBT -->
+
+    <div class="card">
+
+        <h2>
+            ❓ Ask a Doubt
+        </h2>
+
+        <p>
+            Ask anything about the study material.
+        </p>
+
+
+        <div class="question-box">
+
+            <input
+                id="question"
+                type="text"
+                placeholder="Example: Why does this happen? How does this work?">
+
+
+            <button
+                class="primary"
+                onclick="askDoubt()">
+
+                🤖 Ask AI
+
+            </button>
+
+
+            <button
+                class="green"
+                onclick="startVoice()">
+
+                🎤 Voice Doubt
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="voiceStatus"
+            class="voice-status">
+        </div>
+
+    </div>
+
+
+
+    <!-- AI EXPLANATION -->
+
+    <div class="card">
+
+        <h2>
+            💡 AI Explanation
+        </h2>
+
+        <div
+            id="answerResult"
+            class="result">
+
+            Your AI explanation will appear here.
+
+        </div>
+
+
+        <div class="controls">
+
+            <button
+                class="light"
+                onclick="simplifyAgain()">
+
+                🔄 Simplify Again
+
+            </button>
+
+
+            <button
+                class="light"
+                onclick="explainStepByStep()">
+
+                🪜 Step-by-Step
+
+            </button>
+
+
+            <button
+                class="light"
+                onclick="practiceMe()">
+
+                🧪 Practice Me
+
+            </button>
+
+
+            <button
+                class="light"
+                onclick="examMode()">
+
+                📌 Important for Exam
+
+            </button>
+
+
+            <button
+                class="light"
+                onclick="connectConcepts()">
+
+                🔗 Connect Concepts
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- FEATURES -->
+
+    <div class="card">
+
+        <h2>
+            🚀 Summary AI Features
+        </h2>
+
+
+        <div class="feature-grid">
+
+
+            <div class="feature">
+
+                <strong>
+                    🧠 Smart Summary
+                </strong>
+
+                Creates a short summary from the lesson.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🎯 Key Concepts
+                </strong>
+
+                Finds the most important concepts.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    💡 Beginner Explanation
+                </strong>
+
+                Explains difficult concepts simply.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    ❓ Ask a Doubt
+                </strong>
+
+                Ask questions about the material.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🔍 Why / How
+                </strong>
+
+                Ask why something happens or how it works.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🪜 Step-by-Step
+                </strong>
+
+                Breaks difficult topics into small steps.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🌍 Language Explain
+                </strong>
+
+                Explains concepts in different languages.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    📌 Exam Revision
+                </strong>
+
+                Finds useful revision concepts.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🧩 Real-Life Example
+                </strong>
+
+                Connects concepts with everyday examples.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🔗 Connect Concepts
+                </strong>
+
+                Shows relationships between concepts.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🧪 Practice Me
+                </strong>
+
+                Generates practice questions.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🔄 Simplify Again
+                </strong>
+
+                Explains again in easier language.
+
+            </div>
+
+
+            <div class="feature">
+
+                <strong>
+                    🎤 Voice Doubt
+                </strong>
+
+                Ask a question using your microphone.
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+let currentQuestion = "";
+
+
+function getMaterial() {
+
+    return document
+        .getElementById("material")
+        .value
+        .trim();
+
+}
+
+
+function getLevel() {
+
+    return document
+        .getElementById("level")
+        .value;
+
+}
+
+
+function getLanguage() {
+
+    return document
+        .getElementById("language")
+        .value;
+
+}
+
+
+async function callSummaryAI(action, question = "") {
+
+
+    const material =
+        getMaterial();
+
+
+    if (!material) {
+
+        alert(
+            "Please paste your study material first."
+        );
+
+        return;
+
+    }
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "material",
+        material
+    );
+
+
+    formData.append(
+        "question",
+        question
+    );
+
+
+    formData.append(
+        "action",
+        action
+    );
+
+
+    formData.append(
+        "level",
+        getLevel()
+    );
+
+
+    formData.append(
+        "language",
+        getLanguage()
+    );
+
+
+    document
+        .getElementById("status")
+        .innerText =
+        "🤖 Summary AI is thinking...";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "{% url 'summary_ai_api' %}",
+                {
+                    method: "POST",
+
+                    body: formData,
+
+                    headers: {
+                        "X-CSRFToken":
+                            getCookie("csrftoken")
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            document
+                .getElementById("status")
+                .innerText =
+                "❌ " + data.error;
+
+            return;
+
+        }
+
+
+        document
+            .getElementById("status")
+            .innerText =
+            "✅ Summary AI completed";
+
+
+        return data.answer;
+
+
+    } catch (error) {
+
+
+        console.error(error);
+
+
+        document
+            .getElementById("status")
+            .innerText =
+            "❌ Unable to connect to Summary AI.";
+
+    }
+
+}
+
+
+
+async function analyzeMaterial() {
+
+
+    const answer =
+        await callSummaryAI(
+            "analyze"
+        );
+
+
+    if (!answer) {
+        return;
+    }
+
+
+    const summaryMatch =
+        answer.split(
+            "KEY CONCEPTS:"
+        );
+
+
+    document
+        .getElementById("summaryResult")
+        .innerText =
+        summaryMatch[0]
+        .replace(
+            "SMART SUMMARY:",
+            ""
+        )
+        .trim();
+
+
+    document
+        .getElementById("conceptResult")
+        .innerText =
+        answer.includes(
+            "KEY CONCEPTS:"
+        )
+            ?
+            answer
+                .split("KEY CONCEPTS:")[1]
+                .split("IMPORTANT DEFINITIONS:")[0]
+                .trim()
+            :
+            "No key concepts returned.";
+
+
+    document
+        .getElementById("answerResult")
+        .innerText =
+        answer;
+
+}
+
+
+
+async function askDoubt() {
+
+
+    const question =
+        document
+            .getElementById("question")
+            .value
+            .trim();
+
+
+    if (!question) {
+
+        alert(
+            "Please enter your doubt."
+        );
+
+        return;
+
+    }
+
+
+    currentQuestion =
+        question;
+
+
+    const answer =
+        await callSummaryAI(
+            "doubt",
+            question
+        );
+
+
+    if (answer) {
+
+        document
+            .getElementById("answerResult")
+            .innerText =
+            answer;
+
+    }
+
+}
+
+
+
+async function simplifyAgain() {
+
+
+    if (!currentQuestion) {
+
+        alert(
+            "Ask a doubt first."
+        );
+
+        return;
+
+    }
+
+
+    const answer =
+        await callSummaryAI(
+            "simplify",
+            currentQuestion
+        );
+
+
+    if (answer) {
+
+        document
+            .getElementById("answerResult")
+            .innerText =
+            answer;
+
+    }
+
+}
+
+
+
+async function explainStepByStep() {
+
+
+    if (!currentQuestion) {
+
+        alert(
+            "Ask a doubt first."
+        );
+
+        return;
+
+    }
+
+
+    const answer =
+        await callSummaryAI(
+            "doubt",
+            "Explain this step-by-step: "
+            + currentQuestion
+        );
+
+
+    if (answer) {
+
+        document
+            .getElementById("answerResult")
+            .innerText =
+            answer;
+
+    }
+
+}
+
+
+
+async function practiceMe() {
+
+
+    const answer =
+        await callSummaryAI(
+            "practice"
+        );
+
+
+    if (answer) {
+
+        document
+            .getElementById("answerResult")
+            .innerText =
+            answer;
+
+    }
+
+}
+
+
+
+async function examMode() {
+
+
+    const answer =
+        await callSummaryAI(
+            "exam"
+        );
+
+
+    if (answer) {
+
+        document
+            .getElementById("answerResult")
+            .innerText =
+            answer;
+
+    }
+
+}
+
+
+
+async function connectConcepts() {
+
+
+    const answer =
+        await callSummaryAI(
+            "connect"
+        );
+
+
+    if (answer) {
+
+        document
+            .getElementById("answerResult")
+            .innerText =
+            answer;
+
+    }
+
+}
+
+
+
+function startVoice() {
+
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        alert(
+            "Voice input is not supported in this browser."
+        );
+
+        return;
+
+    }
+
+
+    const recognition =
+        new SpeechRecognition();
+
+
+    recognition.lang =
+        "en-IN";
+
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.continuous =
+        false;
+
+
+    document
+        .getElementById("voiceStatus")
+        .innerText =
+        "🎤 Listening...";
+
+
+    recognition.start();
+
+
+    recognition.onresult =
+        function(event) {
+
+
+            const spokenText =
+                event
+                    .results[0][0]
+                    .transcript;
+
+
+            document
+                .getElementById("question")
+                .value =
+                spokenText;
+
+
+            document
+                .getElementById("voiceStatus")
+                .innerText =
+                "✅ Voice question captured.";
+
+        };
+
+
+    recognition.onerror =
+        function() {
+
+            document
+                .getElementById("voiceStatus")
+                .innerText =
+                "❌ Could not capture voice.";
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            setTimeout(
+                function() {
+
+                    document
+                        .getElementById("voiceStatus")
+                        .innerText =
+                        "";
+
+                },
+                2000
+            );
+
+        };
+
+}
+
+
+
+function getCookie(name) {
+
+
+    let cookieValue =
+        null;
+
+
+    if (document.cookie &&
+        document.cookie !== "") {
+
+
+        const cookies =
+            document.cookie.split(";");
+
+
+        for (
+            let cookie of cookies
+        ) {
+
+
+            cookie =
+                cookie.trim();
+
+
+            if (
+                cookie.substring(
+                    0,
+                    name.length + 1
+                ) ===
+                (name + "=")
+            ) {
+
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+    return cookieValue;
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

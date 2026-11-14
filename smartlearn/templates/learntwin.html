@@ -1,0 +1,1416 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LearnTwin AI | SmartLearn</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f7fb;
+
+            color: #172033;
+        }
+
+
+        /* =====================================================
+           MAIN PAGE
+        ===================================================== */
+
+        .page {
+
+            min-height: 100vh;
+
+            padding: 35px;
+
+            max-width: 1250px;
+
+            margin: auto;
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-btn {
+
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            text-decoration: none;
+
+            color: #24528A;
+
+            font-weight: bold;
+        }
+
+
+        .back-btn:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #24528A,
+                    #35B957
+                );
+
+            color: white;
+
+            padding: 32px;
+
+            border-radius: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+
+            margin: 0 0 10px 0;
+
+            font-size: 34px;
+        }
+
+
+        .header p {
+
+            margin: 0;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+            opacity: 0.95;
+        }
+
+
+        /* =====================================================
+           GRID
+        ===================================================== */
+
+        .main-grid {
+
+            display: grid;
+
+            grid-template-columns: 380px 1fr;
+
+            gap: 25px;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.08);
+        }
+
+
+        .card h2 {
+
+            margin-top: 0;
+
+            color: #24528A;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .field {
+
+            margin-bottom: 18px;
+        }
+
+
+        .field label {
+
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+
+        .field input,
+        .field select {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #d5dbe5;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+
+        .field input:focus,
+        .field select:focus {
+
+            border-color: #24528A;
+        }
+
+
+        /* =====================================================
+           GENERATE BUTTON
+        ===================================================== */
+
+        .generate-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #24528A;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .generate-btn:hover {
+
+            background: #173d6a;
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading {
+
+            display: none;
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #24528A;
+        }
+
+
+        .loading.show {
+
+            display: block;
+        }
+
+
+        .loading h3 {
+
+            margin-bottom: 8px;
+        }
+
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        .error {
+
+            display: none;
+
+            background: #fff1f1;
+
+            color: #c62828;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            margin-top: 15px;
+
+            line-height: 1.5;
+        }
+
+
+        .error.show {
+
+            display: block;
+        }
+
+
+        /* =====================================================
+           RESULT AREA
+        ===================================================== */
+
+        .result-area {
+
+            display: none;
+        }
+
+
+        .result-area.show {
+
+            display: block;
+        }
+
+
+        /* =====================================================
+           TWIN PROFILE
+        ===================================================== */
+
+        .twin-profile {
+
+            background: #eef6ff;
+
+            border-left:
+                5px solid #24528A;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .twin-profile h3 {
+
+            margin-top: 0;
+
+            color: #24528A;
+        }
+
+
+        .twin-profile p {
+
+            line-height: 1.7;
+
+            margin-bottom: 0;
+        }
+
+
+        /* =====================================================
+           READINESS
+        ===================================================== */
+
+        .score-box {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background: #eefaf1;
+
+            padding: 18px;
+
+            border-radius: 14px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .score-box p {
+
+            margin-bottom: 0;
+
+            color: #667085;
+        }
+
+
+        .score-number {
+
+            font-size: 35px;
+
+            font-weight: bold;
+
+            color: #35B957;
+        }
+
+
+        /* =====================================================
+           RESULT GRID
+        ===================================================== */
+
+        .result-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .result-box {
+
+            background: #f8fafc;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+            border:
+                1px solid #e5eaf1;
+        }
+
+
+        .result-box h3 {
+
+            margin-top: 0;
+
+            font-size: 17px;
+
+            color: #24528A;
+        }
+
+
+        .result-box p {
+
+            line-height: 1.7;
+
+            white-space: pre-line;
+
+            margin-bottom: 0;
+        }
+
+
+        /* =====================================================
+           TWIN INFORMATION
+        ===================================================== */
+
+        .info-section {
+
+            margin-top: 25px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.06);
+        }
+
+
+        .info-section h2 {
+
+            margin-top: 0;
+
+            color: #24528A;
+        }
+
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .info-box {
+
+            background: #f8fafc;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid #e5eaf1;
+        }
+
+
+        .info-box h3 {
+
+            margin-top: 0;
+
+            color: #24528A;
+        }
+
+
+        .info-box p {
+
+            line-height: 1.6;
+
+            margin-bottom: 0;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .main-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .result-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .info-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .page {
+
+                padding: 18px;
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .header {
+
+                padding: 22px;
+            }
+
+
+            .header h1 {
+
+                font-size: 27px;
+            }
+
+
+            .card {
+
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- =====================================================
+         BACK TO DASHBOARD
+    ===================================================== -->
+
+    <a href="{% url 'dashboard' %}"
+       class="back-btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <div class="header">
+
+        <h1>
+            🧬 LearnTwin AI
+        </h1>
+
+        <p>
+
+            Your Digital Learning Twin.
+
+            LearnTwin studies your learning profile,
+            identifies your strengths and weak areas,
+            and recommends what you should do next.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN GRID
+    ===================================================== -->
+
+    <div class="main-grid">
+
+
+        <!-- =================================================
+             LEFT SIDE
+        ================================================= -->
+
+        <div class="card">
+
+
+            <h2>
+                👤 My Learning Profile
+            </h2>
+
+
+            <!-- LEARNING GOAL -->
+
+            <div class="field">
+
+                <label>
+                    Learning Goal
+                </label>
+
+                <input
+                    type="text"
+                    id="goal"
+                    placeholder="Example: Learn Python"
+                >
+
+            </div>
+
+
+            <!-- SKILL LEVEL -->
+
+            <div class="field">
+
+                <label>
+                    Current Skill Level
+                </label>
+
+                <select id="skillLevel">
+
+                    <option value="Beginner">
+                        Beginner
+                    </option>
+
+                    <option value="Intermediate">
+                        Intermediate
+                    </option>
+
+                    <option value="Advanced">
+                        Advanced
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- STUDY TIME -->
+
+            <div class="field">
+
+                <label>
+                    Daily Study Time
+                </label>
+
+                <select id="studyTime">
+
+                    <option value="15 minutes">
+                        15 minutes
+                    </option>
+
+                    <option value="30 minutes">
+                        30 minutes
+                    </option>
+
+                    <option value="1 hour">
+                        1 hour
+                    </option>
+
+                    <option value="2 hours">
+                        2 hours
+                    </option>
+
+                    <option value="3+ hours">
+                        3+ hours
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- QUIZ SCORE -->
+
+            <div class="field">
+
+                <label>
+                    Recent Quiz Score
+                </label>
+
+                <input
+                    type="number"
+                    id="quizScore"
+                    min="0"
+                    max="100"
+                    value="60"
+                >
+
+            </div>
+
+
+            <!-- CONFIDENCE -->
+
+            <div class="field">
+
+                <label>
+                    Confidence Level
+                </label>
+
+                <select id="confidence">
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                    <option
+                        value="Medium"
+                        selected>
+                        Medium
+                    </option>
+
+                    <option value="High">
+                        High
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- WEAK TOPIC -->
+
+            <div class="field">
+
+                <label>
+                    Weak Topic
+                </label>
+
+                <input
+                    type="text"
+                    id="weakTopic"
+                    placeholder="Example: Python loops"
+                >
+
+            </div>
+
+
+            <!-- GENERATE -->
+
+            <button
+                type="button"
+                class="generate-btn"
+                onclick="generateTwin()">
+
+                🧠 Generate My Learning Twin
+
+            </button>
+
+
+            <!-- ERROR -->
+
+            <div
+                class="error"
+                id="errorBox">
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT SIDE
+        ================================================= -->
+
+        <div class="card">
+
+
+            <h2>
+                🔮 Your Learning Twin
+            </h2>
+
+
+            <!-- LOADING -->
+
+            <div
+                class="loading"
+                id="loading">
+
+                <h3>
+                    🧠 Building your Learning Twin...
+                </h3>
+
+                <p>
+                    Analyzing your learning profile.
+                </p>
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <div
+                class="result-area"
+                id="resultArea">
+
+
+                <!-- TWIN PROFILE -->
+
+                <div class="twin-profile">
+
+                    <h3 id="twinTitle">
+                        Your Learning Twin
+                    </h3>
+
+                    <p id="twinDescription">
+                    </p>
+
+                </div>
+
+
+                <!-- READINESS -->
+
+                <div class="score-box">
+
+                    <div>
+
+                        <strong>
+                            Learning Readiness
+                        </strong>
+
+                        <p>
+                            Based on your current profile
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="score-number"
+                        id="readinessScore">
+
+                        0%
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESULT BOXES -->
+
+                <div class="result-grid">
+
+
+                    <!-- STRENGTHS -->
+
+                    <div class="result-box">
+
+                        <h3>
+                            💪 Strengths
+                        </h3>
+
+                        <p id="strengths">
+                        </p>
+
+                    </div>
+
+
+                    <!-- RISKS -->
+
+                    <div class="result-box">
+
+                        <h3>
+                            ⚠️ Risk Areas
+                        </h3>
+
+                        <p id="risks">
+                        </p>
+
+                    </div>
+
+
+                    <!-- STRATEGY -->
+
+                    <div class="result-box">
+
+                        <h3>
+                            📚 Study Strategy
+                        </h3>
+
+                        <p id="strategy">
+                        </p>
+
+                    </div>
+
+
+                    <!-- NEXT ACTION -->
+
+                    <div class="result-box">
+
+                        <h3>
+                            🚀 Next Action
+                        </h3>
+
+                        <p id="nextAction">
+                        </p>
+
+                    </div>
+
+
+                    <!-- DAILY PLAN -->
+
+                    <div class="result-box">
+
+                        <h3>
+                            📅 Daily Plan
+                        </h3>
+
+                        <p id="dailyPlan">
+                        </p>
+
+                    </div>
+
+
+                    <!-- CONSISTENCY -->
+
+                    <div class="result-box">
+
+                        <h3>
+                            🔥 Consistency Advice
+                        </h3>
+
+                        <p id="consistency">
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- DEFAULT MESSAGE -->
+
+            <div
+                id="defaultMessage"
+                style="
+                    padding:20px;
+                    background:#f8fafc;
+                    border-radius:12px;
+                    color:#667085;
+                    line-height:1.7;
+                ">
+
+                Enter your learning information on
+                the left and click
+                <strong>
+                    Generate My Learning Twin
+                </strong>
+                to create your personalized learning
+                profile.
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         WHAT IS LEARNTWIN
+    ===================================================== -->
+
+    <div class="info-section">
+
+        <h2>
+            🧬 What does LearnTwin analyze?
+        </h2>
+
+
+        <div class="info-grid">
+
+
+            <div class="info-box">
+
+                <h3>
+                    📊 Performance
+                </h3>
+
+                <p>
+
+                    Your recent quiz performance
+                    helps estimate your current
+                    learning readiness.
+
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>
+                    🎯 Weak Areas
+                </h3>
+
+                <p>
+
+                    LearnTwin identifies the topic
+                    that needs additional practice.
+
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>
+                    ⏱️ Study Routine
+                </h3>
+
+                <p>
+
+                    Your available study time is
+                    used to create a realistic
+                    learning strategy.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   GENERATE LEARNING TWIN
+========================================================= */
+
+async function generateTwin() {
+
+
+    const goal =
+        document
+        .getElementById("goal")
+        .value
+        .trim();
+
+
+    const skillLevel =
+        document
+        .getElementById("skillLevel")
+        .value;
+
+
+    const studyTime =
+        document
+        .getElementById("studyTime")
+        .value;
+
+
+    const quizScore =
+        document
+        .getElementById("quizScore")
+        .value;
+
+
+    const confidence =
+        document
+        .getElementById("confidence")
+        .value;
+
+
+    const weakTopic =
+        document
+        .getElementById("weakTopic")
+        .value
+        .trim();
+
+
+    const errorBox =
+        document.getElementById("errorBox");
+
+
+    const loading =
+        document.getElementById("loading");
+
+
+    const resultArea =
+        document.getElementById("resultArea");
+
+
+    const defaultMessage =
+        document.getElementById("defaultMessage");
+
+
+    /* =====================================================
+       CLEAR OLD MESSAGES
+    ===================================================== */
+
+    errorBox.classList.remove("show");
+
+    resultArea.classList.remove("show");
+
+    defaultMessage.style.display = "none";
+
+    loading.classList.add("show");
+
+
+    /* =====================================================
+       CHECK GOAL
+    ===================================================== */
+
+    if (!goal) {
+
+        loading.classList.remove("show");
+
+        defaultMessage.style.display = "block";
+
+        errorBox.innerText =
+            "Please enter your learning goal.";
+
+        errorBox.classList.add("show");
+
+        return;
+    }
+
+
+    /* =====================================================
+       SEND DATA TO DJANGO
+    ===================================================== */
+
+    try {
+
+        const response =
+            await fetch(
+                "/learntwin/api/",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "X-CSRFToken":
+                            getCookie("csrftoken")
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            goal:
+                                goal,
+
+                            skill_level:
+                                skillLevel,
+
+                            study_time:
+                                studyTime,
+
+                            quiz_score:
+                                quizScore,
+
+                            confidence:
+                                confidence,
+
+                            weak_topic:
+                                weakTopic
+
+                        })
+
+                }
+            );
+
+
+        /* =================================================
+           CHECK HTTP RESPONSE
+        ================================================= */
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server returned HTTP " +
+                response.status
+            );
+
+        }
+
+
+        /* =================================================
+           CONVERT RESPONSE
+        ================================================= */
+
+        const data =
+            await response.json();
+
+
+        loading.classList.remove("show");
+
+
+        /* =================================================
+           ERROR FROM DJANGO
+        ================================================= */
+
+        if (!data.success) {
+
+            defaultMessage.style.display =
+                "block";
+
+            errorBox.innerText =
+                data.error ||
+                "Unable to create your Learning Twin.";
+
+            errorBox.classList.add("show");
+
+            return;
+        }
+
+
+        /* =================================================
+           DISPLAY RESULT
+        ================================================= */
+
+        document
+            .getElementById("twinTitle")
+            .innerText =
+                data.twin_title ||
+                "Your Learning Twin";
+
+
+        document
+            .getElementById("twinDescription")
+            .innerText =
+                data.description ||
+                "Your personalized learning profile is ready.";
+
+
+        document
+            .getElementById("readinessScore")
+            .innerText =
+                (data.readiness || 0) + "%";
+
+
+        document
+            .getElementById("strengths")
+            .innerText =
+                data.strengths ||
+                "Your learning strengths are being developed.";
+
+
+        document
+            .getElementById("risks")
+            .innerText =
+                data.risks ||
+                "Continue reviewing difficult topics.";
+
+
+        document
+            .getElementById("strategy")
+            .innerText =
+                data.strategy ||
+                "Use short focused study sessions.";
+
+
+        document
+            .getElementById("nextAction")
+            .innerText =
+                data.next_action ||
+                "Continue practicing your weak topic.";
+
+
+        document
+            .getElementById("dailyPlan")
+            .innerText =
+                data.daily_plan ||
+                "Study, practice and review every day.";
+
+
+        document
+            .getElementById("consistency")
+            .innerText =
+                data.consistency ||
+                "Keep a consistent learning routine.";
+
+
+        /* =================================================
+           SHOW RESULT
+        ================================================= */
+
+        resultArea.classList.add("show");
+
+
+    }
+
+
+    catch (error) {
+
+
+        loading.classList.remove("show");
+
+
+        defaultMessage.style.display =
+            "block";
+
+
+        errorBox.innerText =
+            "Unable to connect to LearnTwin. " +
+            error.message;
+
+
+        errorBox.classList.add("show");
+
+
+        console.error(
+            "LearnTwin Error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CSRF COOKIE
+========================================================= */
+
+function getCookie(name) {
+
+
+    let cookieValue = null;
+
+
+    if (
+        document.cookie &&
+        document.cookie !== ""
+    ) {
+
+
+        const cookies =
+            document.cookie.split(";");
+
+
+        for (
+            let cookie of cookies
+        ) {
+
+
+            cookie =
+                cookie.trim();
+
+
+            if (
+                cookie.substring(
+                    0,
+                    name.length + 1
+                ) ===
+                (name + "=")
+            ) {
+
+
+                cookieValue =
+                    decodeURIComponent(
+
+                        cookie.substring(
+                            name.length + 1
+                        )
+
+                    );
+
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+    return cookieValue;
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

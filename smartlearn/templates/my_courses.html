@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Courses | SmartLearn</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #24528A, #35B957);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 36px;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .course-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+        }
+
+        .course-icon {
+            font-size: 55px;
+        }
+
+        .course-card h2 {
+            color: #24528A;
+        }
+
+        .course-card p {
+            line-height: 1.6;
+        }
+
+        .progress {
+            background: #e5e7eb;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #35B957;
+        }
+
+        .open-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #24528A;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .open-btn:hover {
+            background: #35B957;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            color: #24528A;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📚 My Courses</h1>
+        <p>Your personal learning space in SmartLearn</p>
+    </div>
+
+    <div class="course-card">
+
+        <div class="course-icon">
+            🐍
+        </div>
+
+        <h2>Python Programming</h2>
+
+        <p>
+            Learn Python from the basics and build your programming
+            skills step by step.
+        </p>
+
+        <p>
+            <strong>Level:</strong> Beginner
+        </p>
+
+        <p>
+            <strong>Modules:</strong> 10
+        </p>
+
+        <p>
+            <strong>Progress:</strong> 0%
+        </p>
+
+        <div class="progress">
+            <div class="progress-bar"></div>
+        </div>
+
+        <a href="{% url 'python_course' %}" class="open-btn">
+            Open Course →
+        </a>
+
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

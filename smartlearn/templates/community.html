@@ -1,0 +1,1279 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Community | SmartLearn</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #081a3b,
+                #24528A
+            );
+
+            color: white;
+            padding: 18px 35px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #35B957;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+
+            background: rgba(255,255,255,0.12);
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.22);
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+
+            margin: 30px auto;
+        }
+
+        .page-title {
+            margin-bottom: 8px;
+            font-size: 32px;
+        }
+
+        .page-description {
+            color: #667085;
+            margin-bottom: 28px;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
+
+        .community-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 2fr)
+                minmax(280px, 1fr);
+
+            gap: 25px;
+        }
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .card {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 18px;
+
+            color: #173b70;
+
+            font-size: 21px;
+        }
+
+        /* =========================
+           CREATE POST
+        ========================= */
+
+        textarea {
+            width: 100%;
+
+            min-height: 120px;
+
+            resize: vertical;
+
+            border: 1px solid #d8dee9;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            border-color: #24528A;
+
+            box-shadow:
+                0 0 0 3px rgba(
+                    36,
+                    82,
+                    138,
+                    0.1
+                );
+        }
+
+        .post-controls {
+            margin-top: 15px;
+
+            display: flex;
+
+            gap: 12px;
+
+            align-items: center;
+        }
+
+        select {
+            padding: 11px 14px;
+
+            border: 1px solid #d8dee9;
+
+            border-radius: 8px;
+
+            background: white;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .post-btn {
+            border: none;
+
+            background: #35B957;
+
+            color: white;
+
+            padding: 11px 22px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .post-btn:hover {
+            background: #2d9f4b;
+
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           POST
+        ========================= */
+
+        .post {
+            border: 1px solid #e5e9f0;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            margin-bottom: 15px;
+
+            transition: 0.3s;
+        }
+
+        .post:hover {
+            box-shadow:
+                0 5px 15px rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+        }
+
+        .post-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 12px;
+        }
+
+        .user-info {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #e7f0ff;
+
+            color: #24528A;
+
+            font-weight: bold;
+        }
+
+        .username {
+            font-weight: bold;
+        }
+
+        .time {
+            font-size: 12px;
+
+            color: #8a94a6;
+        }
+
+        .topic-tag {
+            background: #eaf8ee;
+
+            color: #248443;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+        }
+
+        .post-title {
+            font-size: 17px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+        .post-content {
+            color: #596579;
+
+            line-height: 1.6;
+
+            margin-bottom: 15px;
+        }
+
+        .post-actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .action-btn {
+            border: none;
+
+            background: #f3f5f8;
+
+            padding: 8px 12px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            color: #566174;
+
+            transition: 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #e8edf4;
+        }
+
+        /* =========================
+           TOPICS
+        ========================= */
+
+        .topic-list {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 9px;
+        }
+
+        .topic {
+            background: #eef3fa;
+
+            color: #24528A;
+
+            padding: 9px 13px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .topic:hover {
+            background: #24528A;
+
+            color: white;
+        }
+
+        /* =========================
+           STUDY GROUP
+        ========================= */
+
+        .group {
+            border: 1px solid #e5e9f0;
+
+            border-radius: 10px;
+
+            padding: 15px;
+
+            margin-bottom: 12px;
+        }
+
+        .group h3 {
+            font-size: 16px;
+
+            margin-bottom: 6px;
+        }
+
+        .group p {
+            color: #737e91;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            margin-bottom: 12px;
+        }
+
+        .join-btn {
+            border: none;
+
+            background: #24528A;
+
+            color: white;
+
+            padding: 8px 14px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+        }
+
+        .join-btn:hover {
+            background: #173b70;
+        }
+
+        /* =========================
+           RULES
+        ========================= */
+
+        .rules {
+            padding-left: 20px;
+        }
+
+        .rules li {
+            margin-bottom: 10px;
+
+            color: #626d80;
+
+            line-height: 1.5;
+        }
+
+        /* =========================
+           EMPTY MESSAGE
+        ========================= */
+
+        .empty-message {
+            text-align: center;
+
+            color: #8a94a6;
+
+            padding: 25px;
+
+            display: none;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .community-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="logo">
+        Smart<span>Learn</span> Community
+    </div>
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="back-btn"
+    >
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+    <h1 class="page-title">
+        Community
+    </h1>
+
+    <p class="page-description">
+        Connect with other learners, ask questions,
+        share knowledge and learn together.
+    </p>
+
+
+    <!-- =================================================
+         GRID
+    ================================================= -->
+
+    <div class="community-grid">
+
+
+        <!-- =============================================
+             LEFT SIDE
+        ============================================== -->
+
+        <section>
+
+
+            <!-- =========================================
+                 CREATE DISCUSSION
+            ========================================== -->
+
+            <div class="card">
+
+                <h2>
+                    💬 Start a Discussion
+                </h2>
+
+                <textarea
+                    id="postText"
+                    placeholder="Ask a question, share an idea, or help another learner..."
+                ></textarea>
+
+                <div class="post-controls">
+
+                    <select id="postTopic">
+
+                        <option value="General">
+                            General
+                        </option>
+
+                        <option value="Python">
+                            Python
+                        </option>
+
+                        <option value="Django">
+                            Django
+                        </option>
+
+                        <option value="AI">
+                            AI
+                        </option>
+
+                        <option value="Web Development">
+                            Web Development
+                        </option>
+
+                        <option value="Career">
+                            Career
+                        </option>
+
+                        <option value="Study Tips">
+                            Study Tips
+                        </option>
+
+                    </select>
+
+                    <button
+                        class="post-btn"
+                        onclick="createPost()"
+                    >
+                        Post Discussion
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 RECENT DISCUSSIONS
+            ========================================== -->
+
+            <div class="card">
+
+                <h2>
+                    🔥 Recent Discussions
+                </h2>
+
+
+                <div id="postsContainer">
+
+
+                    <!-- POST 1 -->
+
+                    <article class="post">
+
+                        <div class="post-header">
+
+                            <div class="user-info">
+
+                                <div class="avatar">
+                                    S
+                                </div>
+
+                                <div>
+
+                                    <div class="username">
+                                        Swetha
+                                    </div>
+
+                                    <div class="time">
+                                        Just now
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <span class="topic-tag">
+                                Python
+                            </span>
+
+                        </div>
+
+                        <div class="post-title">
+                            How can I improve my Python programming?
+                        </div>
+
+                        <div class="post-content">
+                            I am learning Python and want to become
+                            better at solving programming problems.
+                            What should I practice every day?
+                        </div>
+
+                        <div class="post-actions">
+
+                            <button
+                                class="action-btn"
+                                onclick="likePost(this)"
+                            >
+                                👍 <span>0</span>
+                            </button>
+
+                            <button
+                                class="action-btn"
+                                onclick="replyPost()"
+                            >
+                                💬 Reply
+                            </button>
+
+                            <button
+                                class="action-btn"
+                                onclick="sharePost()"
+                            >
+                                🔗 Share
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- POST 2 -->
+
+                    <article class="post">
+
+                        <div class="post-header">
+
+                            <div class="user-info">
+
+                                <div class="avatar">
+                                    A
+                                </div>
+
+                                <div>
+
+                                    <div class="username">
+                                        Arun
+                                    </div>
+
+                                    <div class="time">
+                                        15 minutes ago
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <span class="topic-tag">
+                                Django
+                            </span>
+
+                        </div>
+
+                        <div class="post-title">
+                            Django project structure
+                        </div>
+
+                        <div class="post-content">
+                            Can someone explain the difference between
+                            views.py, urls.py and templates in a Django
+                            project?
+                        </div>
+
+                        <div class="post-actions">
+
+                            <button
+                                class="action-btn"
+                                onclick="likePost(this)"
+                            >
+                                👍 <span>4</span>
+                            </button>
+
+                            <button
+                                class="action-btn"
+                                onclick="replyPost()"
+                            >
+                                💬 Reply
+                            </button>
+
+                            <button
+                                class="action-btn"
+                                onclick="sharePost()"
+                            >
+                                🔗 Share
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- POST 3 -->
+
+                    <article class="post">
+
+                        <div class="post-header">
+
+                            <div class="user-info">
+
+                                <div class="avatar">
+                                    P
+                                </div>
+
+                                <div>
+
+                                    <div class="username">
+                                        Priya
+                                    </div>
+
+                                    <div class="time">
+                                        1 hour ago
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <span class="topic-tag">
+                                AI
+                            </span>
+
+                        </div>
+
+                        <div class="post-title">
+                            Best way to learn AI?
+                        </div>
+
+                        <div class="post-content">
+                            I want to start learning artificial
+                            intelligence. Which topics should I
+                            learn first?
+                        </div>
+
+                        <div class="post-actions">
+
+                            <button
+                                class="action-btn"
+                                onclick="likePost(this)"
+                            >
+                                👍 <span>8</span>
+                            </button>
+
+                            <button
+                                class="action-btn"
+                                onclick="replyPost()"
+                            >
+                                💬 Reply
+                            </button>
+
+                            <button
+                                class="action-btn"
+                                onclick="sharePost()"
+                            >
+                                🔗 Share
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                </div>
+
+
+                <div
+                    id="emptyMessage"
+                    class="empty-message"
+                >
+                    No discussions yet.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =============================================
+             RIGHT SIDE
+        ============================================== -->
+
+        <aside>
+
+
+            <!-- =========================================
+                 POPULAR TOPICS
+            ========================================== -->
+
+            <div class="card">
+
+                <h2>
+                    🔥 Popular Topics
+                </h2>
+
+                <div class="topic-list">
+
+                    <div
+                        class="topic"
+                        onclick="selectTopic('Python')"
+                    >
+                        Python
+                    </div>
+
+                    <div
+                        class="topic"
+                        onclick="selectTopic('Django')"
+                    >
+                        Django
+                    </div>
+
+                    <div
+                        class="topic"
+                        onclick="selectTopic('AI')"
+                    >
+                        AI
+                    </div>
+
+                    <div
+                        class="topic"
+                        onclick="selectTopic('Machine Learning')"
+                    >
+                        Machine Learning
+                    </div>
+
+                    <div
+                        class="topic"
+                        onclick="selectTopic('Web Development')"
+                    >
+                        Web Development
+                    </div>
+
+                    <div
+                        class="topic"
+                        onclick="selectTopic('Career')"
+                    >
+                        Career
+                    </div>
+
+                    <div
+                        class="topic"
+                        onclick="selectTopic('Study Tips')"
+                    >
+                        Study Tips
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 STUDY GROUPS
+            ========================================== -->
+
+            <div class="card">
+
+                <h2>
+                    👥 Study Groups
+                </h2>
+
+
+                <div class="group">
+
+                    <h3>
+                        🐍 Python Beginners
+                    </h3>
+
+                    <p>
+                        Learn Python together and solve
+                        programming problems.
+                    </p>
+
+                    <button
+                        class="join-btn"
+                        onclick="joinGroup(this)"
+                    >
+                        Join Group
+                    </button>
+
+                </div>
+
+
+                <div class="group">
+
+                    <h3>
+                        🤖 AI Learners
+                    </h3>
+
+                    <p>
+                        Discuss AI, machine learning and
+                        new technologies.
+                    </p>
+
+                    <button
+                        class="join-btn"
+                        onclick="joinGroup(this)"
+                    >
+                        Join Group
+                    </button>
+
+                </div>
+
+
+                <div class="group">
+
+                    <h3>
+                        🌐 Web Developers
+                    </h3>
+
+                    <p>
+                        Share web development projects,
+                        tips and ideas.
+                    </p>
+
+                    <button
+                        class="join-btn"
+                        onclick="joinGroup(this)"
+                    >
+                        Join Group
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 COMMUNITY RULES
+            ========================================== -->
+
+            <div class="card">
+
+                <h2>
+                    📜 Community Rules
+                </h2>
+
+                <ul class="rules">
+
+                    <li>
+                        Be respectful to other learners.
+                    </li>
+
+                    <li>
+                        Help others whenever possible.
+                    </li>
+
+                    <li>
+                        Do not share harmful or inappropriate
+                        content.
+                    </li>
+
+                    <li>
+                        Keep discussions related to learning.
+                    </li>
+
+                    <li>
+                        Do not share passwords or private
+                        information.
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+    /* =========================================
+       CREATE POST
+    ========================================== */
+
+    function createPost() {
+
+        const text =
+            document.getElementById(
+                "postText"
+            ).value.trim();
+
+        const topic =
+            document.getElementById(
+                "postTopic"
+            ).value;
+
+        if (!text) {
+
+            alert(
+                "Please write something before posting."
+            );
+
+            return;
+        }
+
+        const container =
+            document.getElementById(
+                "postsContainer"
+            );
+
+        const post =
+            document.createElement(
+                "article"
+            );
+
+        post.className = "post";
+
+        const safeText =
+            escapeHTML(text);
+
+        post.innerHTML = `
+
+            <div class="post-header">
+
+                <div class="user-info">
+
+                    <div class="avatar">
+                        S
+                    </div>
+
+                    <div>
+
+                        <div class="username">
+                            You
+                        </div>
+
+                        <div class="time">
+                            Just now
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <span class="topic-tag">
+                    ${escapeHTML(topic)}
+                </span>
+
+            </div>
+
+            <div class="post-title">
+                New Community Discussion
+            </div>
+
+            <div class="post-content">
+                ${safeText}
+            </div>
+
+            <div class="post-actions">
+
+                <button
+                    class="action-btn"
+                    onclick="likePost(this)"
+                >
+                    👍 <span>0</span>
+                </button>
+
+                <button
+                    class="action-btn"
+                    onclick="replyPost()"
+                >
+                    💬 Reply
+                </button>
+
+                <button
+                    class="action-btn"
+                    onclick="sharePost()"
+                >
+                    🔗 Share
+                </button>
+
+            </div>
+        `;
+
+        container.prepend(post);
+
+        document.getElementById(
+            "postText"
+        ).value = "";
+
+        alert(
+            "Your discussion has been posted!"
+        );
+
+    }
+
+
+    /* =========================================
+       LIKE POST
+    ========================================== */
+
+    function likePost(button) {
+
+        const count =
+            button.querySelector(
+                "span"
+            );
+
+        let current =
+            parseInt(
+                count.textContent
+            );
+
+        current++;
+
+        count.textContent = current;
+
+    }
+
+
+    /* =========================================
+       REPLY
+    ========================================== */
+
+    function replyPost() {
+
+        alert(
+            "Reply feature is ready for the Community module."
+        );
+
+    }
+
+
+    /* =========================================
+       SHARE
+    ========================================== */
+
+    function sharePost() {
+
+        alert(
+            "Discussion sharing feature is ready."
+        );
+
+    }
+
+
+    /* =========================================
+       JOIN GROUP
+    ========================================== */
+
+    function joinGroup(button) {
+
+        if (
+            button.textContent.trim()
+            === "Joined"
+        ) {
+
+            button.textContent =
+                "Join Group";
+
+            button.style.background =
+                "#24528A";
+
+        } else {
+
+            button.textContent =
+                "Joined";
+
+            button.style.background =
+                "#35B957";
+
+            alert(
+                "You joined the study group!"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       SELECT TOPIC
+    ========================================== */
+
+    function selectTopic(topic) {
+
+        const select =
+            document.getElementById(
+                "postTopic"
+            );
+
+        select.value = topic;
+
+        document.getElementById(
+            "postText"
+        ).focus();
+
+    }
+
+
+    /* =========================================
+       ESCAPE HTML
+    ========================================== */
+
+    function escapeHTML(text) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.textContent = text;
+
+        return div.innerHTML;
+
+    }
+
+</script>
+
+</body>
+</html>

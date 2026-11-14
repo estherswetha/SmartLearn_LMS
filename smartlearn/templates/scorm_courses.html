@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartLearn | Catalogue</title>
+<style>
+:root {
+    --coral: #fa665f;
+    --navy: #20284d;
+    --muted: #8790a6;
+    --line: #e8ebf3;
+    --panel: #f7f8fc;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    color: var(--navy);
+    background: #f3f5fa;
+}
+button, input, select { font: inherit; }
+a { color: inherit; text-decoration: none; }
+.topbar {
+    min-height: 66px;
+    background: var(--coral);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 26px;
+    flex-wrap: wrap;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 800;
+}
+.brand-mark {
+    background: white;
+    color: var(--coral);
+    border-radius: 50%;
+    width: 39px;
+    height: 39px;
+    display: grid;
+    place-items: center;
+}
+.navlinks { display: flex; gap: 22px; align-items: center; }
+.navlinks a { padding: 10px 12px; border-radius: 24px; }
+.navlinks a.active, .navlinks a:hover { background: #ffffff30; }
+.top-search {
+    flex: 1;
+    min-width: 190px;
+    max-width: 390px;
+    margin-left: auto;
+}
+.top-search input {
+    width: 100%;
+    border: 1px solid #ffffff70;
+    background: #ffffff18;
+    color: white;
+    border-radius: 28px;
+    padding: 12px 17px;
+    outline: none;
+}
+.top-search input::placeholder { color: #fff; }
+.top-actions { display: flex; align-items: center; gap: 17px; }
+.avatar-small {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #ffe0ce; color: #7a3b30;
+    display: grid; place-items: center; font-weight: 700;
+}
+.layout {
+    display: grid;
+    grid-template-columns: 255px minmax(0, 1fr);
+    gap: 22px;
+    padding: 20px;
+    max-width: 1700px;
+    margin: auto;
+}
+.sidebar, .content-panel {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+}
+.sidebar { padding: 16px; align-self: start; }
+.profile { text-align: center; padding: 15px 5px 23px; }
+.profile-avatar {
+    margin: auto auto 12px;
+    width: 76px; height: 76px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg,#ffd5c8,#e6e9ff);
+    font-size: 30px;
+}
+.profile h3 { margin: 0 0 5px; font-size: 16px; }
+.muted { color: var(--muted); font-size: 13px; }
+.side-section {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.side-heading {
+    padding: 14px;
+    color: #9ba4b5;
+    font-weight: 750;
+    font-size: 12px;
+    border-bottom: 1px solid var(--line);
+}
+.side-item {
+    display: flex; align-items: center; gap: 10px;
+    margin: 9px; padding: 12px;
+    border: 1px solid #edf0f5; border-radius: 9px;
+    font-size: 12px; font-weight: 650;
+}
+.side-icon {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; background: #fff0e7;
+}
+.main { min-width: 0; }
+.breadcrumb { padding: 10px 3px 22px; font-size: 15px; }
+.content-panel { background: var(--panel); padding: 27px; }
+.catalogue-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 22px;
+}
+.catalogue-header h1 { margin: 0; font-size: 27px; }
+.filters { display: flex; gap: 10px; flex-wrap: wrap; }
+.filters select, .filters input {
+    border: 1px solid var(--line); background: white;
+    padding: 11px 13px; border-radius: 9px; color: var(--navy);
+}
+.filters input { min-width: 180px; }
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+.course-card {
+    background: white; border: 1px solid var(--line);
+    border-radius: 10px; overflow: hidden;
+    min-width: 0; transition: transform .18s, box-shadow .18s;
+}
+.course-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px #20284d12;
+}
+.course-art {
+    height: 150px; position: relative; overflow: hidden;
+    display: flex; align-items: flex-start; padding: 15px;
+    background: linear-gradient(135deg,#dbeafe,#fce7f3);
+}
+.course-art.orange { background: linear-gradient(135deg,#ff7b32,#ffc36b); }
+.course-art.purple { background: linear-gradient(135deg,#e9d5ff,#fce7f3); }
+.course-art.teal { background: linear-gradient(135deg,#a5f3fc,#dbeafe); }
+.course-art.blue { background: linear-gradient(135deg,#bfdbfe,#e0e7ff); }
+.course-art.pink { background: linear-gradient(135deg,#fecdd3,#fb7185); }
+.course-art.people { background: linear-gradient(135deg,#475569,#fbbf24); }
+.art-shape {
+    position: absolute; width: 190px; height: 190px;
+    right: -25px; bottom: -110px; border-radius: 50%;
+    background: #ffffff55;
+}
+.course-logo {
+    z-index: 1; background: white; color: #2856c6;
+    border-radius: 10px; padding: 11px;
+    min-width: 55px; min-height: 55px;
+    display: grid; place-items: center; font-weight: 800;
+    box-shadow: 0 2px 8px #20284d12;
+}
+.course-body { padding: 14px; }
+.course-body h3 { font-size: 15px; margin: 0 0 8px; line-height: 1.35; }
+.course-body p { color: #778097; font-size: 13px; margin: 0 0 15px; }
+.card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; flex-wrap: wrap;
+}
+.status {
+    font-size: 11px; padding: 6px 9px; border-radius: 6px;
+    background: #f0edff; color: #6554a5;
+}
+.status.progress { background: #fff1e9; color: #d66a36; }
+.status.new { background: #f2eaff; color: #8052c9; }
+.course-button {
+    border: 0; cursor: pointer; border-radius: 7px;
+    padding: 8px 10px; font-size: 12px; font-weight: 700;
+    background: #edf1ff; color: #354b9a;
+}
+.course-button:hover { background: #dfe6ff; }
+.empty-state {
+    grid-column: 1 / -1; text-align: center;
+    background: white; padding: 35px; border-radius: 10px;
+    color: var(--muted);
+}
+footer { padding: 18px; text-align: center; color: var(--muted); font-size: 12px; }
+@media(max-width: 1100px) {
+    .course-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .layout { grid-template-columns: 215px minmax(0,1fr); padding: 12px; }
+}
+@media(max-width: 720px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { order: 2; }
+    .course-grid { grid-template-columns: 1fr; }
+    .topbar { gap: 12px; padding: 12px; }
+    .navlinks { gap: 3px; }
+    .content-panel { padding: 15px; }
+    .catalogue-header h1 { font-size: 23px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <a class="brand" href="{% url 'dashboard' %}" aria-label="SmartLearn home">
+        <span class="brand-mark">S</span>
+        <span>SmartLearn</span>
+    </a>
+    <nav class="navlinks">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'all_modules' %}">Modules</a>
+        <a href="{% url 'scorm_catalogue' %}" class="active">Catalogue</a>
+    </nav>
+    <div class="top-search">
+        <input id="topSearch" type="search" placeholder="Search courses, skills, topics..." aria-label="Search courses">
+    </div>
+    <div class="top-actions">
+        <span aria-hidden="true">🔔</span>
+        <span class="avatar-small">{{ request.user.username|first|upper|default:"S" }}</span>
+        <span>Esther</span>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="profile">
+            <div class="profile-avatar">🎓</div>
+            <h3>Esther</h3>
+            <div class="muted">Student</div>
+        </div>
+
+        <section class="side-section">
+            <div class="side-heading">MY CERTIFICATIONS</div>
+            <a class="side-item" href="{% url 'my_courses' %}">
+                <span class="side-icon">🏅</span>
+                <span>Digital Skills</span>
+            </a>
+        </section>
+
+        <section class="side-section">
+            <div class="side-heading">PENDING ACTIONS</div>
+            <a class="side-item" href="{% url 'workshop_list' %}">
+                <span class="side-icon">▤</span>
+                <span>Workshop Sessions</span>
+            </a>
+            <a class="side-item" href="{% url 'course_history' %}">
+                <span class="side-icon">✎</span>
+                <span>Course History</span>
+            </a>
+        </section>
+
+        <section class="side-section">
+            <div class="side-heading">LEARNING TOOLS</div>
+            <a class="side-item" href="{% url 'all_modules' %}">
+                <span class="side-icon">🧠</span>
+                <span>AI Learning Modules</span>
+            </a>
+            <a class="side-item" href="{% url 'quiz_ai' %}">
+                <span class="side-icon">✓</span>
+                <span>Practice Quizzes</span>
+            </a>
+        </section>
+    </aside>
+
+    <main class="main">
+        <div class="breadcrumb">⌂ &nbsp; › &nbsp; Catalogue</div>
+        <section class="content-panel">
+            <div class="catalogue-header">
+                <a href="{% url 'upload_scorm_course' %}"
+                    class="course-button"
+                    style="background:#f56860;color:white;padding:12px 18px;">
+                    + Upload SCORM Course
+                </a>
+                <div>
+                    <h1>Catalogue</h1>
+                    <p class="muted">Discover your next learning experience.</p>
+                </div>
+                <div class="filters">
+                    <input id="courseSearch" type="search" placeholder="Search catalogue..." aria-label="Filter catalogue">
+                    <select id="categoryFilter" aria-label="Filter by category">
+                        <option value="all">All Categories</option>
+                        <option value="technology">Technology</option>
+                        <option value="business">Business</option>
+                        <option value="design">Design</option>
+                        <option value="ai">Artificial Intelligence</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="course-grid" id="courseGrid">
+                <article class="course-card" data-category="technology">
+                    <div class="course-art blue"><span class="course-logo">in<br><small>Learning</small></span><span class="art-shape"></span></div>
+                    <div class="course-body">
+                        <h3>Python Fundamentals</h3>
+                        <p>Technology · Beginner</p>
+                        <div class="card-footer"><span class="status">Available</span><a class="course-button" href="{% url 'python_course' %}">Open course →</a></div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-category="business">
+                    <div class="course-art orange"><span class="course-logo">✿</span><span class="art-shape"></span></div>
+                    <div class="course-body">
+                        <h3>Business Communication</h3>
+                        <p>Business · Beginner</p>
+                        <div class="card-footer"><span class="status progress">Explore</span><a class="course-button" href="{% url 'my_courses' %}">View courses →</a></div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-category="design">
+                    <div class="course-art purple"><span class="course-logo">Sponge.</span><span class="art-shape"></span></div>
+                    <div class="course-body">
+                        <h3>UI/UX Design Basics</h3>
+                        <p>Design · Beginner</p>
+                        <div class="card-footer"><span class="status new">Explore</span><a class="course-button" href="{% url 'my_courses' %}">View courses →</a></div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-category="technology">
+                    <div class="course-art teal"><span class="course-logo">C</span><span class="art-shape"></span></div>
+                    <div class="course-body">
+                        <h3>Web Development</h3>
+                        <p>Technology · Intermediate</p>
+                        <div class="card-footer"><span class="status">Available</span><a class="course-button" href="{% url 'my_courses' %}">View courses →</a></div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-category="ai">
+                    <div class="course-art pink"><span class="course-logo">g</span><span class="art-shape"></span></div>
+                    <div class="course-body">
+                        <h3>Introduction to AI</h3>
+                        <p>Artificial Intelligence · Beginner</p>
+                        <div class="card-footer"><span class="status progress">Explore</span><a class="course-button" href="{% url 'all_modules' %}">Explore AI →</a></div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-category="business">
+                    <div class="course-art people"><span class="course-logo">RA</span><span class="art-shape"></span></div>
+                    <div class="course-body">
+                        <h3>Teamwork and Leadership</h3>
+                        <p>Business · Intermediate</p>
+                        <div class="card-footer"><span class="status new">Explore</span><a class="course-button" href="{% url 'my_courses' %}">View courses →</a></div>
+                    </div>
+                </article>
+
+                <div class="empty-state" id="emptyState" hidden>
+                    No courses match your search. Try another keyword or category.
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<footer>SmartLearn · Your learning journey starts here.</footer>
+
+<script>
+(function () {
+    const searches = [
+        document.getElementById("topSearch"),
+        document.getElementById("courseSearch")
+    ];
+    const category = document.getElementById("categoryFilter");
+    const cards = Array.from(document.querySelectorAll(".course-card"));
+    const empty = document.getElementById("emptyState");
+
+    function filterCourses() {
+        const query = searches.map(input => input.value.trim().toLowerCase())
+            .find(value => value) || "";
+        const selectedCategory = category.value;
+        let visible = 0;
+
+        cards.forEach(card => {
+            const matchesText = card.innerText.toLowerCase().includes(query);
+            const matchesCategory = selectedCategory === "all" ||
+                card.dataset.category === selectedCategory;
+            const show = matchesText && matchesCategory;
+            card.hidden = !show;
+            if (show) visible++;
+        });
+        empty.hidden = visible !== 0;
+    }
+
+    searches.forEach(input => input.addEventListener("input", filterCourses));
+    category.addEventListener("change", filterCourses);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning | SmartLearn</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172554;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #24528A, #35B957);
+            color: white;
+            padding: 35px;
+            border-radius: 22px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+        }
+
+        .header p { margin: 0; font-size: 17px; }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #24528A;
+        }
+
+        .continue-card {
+            background: #eef7ff;
+            border-left: 6px solid #24528A;
+            padding: 22px;
+            border-radius: 12px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 80%;
+            background: linear-gradient(90deg, #24528A, #35B957);
+        }
+
+        .btn, .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 9px;
+            background: #24528A;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn:hover, .back-btn:hover { background: #35B957; }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .course-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 22px;
+            background: white;
+        }
+
+        .course-card h3 { margin-top: 0; color: #172554; }
+
+        .today {
+            background: linear-gradient(135deg, #f0fdf4, #ecfeff);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 15px;
+        }
+
+        .resource {
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            background: #fafafa;
+        }
+
+        .resource h3 { margin-top: 0; }
+
+        .resource a {
+            color: #24528A;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 220px;
+            padding: 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .note-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .note-status {
+            margin-top: 12px;
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .share-box {
+            margin-top: 20px;
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .share-box select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+        }
+
+        .practice {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .hint {
+            background: #eff6ff;
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #hintText {
+            display: none;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .skill { margin-bottom: 20px; }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+        }
+
+        /* PYTHON CODING PLATFORM */
+
+        .coding-platform {
+            margin-top: 22px;
+            padding: 22px;
+            border: 1px solid #dbeafe;
+            border-radius: 14px;
+            background: #ffffff;
+            color: #172554;
+        }
+
+        .coding-platform[hidden] { display: none !important; }
+
+        .coding-platform h3 { color: #24528A; margin-top: 0; }
+
+        .coding-instructions {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .coding-platform textarea {
+            display: block;
+            width: 100%;
+            min-height: 240px;
+            margin-top: 10px;
+            padding: 16px;
+            resize: vertical;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            background: #0f172a;
+            color: #d1fae5;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            tab-size: 4;
+        }
+
+        .coding-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 14px 0 20px;
+        }
+
+        .coding-buttons button {
+            padding: 11px 16px;
+            border: none;
+            border-radius: 9px;
+            background: #24528A;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .coding-buttons button:hover { background: #35B957; }
+
+        .coding-buttons button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .coding-platform pre {
+            min-height: 50px;
+            padding: 14px;
+            border-radius: 9px;
+            background: #0f172a;
+            color: #a7f3d0;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .coding-feedback {
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        .back-btn { margin-top: 10px; }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .header { padding: 25px; }
+            .header h1 { font-size: 27px; }
+            .search-box { flex-direction: column; }
+            .coding-platform { padding: 16px; }
+            .coding-buttons button { flex: 1 1 100%; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🎓 SmartLearn Learning Hub</h1>
+        <p>Learn, practice, explore and create your own learning journey.</p>
+    </div>
+
+    <!-- CONTINUE LEARNING -->
+    <div class="section">
+        <h2>▶️ Continue Learning</h2>
+        <div class="continue-card">
+            <h3>🐍 Python Programming</h3>
+            <p>Module 1 → Lesson 1: What is Python?</p>
+            <p>Your course progress: <strong>80%</strong></p>
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+            <a href="{% url 'lesson1' %}" class="btn">Continue Learning →</a>
+        </div>
+    </div>
+
+    <!-- MY COURSES -->
+    <div class="section">
+        <h2>📚 My Courses</h2>
+        <div class="course-grid">
+            <div class="course-card">
+                <h3>🐍 Python Programming</h3>
+                <p>Learn Python from the basics to practical programming.</p>
+                <p><strong>Progress: 80%</strong></p>
+                <a href="{% url 'python_course' %}" class="btn">Open Course</a>
+            </div>
+
+            <div class="course-card">
+                <h3>🌐 Web Development</h3>
+                <p>Learn HTML, CSS, JavaScript and web development.</p>
+                <p><strong>Progress: 35%</strong></p>
+                <button class="btn" type="button" onclick="comingSoon()">Continue</button>
+            </div>
+
+            <div class="course-card">
+                <h3>🤖 AI Fundamentals</h3>
+                <p>Understand the fundamentals of Artificial Intelligence.</p>
+                <p><strong>Progress: 10%</strong></p>
+                <button class="btn" type="button" onclick="comingSoon()">Start Course</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TODAY'S LEARNING -->
+    <div class="section">
+        <h2>🎯 Today's Learning</h2>
+        <div class="today">
+            <h3>🐍 Learn Python Variables</h3>
+            <p>Understand how variables store information in Python.</p>
+            <p>⏱ Estimated time: <strong>15 minutes</strong></p>
+            <a href="{% url 'lesson1' %}" class="btn">Start Today's Lesson →</a>
+        </div>
+    </div>
+
+    <!-- EXPLORE RESOURCES -->
+    <div class="section">
+        <h2>🌐 Explore Learning Resources</h2>
+        <p>Learn from SmartLearn and discover additional educational resources from trusted learning platforms.</p>
+
+        <div class="search-box">
+            <input type="text" id="resourceSearch"
+                   placeholder="Search what you want to learn..."
+                   onkeyup="searchResources()">
+            <button class="btn" type="button" onclick="searchResources()">🔍 Search</button>
+        </div>
+
+        <div class="resource-grid" id="resourceGrid">
+            <div class="resource">
+                <h3>🎓 SWAYAM</h3>
+                <p>Online courses and educational resources.</p>
+                <a href="https://www.swayam.gov.in/" target="_blank" rel="noopener noreferrer">Open Resource →</a>
+            </div>
+
+            <div class="resource">
+                <h3>💻 NPTEL</h3>
+                <p>Technical and university-level learning resources.</p>
+                <a href="https://nptel.ac.in/" target="_blank" rel="noopener noreferrer">Open Resource →</a>
+            </div>
+
+            <div class="resource">
+                <h3>📚 MIT OpenCourseWare</h3>
+                <p>Free educational course materials from MIT.</p>
+                <a href="https://ocw.mit.edu/" target="_blank" rel="noopener noreferrer">Open Resource →</a>
+            </div>
+
+            <div class="resource">
+                <h3>🐍 Python Documentation</h3>
+                <p>Official Python documentation and tutorials.</p>
+                <a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener noreferrer">Open Resource →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MY NOTES -->
+    <div class="section">
+        <h2>📝 My Notes</h2>
+        <p>Write your own notes while learning.</p>
+
+        <textarea id="notes" class="notes-area"
+                  placeholder="Write your learning notes here..."></textarea>
+
+        <div class="note-actions">
+            <button class="btn" type="button" onclick="saveNotes()">💾 Save Notes</button>
+            <button class="btn" type="button" onclick="shareNotes()">🔗 Share Notes</button>
+            <button class="btn" type="button" onclick="downloadNotes()">📥 Download Notes</button>
+        </div>
+
+        <div id="noteStatus" class="note-status"></div>
+
+        <div class="share-box">
+            <strong>🔐 Note Visibility</strong><br><br>
+            <select id="shareType">
+                <option value="private">🔒 Only Me</option>
+                <option value="group">👥 My Study Group</option>
+                <option value="link">🔗 Anyone with the link</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- PRACTICE LAB -->
+    <div class="section">
+        <h2>🧪 Practice Lab</h2>
+
+        <div class="practice">
+            <h3>🐍 Python Challenge</h3>
+            <p>Create a Python program that calculates the total price of three products.</p>
+            <p>Difficulty: 🟢 Beginner</p>
+
+            <button class="btn" type="button" onclick="openCodingPlatform()">
+                Start Practice →
+            </button>
+        </div>
+
+        <!-- CODING EDITOR OPENS INSIDE THIS PAGE -->
+        <div class="coding-platform" id="codingPlatform" hidden>
+            <h3>💻 Python Coding Platform</h3>
+            <p class="coding-instructions">
+                Write Python code in the editor. Click Run Code to see the result,
+                Check Solution to test this challenge, or Reset to restore the starter code.
+            </p>
+
+            <label for="pythonCode"><strong>Python Editor</strong></label>
+
+            <textarea id="pythonCode" spellcheck="false"
+                      aria-label="Python code editor">price1 = 100
+price2 = 250
+price3 = 150
+
+total = price1 + price2 + price3
+print("Total price:", total)</textarea>
+
+            <div class="coding-buttons">
+                <button type="button" onclick="runPythonCode()">▶ Run Code</button>
+                <button type="button" onclick="checkPythonSolution()">✓ Check Solution</button>
+                <button type="button" onclick="resetPythonCode()">↺ Reset</button>
+            </div>
+
+            <h4>Output</h4>
+            <pre id="pythonOutput" aria-live="polite">Your output will appear here...</pre>
+            <p id="pythonFeedback" class="coding-feedback" role="status"></p>
+        </div>
+    </div>
+
+    <!-- I'M STUCK -->
+    <div class="section">
+        <h2>😕 I'm Stuck</h2>
+        <div class="hint">
+            <p>Need help with your current lesson?</p>
+            <button class="btn" type="button" onclick="showHint()">💡 Give Me a Hint</button>
+            <p id="hintText">
+                💡 Hint: Think about what information your program needs to store before writing the calculation.
+            </p>
+        </div>
+    </div>
+
+    <!-- LEARNING PROGRESS -->
+    <div class="section">
+        <h2>📊 My Learning Progress</h2>
+
+        <div class="skill">
+            <div class="skill-name"><span>Python Basics</span><strong>100%</strong></div>
+            <div class="progress"><div class="progress-bar" style="width:100%;"></div></div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-name"><span>Variables</span><strong>80%</strong></div>
+            <div class="progress"><div class="progress-bar" style="width:80%;"></div></div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-name"><span>Conditions</span><strong>60%</strong></div>
+            <div class="progress"><div class="progress-bar" style="width:60%;"></div></div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-name"><span>Loops</span><strong>30%</strong></div>
+            <div class="progress"><div class="progress-bar" style="width:30%;"></div></div>
+        </div>
+    </div>
+
+    <!-- BACK TO DASHBOARD -->
+    <a href="{% url 'dashboard' %}" class="back-btn">← Back to Dashboard</a>
+</div>
+
+<!-- Python runtime: Python runs in the browser using Pyodide -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+
+<script>
+    /* =========================
+       PYTHON CODING PLATFORM
+    ========================= */
+
+    let pyodideInstance = null;
+    const originalPythonCode = document.getElementById("pythonCode").value;
+
+    function openCodingPlatform() {
+        const platform = document.getElementById("codingPlatform");
+        platform.hidden = false;
+        platform.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById("pythonCode").focus();
+    }
+
+    async function getPyodide() {
+        if (!pyodideInstance) {
+            document.getElementById("pythonOutput").textContent =
+                "Loading Python runtime. Please wait...";
+
+            if (typeof loadPyodide !== "function") {
+                throw new Error(
+                    "Python runtime could not load. Check your internet connection and refresh the page."
+                );
+            }
+
+            pyodideInstance = await loadPyodide();
+        }
+
+        return pyodideInstance;
+    }
+
+    async function runPythonCode() {
+        const code = document.getElementById("pythonCode").value;
+        const output = document.getElementById("pythonOutput");
+        const feedback = document.getElementById("pythonFeedback");
+        const buttons = document.querySelectorAll(".coding-buttons button");
+
+        output.textContent = "Running code...";
+        feedback.textContent = "";
+        feedback.style.color = "";
+
+        buttons.forEach(button => button.disabled = true);
+
+        try {
+            const pyodide = await getPyodide();
+            let printedOutput = "";
+
+            pyodide.setStdout({
+                batched: function (text) {
+                    printedOutput += text + "\n";
+                }
+            });
+
+            pyodide.setStderr({
+                batched: function (text) {
+                    printedOutput += text + "\n";
+                }
+            });
+
+            await pyodide.runPythonAsync(code);
+
+            output.textContent = printedOutput.trim() || "(No output)";
+            return { success: true, output: output.textContent };
+        } catch (error) {
+            output.textContent = "Error:\n" + error.message;
+            return { success: false, output: output.textContent };
+        } finally {
+            buttons.forEach(button => button.disabled = false);
+        }
+    }
+
+    async function checkPythonSolution() {
+        const feedback = document.getElementById("pythonFeedback");
+        const result = await runPythonCode();
+
+        if (!result.success) {
+            feedback.textContent = "Fix the error above and try again.";
+            feedback.style.color = "#b45309";
+            return;
+        }
+
+        if (result.output.trim() === "Total price: 500") {
+            feedback.textContent =
+                "🎉 Correct! You completed the Python challenge.";
+            feedback.style.color = "#15803d";
+        } else {
+            feedback.textContent =
+                "💡 Hint: add all three product prices and print the total.";
+            feedback.style.color = "#b45309";
+        }
+    }
+
+    function resetPythonCode() {
+        document.getElementById("pythonCode").value = originalPythonCode;
+        document.getElementById("pythonOutput").textContent =
+            "Your output will appear here...";
+        document.getElementById("pythonFeedback").textContent = "";
+        document.getElementById("pythonFeedback").style.color = "";
+    }
+
+    /* =========================
+       SAVE NOTES
+    ========================= */
+
+    window.addEventListener("DOMContentLoaded", function () {
+        const savedNotes = localStorage.getItem("smartlearn_notes");
+        if (savedNotes !== null) {
+            document.getElementById("notes").value = savedNotes;
+        }
+    });
+
+    function saveNotes() {
+        const notes = document.getElementById("notes").value;
+        localStorage.setItem("smartlearn_notes", notes);
+        document.getElementById("noteStatus").innerText =
+            "✅ Notes saved successfully!";
+    }
+
+    /* =========================
+       SHARE NOTES
+    ========================= */
+
+    async function shareNotes() {
+        const notes = document.getElementById("notes").value;
+        const shareType = document.getElementById("shareType").value;
+
+        if (!notes.trim()) {
+            alert("Please write some notes before sharing.");
+            return;
+        }
+
+        if (shareType === "private") {
+            alert("🔒 Your notes are private and only available to you.");
+            return;
+        }
+
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: "My SmartLearn Notes",
+                    text: notes
+                });
+            } else {
+                await navigator.clipboard.writeText(notes);
+                alert("🔗 Notes copied. You can now share them with others.");
+            }
+        } catch (error) {
+            alert("Unable to share notes right now. You can download them instead.");
+        }
+    }
+
+    /* =========================
+       DOWNLOAD NOTES
+    ========================= */
+
+    function downloadNotes() {
+        const notes = document.getElementById("notes").value;
+
+        if (!notes.trim()) {
+            alert("Please write some notes first.");
+            return;
+        }
+
+        const blob = new Blob([notes], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "SmartLearn-Notes.txt";
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+    /* =========================
+       RESOURCE SEARCH
+    ========================= */
+
+    function searchResources() {
+        const search = document.getElementById("resourceSearch").value.toLowerCase();
+        const resources = document.querySelectorAll(".resource");
+
+        resources.forEach(function (resource) {
+            const text = resource.innerText.toLowerCase();
+            resource.style.display = text.includes(search) ? "block" : "none";
+        });
+    }
+
+    /* =========================
+       HINT
+    ========================= */
+
+    function showHint() {
+        document.getElementById("hintText").style.display = "block";
+    }
+
+    /* =========================
+       COMING SOON
+    ========================= */
+
+    function comingSoon() {
+        alert("🚀 This learning feature will be available soon!");
+    }
+</script>
+
+</body>
+</html>

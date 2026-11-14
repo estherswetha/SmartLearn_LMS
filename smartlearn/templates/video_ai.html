@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Video AI | SmartLearn</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172554;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #24528A, #35B957);
+            color: white;
+            padding: 35px;
+            border-radius: 22px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 35px;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #24528A;
+        }
+
+        .upload-box {
+            border: 2px dashed #35B957;
+            border-radius: 15px;
+            padding: 35px;
+            text-align: center;
+            background: #f8fff9;
+        }
+
+        .upload-box input {
+            margin-top: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 9px;
+            background: #24528A;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn:hover {
+            background: #35B957;
+        }
+
+        .video-area {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        video {
+            width: 100%;
+            max-height: 500px;
+            border-radius: 15px;
+            background: black;
+        }
+
+        .video-info {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .video-info h3 {
+            color: #24528A;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(230px, 1fr)
+            );
+            gap: 18px;
+        }
+
+        .feature-card {
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+        }
+
+        .feature-card h3 {
+            color: #24528A;
+            margin-top: 0;
+        }
+
+        .transcript {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            min-height: 200px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #eef7ff;
+            border-radius: 10px;
+        }
+
+        .language-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            margin-bottom: 15px;
+        }
+
+        .ai-output {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            line-height: 1.7;
+            min-height: 120px;
+            white-space: pre-wrap;
+        }
+
+        .ask-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ask-row input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+        }
+
+        .chapter {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border-left: 4px solid #35B957;
+            border-radius: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #24528A;
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+        }
+
+        .back-btn:hover {
+            background: #35B957;
+        }
+
+        @media (max-width: 800px) {
+
+            .video-area {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box,
+            .ask-row {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>🎬 Video AI</h1>
+
+        <p>
+            Turn educational videos into interactive
+            AI-powered learning experiences.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <div class="section">
+
+        <h2>📤 Upload Learning Video</h2>
+
+        <div class="upload-box">
+
+            <h3>🤖 Let AI understand your video</h3>
+
+            <p>
+                Upload a lesson video and SmartLearn can generate
+                transcript, captions, summary, notes and quiz.
+            </p>
+
+            <input
+                type="file"
+                id="videoFile"
+                accept="video/*"
+            >
+
+            <br><br>
+
+            <button
+                class="btn"
+                onclick="loadVideo()"
+            >
+                ▶ Load Video
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- VIDEO -->
+
+    <div class="section">
+
+        <div class="video-area">
+
+            <div>
+
+                <video
+                    id="videoPlayer"
+                    controls
+                >
+
+                    Your browser does not support video.
+
+                </video>
+
+            </div>
+
+
+            <div class="video-info">
+
+                <h3>🤖 AI Video Analysis</h3>
+
+                <p>
+
+                    <strong>Status:</strong>
+
+                    <span id="aiStatus">
+                        Waiting for video
+                    </span>
+
+                </p>
+
+                <p>
+
+                    📝 Transcript:
+
+                    <strong id="transcriptStatus">
+                        Not generated
+                    </strong>
+
+                </p>
+
+                <p>
+
+                    💬 Captions:
+
+                    <strong id="captionStatus">
+                        Not generated
+                    </strong>
+
+                </p>
+
+                <p>
+
+                    🧠 Summary:
+
+                    <strong>
+                        Ready
+                    </strong>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI CONTROLS -->
+
+    <div class="section">
+
+        <h2>🤖 AI Video Tools</h2>
+
+        <div class="feature-grid">
+
+
+            <div class="feature-card">
+
+                <h3>📝 Auto Transcript</h3>
+
+                <p>
+                    Convert spoken words in the video
+                    into searchable text.
+                </p>
+
+                <button
+                    class="btn"
+                    onclick="generateTranscript()"
+                >
+                    Generate Transcript
+                </button>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>💬 Auto Captions</h3>
+
+                <p>
+                    Generate captions from the video's speech.
+                </p>
+
+                <button
+                    class="btn"
+                    onclick="generateCaptions()"
+                >
+                    Generate Captions
+                </button>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>🧠 AI Summary</h3>
+
+                <p>
+                    Convert the lesson into important
+                    learning points.
+                </p>
+
+                <button
+                    class="btn"
+                    onclick="generateSummary()"
+                >
+                    Generate Summary
+                </button>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>📚 Study Notes</h3>
+
+                <p>
+                    Automatically create student-friendly notes.
+                </p>
+
+                <button
+                    class="btn"
+                    onclick="generateNotes()"
+                >
+                    Generate Notes
+                </button>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>🧪 AI Quiz</h3>
+
+                <p>
+                    Generate quiz questions from the lesson.
+                </p>
+
+                <button
+                    class="btn"
+                    onclick="generateQuiz()"
+                >
+                    Generate Quiz
+                </button>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <h3>⭐ Important Moments</h3>
+
+                <p>
+                    Find important concepts and key moments.
+                </p>
+
+                <button
+                    class="btn"
+                    onclick="findImportantMoments()"
+                >
+                    Find Moments
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CAPTION LANGUAGE -->
+
+    <div class="section">
+
+        <h2>🌍 Caption Language</h2>
+
+        <select
+            class="language-select"
+            id="captionLanguage"
+        >
+
+            <option value="English">
+                🇬🇧 English
+            </option>
+
+            <option value="Tamil">
+                🇮🇳 Tamil
+            </option>
+
+            <option value="Hindi">
+                🇮🇳 Hindi
+            </option>
+
+            <option value="French">
+                🇫🇷 French
+            </option>
+
+            <option value="Spanish">
+                🇪🇸 Spanish
+            </option>
+
+            <option value="German">
+                🇩🇪 German
+            </option>
+
+            <option value="Japanese">
+                🇯🇵 Japanese
+            </option>
+
+        </select>
+
+        <button
+            class="btn"
+            onclick="translateCaptions()"
+        >
+            🌍 Translate Captions
+        </button>
+
+    </div>
+
+
+    <!-- TRANSCRIPT -->
+
+    <div class="section">
+
+        <h2>📝 Video Transcript</h2>
+
+        <div
+            id="transcript"
+            class="transcript"
+        >
+
+            AI transcript will appear here.
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="section">
+
+        <h2>🔎 Search Inside Video</h2>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchText"
+                placeholder="Search for a topic..."
+            >
+
+            <button
+                class="btn"
+                onclick="searchTranscript()"
+            >
+                Search
+            </button>
+
+        </div>
+
+        <div
+            id="searchResult"
+            class="result"
+        >
+
+            Search results will appear here.
+
+        </div>
+
+    </div>
+
+
+    <!-- AI OUTPUT -->
+
+    <div class="section">
+
+        <h2>🧠 AI Learning Output</h2>
+
+        <div
+            id="aiOutput"
+            class="ai-output"
+        >
+
+            Choose an AI tool above.
+
+        </div>
+
+    </div>
+
+
+    <!-- CHAPTERS -->
+
+    <div class="section">
+
+        <h2>⏱️ AI Video Chapters</h2>
+
+        <div id="chapters">
+
+            <div class="chapter">
+                00:00 — Introduction
+            </div>
+
+            <div class="chapter">
+                01:30 — Main Concept
+            </div>
+
+            <div class="chapter">
+                05:00 — Example
+            </div>
+
+            <div class="chapter">
+                10:00 — Summary
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ASK AI -->
+
+    <div class="section">
+
+        <h2>🤖 Ask AI About This Video</h2>
+
+        <div class="ask-row">
+
+            <input
+                type="text"
+                id="question"
+                placeholder="Ask something about this lesson..."
+            >
+
+            <button
+                class="btn"
+                onclick="askAI()"
+            >
+                Ask AI
+            </button>
+
+        </div>
+
+        <br>
+
+        <div
+            id="answer"
+            class="ai-output"
+        >
+
+            AI answer will appear here.
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="back-btn"
+    >
+        ← Back to Dashboard
+    </a>
+
+
+</div>
+
+
+<script>
+
+
+    let selectedVideo = null;
+
+    let transcriptText = "";
+
+
+    /* =========================
+       CSRF COOKIE
+    ========================= */
+
+    function getCookie(name) {
+
+        let cookieValue = null;
+
+        if (
+            document.cookie &&
+            document.cookie !== ""
+        ) {
+
+            const cookies =
+                document.cookie.split(";");
+
+            for (
+                let cookie of cookies
+            ) {
+
+                cookie = cookie.trim();
+
+                if (
+                    cookie.substring(
+                        0,
+                        name.length + 1
+                    ) === name + "="
+                ) {
+
+                    cookieValue =
+                        decodeURIComponent(
+                            cookie.substring(
+                                name.length + 1
+                            )
+                        );
+
+                    break;
+                }
+            }
+        }
+
+        return cookieValue;
+    }
+
+
+    /* =========================
+       LOAD VIDEO
+    ========================= */
+
+    function loadVideo() {
+
+        const file =
+            document.getElementById(
+                "videoFile"
+            ).files[0];
+
+        const player =
+            document.getElementById(
+                "videoPlayer"
+            );
+
+        const status =
+            document.getElementById(
+                "aiStatus"
+            );
+
+
+        if (!file) {
+
+            alert(
+                "Please select a video first."
+            );
+
+            return;
+        }
+
+
+        selectedVideo = file;
+
+
+        player.src =
+            URL.createObjectURL(file);
+
+
+        status.innerText =
+            "Video loaded successfully";
+
+
+        document.getElementById(
+            "transcriptStatus"
+        ).innerText = "Ready";
+
+
+        document.getElementById(
+            "captionStatus"
+        ).innerText = "Ready";
+
+    }
+
+
+    /* =========================
+       REAL AI TRANSCRIPT
+    ========================= */
+
+    async function generateTranscript() {
+
+        if (!selectedVideo) {
+
+            alert(
+                "Please upload a video first."
+            );
+
+            return;
+        }
+
+
+        const transcript =
+            document.getElementById(
+                "transcript"
+            );
+
+        const status =
+            document.getElementById(
+                "aiStatus"
+            );
+
+        const transcriptStatus =
+            document.getElementById(
+                "transcriptStatus"
+            );
+
+
+        status.innerText =
+            "🤖 AI is analyzing the video...";
+
+
+        transcriptStatus.innerText =
+            "Generating...";
+
+
+        transcript.innerText =
+            "🔄 AI is listening to the video...\n\n" +
+            "Please wait while SmartLearn creates " +
+            "the transcript.";
+
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "video",
+            selectedVideo
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "{% url 'generate_transcript' %}",
+                    {
+                        method: "POST",
+
+                        body: formData,
+
+                        headers: {
+                            "X-CSRFToken":
+                                getCookie(
+                                    "csrftoken"
+                                )
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                transcript.innerText =
+                    "❌ " + data.error;
+
+
+                status.innerText =
+                    "❌ Transcript failed";
+
+
+                transcriptStatus.innerText =
+                    "Failed";
+
+
+                return;
+            }
+
+
+            transcriptText =
+                data.text;
+
+
+            window.videoSegments =
+                data.segments;
+
+
+            transcript.innerText =
+                data.text;
+
+
+            status.innerText =
+                "✅ AI transcript generated";
+
+
+            transcriptStatus.innerText =
+                "Generated";
+
+
+            console.log(
+                "AI Transcript:",
+                data.text
+            );
+
+
+            console.log(
+                "Timestamp segments:",
+                data.segments
+            );
+
+        }
+
+
+        catch (error) {
+
+            console.error(error);
+
+
+            transcript.innerText =
+                "❌ Unable to connect to Video AI.\n\n" +
+                "Please check your API key and internet connection.";
+
+
+            status.innerText =
+                "❌ AI connection failed";
+
+
+            transcriptStatus.innerText =
+                "Failed";
+
+        }
+
+    }
+
+
+    /* =========================
+       CAPTIONS
+    ========================= */
+
+    function generateCaptions() {
+
+        if (!selectedVideo) {
+
+            alert(
+                "Please upload a video first."
+            );
+
+            return;
+        }
+
+
+        document.getElementById(
+            "captionStatus"
+        ).innerText =
+            "AI captions requested";
+
+
+        document.getElementById(
+            "aiOutput"
+        ).innerText =
+            "🤖 AI is preparing captions from the video speech.";
+
+    }
+
+
+    /* =========================
+       SUMMARY
+    ========================= */
+
+    function generateSummary() {
+
+        document.getElementById(
+            "aiOutput"
+        ).innerText =
+
+            "🧠 AI VIDEO SUMMARY\n\n" +
+
+            "The AI will analyze the video transcript " +
+            "and create a concise summary.\n\n" +
+
+            "Key points:\n" +
+
+            "• Main concepts\n" +
+
+            "• Important explanations\n" +
+
+            "• Examples\n" +
+
+            "• Key takeaways";
+
+    }
+
+
+    /* =========================
+       NOTES
+    ========================= */
+
+    function generateNotes() {
+
+        document.getElementById(
+            "aiOutput"
+        ).innerText =
+
+            "📚 AI STUDY NOTES\n\n" +
+
+            "1. Important concept\n" +
+
+            "2. Key definition\n" +
+
+            "3. Example\n" +
+
+            "4. Important points\n\n" +
+
+            "These notes can later be connected " +
+
+            "to SmartLearn's My Notes system.";
+
+    }
+
+
+    /* =========================
+       QUIZ
+    ========================= */
+
+    function generateQuiz() {
+
+        document.getElementById(
+            "aiOutput"
+        ).innerText =
+
+            "🧪 AI GENERATED QUIZ\n\n" +
+
+            "Question 1:\n" +
+
+            "What is the main concept explained in this video?\n\n" +
+
+            "Question 2:\n" +
+
+            "Which example was discussed?\n\n" +
+
+            "Question 3:\n" +
+
+            "What is the most important takeaway?";
+
+    }
+
+
+    /* =========================
+       IMPORTANT MOMENTS
+    ========================= */
+
+    function findImportantMoments() {
+
+        document.getElementById(
+            "aiOutput"
+        ).innerText =
+
+            "⭐ IMPORTANT MOMENTS\n\n" +
+
+            "02:15 — Important definition\n" +
+
+            "05:42 — Main example\n" +
+
+            "08:30 — Important concept\n" +
+
+            "12:10 — Exam point";
+
+    }
+
+
+    /* =========================
+       CAPTION TRANSLATION
+    ========================= */
+
+    function translateCaptions() {
+
+        const language =
+            document.getElementById(
+                "captionLanguage"
+            ).value;
+
+
+        document.getElementById(
+            "aiOutput"
+        ).innerText =
+
+            "🌍 Translating captions to " +
+
+            language +
+
+            "...\n\n" +
+
+            "AI translated captions will appear " +
+
+            "here.";
+
+    }
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    function searchTranscript() {
+
+        const search =
+            document.getElementById(
+                "searchText"
+            ).value
+            .trim()
+            .toLowerCase();
+
+
+        const result =
+            document.getElementById(
+                "searchResult"
+            );
+
+
+        if (!search) {
+
+            result.innerText =
+                "Please enter a search term.";
+
+            return;
+        }
+
+
+        if (!transcriptText) {
+
+            result.innerText =
+                "Generate the transcript first.";
+
+            return;
+        }
+
+
+        if (
+            transcriptText
+                .toLowerCase()
+                .includes(search)
+        ) {
+
+            result.innerText =
+                "🔎 Found \"" +
+                search +
+                "\" in the transcript.";
+
+        }
+
+        else {
+
+            result.innerText =
+                "No matching section found.";
+
+        }
+
+    }
+
+
+    /* =========================
+       ASK AI
+    ========================= */
+
+    function askAI() {
+
+        const question =
+            document.getElementById(
+                "question"
+            ).value.trim();
+
+
+        const answer =
+            document.getElementById(
+                "answer"
+            );
+
+
+        if (!question) {
+
+            answer.innerText =
+                "Please enter a question.";
+
+            return;
+        }
+
+
+        answer.innerText =
+            "🤖 AI is preparing an answer based on the video transcript...\n\n" +
+
+            "Question: " +
+
+            question;
+
+    }
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,2399 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tutor AI | SmartLearn</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* TOP BAR */
+
+        .topbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: #24528A;
+        }
+
+        .brand span {
+            color: #35B957;
+        }
+
+        .top-title {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #24528A;
+            font-weight: 700;
+        }
+
+        /* MAIN */
+
+        .page {
+            max-width: 1450px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .welcome {
+            background: linear-gradient(135deg, #0d2854, #24528A);
+            color: white;
+            border-radius: 20px;
+            padding: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .welcome h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #dbeafe;
+        }
+
+        .robert-mini {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+        }
+
+        /* GRID */
+
+        .layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* HISTORY */
+
+        .history-card {
+            padding: 18px;
+            height: fit-content;
+            position: sticky;
+            top: 92px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .history-header h3 {
+            margin: 0;
+        }
+
+        .clear-btn {
+            border: none;
+            background: transparent;
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .history-search {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 10px;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .history-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 12px;
+            border-radius: 12px;
+            background: #f8fafc;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .history-item:hover {
+            border-color: #24528A;
+            background: #eff6ff;
+        }
+
+        .history-question {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .history-date {
+            font-size: 10px;
+            color: #9ca3af;
+            margin-top: 5px;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: #9ca3af;
+            padding: 25px 5px;
+            font-size: 13px;
+        }
+
+        /* TUTOR */
+
+        .tutor-area {
+            min-width: 0;
+        }
+
+        .robert-card {
+            padding: 22px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .robert-image-box {
+            width: 125px;
+            height: 125px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        #tutorImage,
+        #tutorTalkingImage {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #dbeafe;
+        }
+
+        .online-dot {
+            width: 17px;
+            height: 17px;
+            background: #22c55e;
+            border: 3px solid white;
+            border-radius: 50%;
+            position: absolute;
+            right: 5px;
+            bottom: 8px;
+        }
+
+        .robert-info h2 {
+            margin: 0 0 6px;
+            color: #0f2d5c;
+        }
+
+        .robert-info p {
+            margin: 0 0 10px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .status {
+            display: inline-block;
+            background: #dcfce7;
+            color: #15803d;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* CHAT */
+
+        .chat-card {
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 17px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .small-btn {
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 9px;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .small-btn:hover {
+            background: #eff6ff;
+        }
+
+        .chat-box {
+            min-height: 420px;
+            max-height: 560px;
+            overflow-y: auto;
+            padding: 22px;
+            background: #f8fafc;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 18px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 78%;
+            padding: 15px 17px;
+            border-radius: 17px;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .message.user .message-content {
+            background: #24528A;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-tools {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tool-btn {
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 8px;
+            padding: 6px 9px;
+            font-size: 11px;
+        }
+
+        .tool-btn:hover {
+            background: #eff6ff;
+        }
+
+        /* TYPING */
+
+        .typing {
+            display: none;
+            padding: 12px 20px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .typing span {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #24528A;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: bounce 1s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* FEATURES */
+
+        .feature-section {
+            padding: 18px 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .feature-title {
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 9px;
+        }
+
+        .feature-btn {
+            border: 1px solid #dbe3ef;
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 11px 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .feature-btn:hover {
+            background: #eff6ff;
+            border-color: #24528A;
+        }
+
+        /* INPUT */
+
+        .input-area {
+            padding: 18px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .question-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        #questionInput {
+            flex: 1;
+            min-height: 55px;
+            resize: none;
+            border: 1px solid #cbd5e1;
+            border-radius: 13px;
+            padding: 15px;
+            outline: none;
+        }
+
+        #questionInput:focus {
+            border-color: #24528A;
+        }
+
+        .send-btn {
+            border: none;
+            border-radius: 13px;
+            padding: 0 23px;
+            background: #24528A;
+            color: white;
+            font-weight: 800;
+        }
+
+        .send-btn:hover {
+            background: #173b69;
+        }
+
+        .input-tools {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .input-tool {
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 9px;
+            padding: 8px 11px;
+            font-size: 12px;
+        }
+
+        /* LEARNING PANEL */
+
+        .learning-panel {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            padding: 17px;
+        }
+
+        .stat-icon {
+            font-size: 22px;
+        }
+
+        .stat-number {
+            font-size: 25px;
+            font-weight: 800;
+            color: #24528A;
+            margin-top: 7px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* SUGGESTIONS */
+
+        .next-card {
+            margin-top: 18px;
+            padding: 20px;
+        }
+
+        .next-card h3 {
+            margin-top: 0;
+        }
+
+        .suggestions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+
+        .suggestion {
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            color: #1e40af;
+            border-radius: 10px;
+            padding: 10px 13px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .6);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            width: min(800px, 100%);
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 18px;
+            padding: 24px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .close-modal {
+            border: none;
+            background: #f1f5f9;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+        }
+
+        #notesContent {
+            width: 100%;
+            min-height: 350px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 15px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 12px;
+        }
+
+        .modal-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 10px 15px;
+            font-weight: 700;
+        }
+
+        .modal-btn.primary {
+            background: #24528A;
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #e5e7eb;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .history-card {
+                position: static;
+            }
+
+            .history-list {
+                max-height: 220px;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .top-title {
+                display: none;
+            }
+
+            .page {
+                padding: 12px;
+            }
+
+            .welcome {
+                padding: 20px;
+            }
+
+            .welcome h1 {
+                font-size: 23px;
+            }
+
+            .robert-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .learning-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .question-box {
+                flex-direction: column;
+            }
+
+            .send-btn {
+                min-height: 48px;
+            }
+
+            .message-content {
+                max-width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+
+<header class="topbar">
+
+    <div class="brand">
+        Smart<span>Learn</span>
+    </div>
+
+    <div class="top-title">
+        🤖 Personal AI Tutor
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="back-btn">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<main class="page">
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <div>
+            <h1>Meet Robert — Your AI Tutor 🤖</h1>
+
+            <p>
+                Ask questions, understand difficult topics,
+                learn step-by-step and build your knowledge.
+            </p>
+        </div>
+
+        <img
+            src="{% static 'images/robert.png' %}"
+            class="robert-mini"
+            alt="Robert"
+        >
+
+    </section>
+
+
+    <div class="layout">
+
+        <!-- HISTORY -->
+
+        <aside class="card history-card">
+
+            <div class="history-header">
+
+                <h3>📚 History</h3>
+
+                <button
+                    class="clear-btn"
+                    onclick="clearHistory()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+            <input
+                type="text"
+                id="historySearch"
+                class="history-search"
+                placeholder="🔎 Search history..."
+                oninput="renderHistory()"
+            >
+
+            <div id="historyList" class="history-list"></div>
+
+        </aside>
+
+
+        <!-- TUTOR AREA -->
+
+        <section class="tutor-area">
+
+            <!-- ROBERT -->
+
+            <div class="card robert-card">
+
+                <div class="robert-image-box">
+
+                    <img
+                        id="tutorImage"
+                        src="{% static 'images/robert.png' %}"
+                        alt="Robert AI Tutor"
+                    >
+
+                    <img
+                        id="tutorTalkingImage"
+                        src="{% static 'images/robert_talking.png' %}"
+                        alt="Robert AI Tutor Speaking"
+                        style="display:none;"
+                    >
+
+                    <div class="online-dot"></div>
+
+                </div>
+
+                <div class="robert-info">
+
+                    <h2>Robert</h2>
+
+                    <p>
+                        Your friendly SmartLearn AI Tutor.
+                        I can explain concepts simply, give examples,
+                        help with programming and prepare you for interviews.
+                    </p>
+
+                    <span class="status">
+                        ● Online
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHAT -->
+
+            <div class="card chat-card">
+
+                <div class="chat-header">
+
+                    <h3>💬 Ask Robert</h3>
+
+                    <div class="chat-actions">
+
+                        <button
+                            class="small-btn"
+                            onclick="copyLastAnswer()"
+                        >
+                            📋 Copy
+                        </button>
+
+                        <button
+                            class="small-btn"
+                            onclick="saveLastAnswer()"
+                        >
+                            💾 Save
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="chatBox"
+                    class="chat-box"
+                >
+
+                    <div class="message bot">
+
+                        <div class="message-content">
+
+                            👋 Hello! I'm Robert.
+
+                            <br><br>
+
+                            Ask me anything you want to learn.
+
+                            <br><br>
+
+                            I can help you with:
+
+                            <br>
+                            • Programming
+                            <br>
+                            • Python
+                            <br>
+                            • Django
+                            <br>
+                            • Mathematics
+                            <br>
+                            • Science
+                            <br>
+                            • Interview preparation
+                            <br>
+                            • Step-by-step explanations
+
+                            <br><br>
+
+                            What would you like to learn today?
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TYPING -->
+
+                <div
+                    id="typing"
+                    class="typing"
+                >
+                    Robert is thinking
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+
+                <!-- FEATURE BUTTONS -->
+
+                <div class="feature-section">
+
+                    <div class="feature-title">
+                        ⚡ Learning Tools
+                    </div>
+
+                    <div class="feature-grid">
+
+                        <button
+                            class="feature-btn"
+                            onclick="followUp('Explain this simply')"
+                        >
+                            📖 Explain Simply
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="followUp('Give me a real-life example')"
+                        >
+                            💡 Real-Life Example
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="followUp('Explain this step-by-step')"
+                        >
+                            🔍 Step-by-Step
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="followUp('What are the common mistakes?')"
+                        >
+                            ⚠️ Common Mistakes
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="followUp('Help me prepare for an interview')"
+                        >
+                            💼 Interview Prep
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="makeLastAnswerNote()"
+                        >
+                            📝 Make Notes
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="saveLastAnswer()"
+                        >
+                            💾 Save Answer
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="speakLastAnswer()"
+                        >
+                            🔊 Robert Voice
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="pauseVoice()"
+                        >
+                            ⏸️ Pause Voice
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="resumeVoice()"
+                        >
+                            ▶️ Resume Voice
+                        </button>
+
+                        <button
+                            class="feature-btn"
+                            onclick="stopVoice()"
+                        >
+                            ⏹️ Stop Voice
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUESTION INPUT -->
+
+                <div class="input-area">
+
+                    <div class="question-box">
+
+                        <textarea
+                            id="questionInput"
+                            placeholder="Ask Robert anything..."
+                        ></textarea>
+
+                        <button
+                            class="send-btn"
+                            onclick="askTutor()"
+                        >
+                            🚀 Ask Robert
+                        </button>
+
+                    </div>
+
+
+                    <div class="input-tools">
+
+                        <button
+                            class="input-tool"
+                            onclick="startVoiceInput()"
+                        >
+                            🎤 Voice Question
+                        </button>
+
+                        <button
+                            class="input-tool"
+                            onclick="clearChat()"
+                        >
+                            🗑️ Clear Chat
+                        </button>
+
+                        <button
+                            class="input-tool"
+                            onclick="openNotesWith(lastAnswer)"
+                        >
+                            📝 Notes
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEARNING STATS -->
+
+            <div class="learning-panel">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🔥
+                    </div>
+
+                    <div
+                        id="streakNumber"
+                        class="stat-number"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Day Learning Streak
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ❓
+                    </div>
+
+                    <div
+                        id="questionNumber"
+                        class="stat-number"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Questions Asked
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        💾
+                    </div>
+
+                    <div
+                        id="savedNumber"
+                        class="stat-number"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Saved Learning
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- WHAT NEXT -->
+
+            <div class="card next-card">
+
+                <h3>
+                    🚀 What Next?
+                </h3>
+
+                <p>
+                    Continue your learning with one of these ideas:
+                </p>
+
+                <div class="suggestions">
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Teach me Python basics')"
+                    >
+                        🐍 Learn Python Basics
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Teach me Django step by step')"
+                    >
+                        🌐 Learn Django
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Give me programming interview questions')"
+                    >
+                        💼 Interview Practice
+                    </button>
+
+                    <button
+                        class="suggestion"
+                        onclick="askSuggestion('Teach me object oriented programming')"
+                    >
+                        🧠 OOP
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- NOTES MODAL -->
+
+<div
+    id="notesModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>📝 My Learning Notes</h2>
+
+            <button
+                class="close-modal"
+                onclick="closeNotes()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <textarea
+            id="notesContent"
+            placeholder="Your notes will appear here..."
+        ></textarea>
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-btn secondary"
+                onclick="downloadNotes()"
+            >
+                📥 Download
+            </button>
+
+            <button
+                class="modal-btn primary"
+                onclick="saveNotes()"
+            >
+                💾 Save Notes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       STORAGE
+    ===================================================== */
+
+    const HISTORY_KEY = "smartlearn_tutor_history";
+    const SAVED_KEY = "smartlearn_tutor_saved";
+    const NOTES_KEY = "smartlearn_tutor_notes";
+    const STREAK_KEY = "smartlearn_tutor_streak";
+
+    let lastAnswer = "";
+    let conversation = [];
+
+
+    /* =====================================================
+       STORAGE FUNCTIONS
+    ===================================================== */
+
+    function getHistory() {
+
+        try {
+            return JSON.parse(
+                localStorage.getItem(HISTORY_KEY)
+            ) || [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+
+    function getSaved() {
+
+        try {
+            return JSON.parse(
+                localStorage.getItem(SAVED_KEY)
+            ) || [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+
+    function saveHistoryItem(question, answer) {
+
+        const history = getHistory();
+
+        history.unshift({
+            question: question,
+            answer: answer,
+            date: new Date().toISOString()
+        });
+
+        localStorage.setItem(
+            HISTORY_KEY,
+            JSON.stringify(history.slice(0, 100))
+        );
+
+        renderHistory();
+        updateDashboardStats();
+    }
+
+
+    /* =====================================================
+       HISTORY
+    ===================================================== */
+
+    function renderHistory() {
+
+        const list = document.getElementById(
+            "historyList"
+        );
+
+        const search = document.getElementById(
+            "historySearch"
+        ).value.toLowerCase();
+
+        const history = getHistory();
+
+        const filtered = history.filter(item =>
+            item.question.toLowerCase().includes(search)
+        );
+
+        if (filtered.length === 0) {
+
+            list.innerHTML = `
+                <div class="empty-history">
+                    📚 No questions found.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        list.innerHTML = filtered.map(
+            (item, index) => {
+
+                const date = new Date(
+                    item.date
+                ).toLocaleString();
+
+                return `
+                    <div
+                        class="history-item"
+                        onclick="openHistory(${index})"
+                    >
+
+                        <div class="history-question">
+                            ${escapeHtml(item.question)}
+                        </div>
+
+                        <div class="history-date">
+                            ${date}
+                        </div>
+
+                    </div>
+                `;
+            }
+        ).join("");
+    }
+
+
+    function openHistory(index) {
+
+        const history = getHistory();
+
+        if (!history[index]) {
+            return;
+        }
+
+        const item = history[index];
+
+        clearChat();
+
+        addMessage(
+            "user",
+            item.question
+        );
+
+        addMessage(
+            "bot",
+            item.answer
+        );
+
+        lastAnswer = item.answer;
+
+        conversation = [
+            {
+                role: "user",
+                text: item.question
+            },
+            {
+                role: "assistant",
+                text: item.answer
+            }
+        ];
+
+    }
+
+
+    function clearHistory() {
+
+        if (
+            !confirm(
+                "Clear all Tutor AI history?"
+            )
+        ) {
+            return;
+        }
+
+        localStorage.removeItem(
+            HISTORY_KEY
+        );
+
+        renderHistory();
+        updateDashboardStats();
+    }
+
+
+    /* =====================================================
+       CHAT
+    ===================================================== */
+
+    function addMessage(type, text) {
+
+        const chatBox = document.getElementById(
+            "chatBox"
+        );
+
+        const message = document.createElement(
+            "div"
+        );
+
+        message.className =
+            "message " + type;
+
+
+        const content = document.createElement(
+            "div"
+        );
+
+        content.className =
+            "message-content";
+
+
+        content.innerHTML =
+            escapeHtml(text);
+
+
+        if (type === "bot") {
+
+            const tools =
+                document.createElement("div");
+
+            tools.className =
+                "message-tools";
+
+            tools.innerHTML = `
+
+                <button
+                    class="tool-btn"
+                    onclick="copyAnswer(this)"
+                >
+                    📋 Copy
+                </button>
+
+                <button
+                    class="tool-btn"
+                    onclick="saveAnswerElement(this)"
+                >
+                    💾 Save
+                </button>
+
+                <button
+                    class="tool-btn"
+                    onclick="notesFromElement(this)"
+                >
+                    📝 Notes
+                </button>
+
+                <button
+                    class="tool-btn"
+                    onclick="speakElement(this)"
+                >
+                    🔊 Speak
+                </button>
+
+            `;
+
+            content.appendChild(tools);
+        }
+
+
+        message.appendChild(content);
+
+        chatBox.appendChild(message);
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+    }
+
+
+    function clearChat() {
+
+        const chatBox =
+            document.getElementById("chatBox");
+
+        chatBox.innerHTML = "";
+
+        conversation = [];
+
+        addMessage(
+            "bot",
+            "👋 Chat cleared! What would you like to learn?"
+        );
+    }
+
+
+    /* =====================================================
+       ASK ROBERT
+    ===================================================== */
+
+    async function askTutor(customQuestion = null) {
+
+        const input =
+            document.getElementById(
+                "questionInput"
+            );
+
+        const question =
+            customQuestion ||
+            input.value.trim();
+
+
+        if (!question) {
+
+            alert(
+                "Please enter a question first."
+            );
+
+            return;
+        }
+
+
+        input.value = "";
+
+        addMessage(
+            "user",
+            question
+        );
+
+
+        conversation.push({
+            role: "user",
+            text: question
+        });
+
+
+        document.getElementById(
+            "typing"
+        ).style.display = "block";
+
+
+        try {
+
+            const csrfToken =
+                document.querySelector(
+                    "[name=csrfmiddlewaretoken]"
+                ).value;
+
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "question",
+                question
+            );
+
+            formData.append(
+                "conversation",
+                JSON.stringify(conversation)
+            );
+
+            formData.append(
+                "csrfmiddlewaretoken",
+                csrfToken
+            );
+
+
+            const response =
+                await fetch(
+                    "{% url 'tutor_ai_api' %}",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.error ||
+                    "Something went wrong."
+                );
+            }
+
+
+            const answer =
+                data.answer;
+
+
+            lastAnswer =
+                answer;
+
+
+            conversation.push({
+                role: "assistant",
+                text: answer
+            });
+
+
+            addMessage(
+                "bot",
+                answer
+            );
+
+
+            saveHistoryItem(
+                question,
+                answer
+            );
+
+
+            updateStreak();
+
+        } catch (error) {
+
+            addMessage(
+                "bot",
+                "⚠️ " + error.message
+            );
+
+        } finally {
+
+            document.getElementById(
+                "typing"
+            ).style.display = "none";
+
+        }
+    }
+
+
+    /* =====================================================
+       FOLLOW UP
+    ===================================================== */
+
+    function followUp(text) {
+
+        if (!lastAnswer) {
+
+            alert(
+                "Ask Robert a question first."
+            );
+
+            return;
+        }
+
+        askTutor(
+            text +
+            ". Use the previous answer as context."
+        );
+    }
+
+
+    function askSuggestion(question) {
+
+        askTutor(question);
+    }
+
+
+    /* =====================================================
+       SAVE ANSWER
+    ===================================================== */
+
+    function saveAnswerText(text) {
+
+        if (!text) {
+            return;
+        }
+
+        const saved = getSaved();
+
+        saved.unshift({
+            text: text,
+            date: new Date().toISOString()
+        });
+
+        localStorage.setItem(
+            SAVED_KEY,
+            JSON.stringify(
+                saved.slice(0, 100)
+            )
+        );
+
+        updateDashboardStats();
+
+        alert(
+            "✅ Answer saved!"
+        );
+    }
+
+
+    function saveLastAnswer() {
+
+        if (!lastAnswer) {
+
+            alert(
+                "There is no answer to save yet."
+            );
+
+            return;
+        }
+
+        saveAnswerText(
+            lastAnswer
+        );
+    }
+
+
+    function saveAnswerElement(button) {
+
+        const message =
+            button.closest(
+                ".message-content"
+            );
+
+        const clone =
+            message.cloneNode(true);
+
+        const tools =
+            clone.querySelector(
+                ".message-tools"
+            );
+
+        if (tools) {
+            tools.remove();
+        }
+
+        saveAnswerText(
+            clone.innerText.trim()
+        );
+    }
+
+
+    /* =====================================================
+       COPY
+    ===================================================== */
+
+    async function copyLastAnswer() {
+
+        if (!lastAnswer) {
+
+            alert(
+                "There is no answer to copy."
+            );
+
+            return;
+        }
+
+        await navigator.clipboard.writeText(
+            lastAnswer
+        );
+
+        alert(
+            "📋 Answer copied!"
+        );
+    }
+
+
+    function copyAnswer(button) {
+
+        const message =
+            button.closest(
+                ".message-content"
+            );
+
+        const clone =
+            message.cloneNode(true);
+
+        const tools =
+            clone.querySelector(
+                ".message-tools"
+            );
+
+        if (tools) {
+            tools.remove();
+        }
+
+        navigator.clipboard.writeText(
+            clone.innerText.trim()
+        );
+
+        alert(
+            "📋 Answer copied!"
+        );
+    }
+
+
+    /* =====================================================
+       NOTES
+    ===================================================== */
+
+    function openNotesWith(text) {
+
+        if (!text) {
+
+            alert(
+                "Ask Robert something first."
+            );
+
+            return;
+        }
+
+        document.getElementById(
+            "notesContent"
+        ).value = text;
+
+        document.getElementById(
+            "notesModal"
+        ).style.display = "flex";
+    }
+
+
+    function makeLastAnswerNote() {
+
+        openNotesWith(
+            lastAnswer
+        );
+    }
+
+
+    function notesFromElement(button) {
+
+        const message =
+            button.closest(
+                ".message-content"
+            );
+
+        const clone =
+            message.cloneNode(true);
+
+        const tools =
+            clone.querySelector(
+                ".message-tools"
+            );
+
+        if (tools) {
+            tools.remove();
+        }
+
+        openNotesWith(
+            clone.innerText.trim()
+        );
+    }
+
+
+    function closeNotes() {
+
+        document.getElementById(
+            "notesModal"
+        ).style.display = "none";
+    }
+
+
+    function saveNotes() {
+
+        const notes =
+            document.getElementById(
+                "notesContent"
+            ).value.trim();
+
+
+        if (!notes) {
+
+            alert(
+                "There are no notes to save."
+            );
+
+            return;
+        }
+
+
+        localStorage.setItem(
+            NOTES_KEY,
+            notes
+        );
+
+
+        alert(
+            "✅ Notes saved!"
+        );
+    }
+
+
+    function downloadNotes() {
+
+        const notes =
+            document.getElementById(
+                "notesContent"
+            ).value;
+
+
+        if (!notes.trim()) {
+
+            alert(
+                "There are no notes to download."
+            );
+
+            return;
+        }
+
+
+        const blob =
+            new Blob(
+                [notes],
+                {
+                    type: "text/plain"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "SmartLearn_Robert_Notes.txt";
+
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+
+    /* =====================================================
+       VOICE
+    ===================================================== */
+
+    function speakText(text) {
+
+        if (!text) {
+            return;
+        }
+
+
+        if (
+            !("speechSynthesis" in window)
+        ) {
+
+            alert(
+                "Voice is not supported in this browser."
+            );
+
+            return;
+        }
+
+
+        speechSynthesis.cancel();
+
+
+        const cleanText =
+            text.replace(
+                /[📌🎯📝💡⚠️📚🔥🚀🤖]/g,
+                ""
+            );
+
+
+        const speech =
+            new SpeechSynthesisUtterance(
+                cleanText
+            );
+
+
+        speech.rate = 0.95;
+        speech.pitch = 1;
+
+
+        const normal =
+            document.getElementById(
+                "tutorImage"
+            );
+
+        const talking =
+            document.getElementById(
+                "tutorTalkingImage"
+            );
+
+
+        normal.style.display =
+            "none";
+
+        talking.style.display =
+            "block";
+
+
+        speech.onend = function () {
+
+            talking.style.display =
+                "none";
+
+            normal.style.display =
+                "block";
+        };
+
+
+        speech.onerror = function () {
+
+            talking.style.display =
+                "none";
+
+            normal.style.display =
+                "block";
+        };
+
+
+        speechSynthesis.speak(
+            speech
+        );
+    }
+
+
+    function speakLastAnswer() {
+
+        if (!lastAnswer) {
+
+            alert(
+                "Ask Robert something first."
+            );
+
+            return;
+        }
+
+        speakText(
+            lastAnswer
+        );
+    }
+
+
+    function speakElement(button) {
+
+        const message =
+            button.closest(
+                ".message-content"
+            );
+
+        const clone =
+            message.cloneNode(true);
+
+        const tools =
+            clone.querySelector(
+                ".message-tools"
+            );
+
+        if (tools) {
+            tools.remove();
+        }
+
+        speakText(
+            clone.innerText.trim()
+        );
+    }
+    function pauseVoice() {
+
+    if ("speechSynthesis" in window) {
+        speechSynthesis.pause();
+    }
+
+}
+
+
+function resumeVoice() {
+
+    if ("speechSynthesis" in window) {
+        speechSynthesis.resume();
+    }
+
+}
+
+
+function stopVoice() {
+
+    if ("speechSynthesis" in window) {
+
+        speechSynthesis.cancel();
+
+        document.getElementById(
+            "tutorTalkingImage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "tutorImage"
+        ).style.display = "block";
+    }
+
+}
+
+
+    /* =====================================================
+       VOICE INPUT
+    ===================================================== */
+
+    function startVoiceInput() {
+
+        const SpeechRecognition =
+            window.SpeechRecognition ||
+            window.webkitSpeechRecognition;
+
+
+        if (!SpeechRecognition) {
+
+            alert(
+                "Voice input is not supported in this browser."
+            );
+
+            return;
+        }
+
+
+        const recognition =
+            new SpeechRecognition();
+
+
+        recognition.lang =
+            "en-IN";
+
+        recognition.interimResults =
+            false;
+
+
+        recognition.onstart = function () {
+
+            alert(
+                "🎤 Speak your question now."
+            );
+        };
+
+
+        recognition.onresult =
+            function(event) {
+
+                const text =
+                    event.results[0][0].transcript;
+
+                document.getElementById(
+                    "questionInput"
+                ).value = text;
+
+            };
+
+
+        recognition.onerror =
+            function() {
+
+                alert(
+                    "Could not hear your voice. Please try again."
+                );
+
+            };
+
+
+        recognition.start();
+    }
+
+
+    /* =====================================================
+       STREAK
+    ===================================================== */
+
+    function updateStreak() {
+
+        const today =
+            new Date().toISOString()
+            .split("T")[0];
+
+
+        let data;
+
+        try {
+
+            data =
+                JSON.parse(
+                    localStorage.getItem(
+                        STREAK_KEY
+                    )
+                ) || {
+                    lastDate: null,
+                    streak: 0
+                };
+
+        } catch (error) {
+
+            data = {
+                lastDate: null,
+                streak: 0
+            };
+        }
+
+
+        if (
+            data.lastDate === today
+        ) {
+
+            return;
+        }
+
+
+        if (data.lastDate) {
+
+            const last =
+                new Date(
+                    data.lastDate
+                );
+
+            const current =
+                new Date(today);
+
+
+            const difference =
+                Math.round(
+                    (
+                        current - last
+                    ) /
+                    (
+                        1000 *
+                        60 *
+                        60 *
+                        24
+                    )
+                );
+
+
+            if (difference === 1) {
+
+                data.streak++;
+
+            } else {
+
+                data.streak = 1;
+            }
+
+        } else {
+
+            data.streak = 1;
+        }
+
+
+        data.lastDate =
+            today;
+
+
+        localStorage.setItem(
+            STREAK_KEY,
+            JSON.stringify(data)
+        );
+
+
+        updateDashboardStats();
+    }
+
+
+    function calculateStreak() {
+
+        try {
+
+            const data =
+                JSON.parse(
+                    localStorage.getItem(
+                        STREAK_KEY
+                    )
+                );
+
+
+            return data
+                ? data.streak
+                : 0;
+
+        } catch (error) {
+
+            return 0;
+        }
+    }
+
+
+    /* =====================================================
+       DASHBOARD STATS
+    ===================================================== */
+
+    function updateDashboardStats() {
+
+        const history =
+            getHistory();
+
+        const saved =
+            getSaved();
+
+
+        document.getElementById(
+            "questionNumber"
+        ).textContent =
+            history.length;
+
+
+        document.getElementById(
+            "savedNumber"
+        ).textContent =
+            saved.length;
+
+
+        document.getElementById(
+            "streakNumber"
+        ).textContent =
+            calculateStreak();
+    }
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.textContent =
+            text;
+
+        return div.innerHTML;
+    }
+
+
+    /* =====================================================
+       ENTER KEY
+    ===================================================== */
+
+    document.getElementById(
+        "questionInput"
+    ).addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+                askTutor();
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       MODAL CLOSE
+    ===================================================== */
+
+    document.getElementById(
+        "notesModal"
+    ).addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                closeNotes();
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       LOAD SAVED NOTES
+    ===================================================== */
+
+    const existingNotes =
+        localStorage.getItem(
+            NOTES_KEY
+        );
+
+
+    if (existingNotes) {
+
+        document.getElementById(
+            "notesContent"
+        ).value =
+            existingNotes;
+    }
+
+
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
+
+    renderHistory();
+
+    updateDashboardStats();
+
+</script>
+
+
+<!-- CSRF TOKEN FOR DJANGO -->
+
+<form style="display:none;">
+    {% csrf_token %}
+</form>
+
+</body>
+</html>

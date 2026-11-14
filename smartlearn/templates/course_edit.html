@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course | SmartLearn</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 30px 15px;
+            background: #f7f8fc;
+            color: #20243a;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+        .panel {
+            max-width: 650px;
+            margin: 25px auto;
+            padding: 28px;
+            border: 1px solid #e9ebf3;
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 10px 30px #292c550c;
+        }
+        h1 { margin-top: 0; font-size: 26px; }
+        .subtitle { color: #7b8195; font-size: 13px; line-height: 1.6; }
+        .field { margin: 18px 0; }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dfe2ec;
+            border-radius: 8px;
+            font: inherit;
+        }
+        textarea { min-height: 100px; resize: vertical; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 17px;
+            border: 0;
+            border-radius: 8px;
+            background: #635bdf;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back { background: #efedff; color: #635bdf; }
+        .message {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 8px;
+            background: #fff0f0;
+            color: #a52a2a;
+            font-size: 13px;
+        }
+        @media (max-width: 500px) {
+            .row { grid-template-columns: 1fr; gap: 0; }
+            .panel { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="panel">
+        <h1>✎ Edit Course</h1>
+        <p class="subtitle">Update the course details and save your changes.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="field">
+                <label for="title">Course name *</label>
+                <input id="title" name="title" type="text"
+                       maxlength="200" value="{{ course.title }}" required>
+            </div>
+
+            <div class="field">
+                <label for="description">Description</label>
+                <textarea id="description" name="description">{{ course.description }}</textarea>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value="programming" {% if course.category == "programming" %}selected{% endif %}>Programming</option>
+                        <option value="ai" {% if course.category == "ai" %}selected{% endif %}>Artificial Intelligence</option>
+                        <option value="web" {% if course.category == "web" %}selected{% endif %}>Web Development</option>
+                        <option value="data" {% if course.category == "data" %}selected{% endif %}>Data Science</option>
+                        <option value="other" {% if course.category == "other" %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="cover_emoji">Cover icon</label>
+                    <select id="cover_emoji" name="cover_emoji">
+                        <option value="📚" {% if course.cover_emoji == "📚" %}selected{% endif %}>📚 Books</option>
+                        <option value="🐍" {% if course.cover_emoji == "🐍" %}selected{% endif %}>🐍 Python</option>
+                        <option value="🤖" {% if course.cover_emoji == "🤖" %}selected{% endif %}>🤖 AI</option>
+                        <option value="💻" {% if course.cover_emoji == "💻" %}selected{% endif %}>💻 Web</option>
+                        <option value="📊" {% if course.cover_emoji == "📊" %}selected{% endif %}>📊 Data</option>
+                        <option value="✨" {% if course.cover_emoji == "✨" %}selected{% endif %}>✨ Creative</option>
+                        <option value="🎓" {% if course.cover_emoji == "🎓" %}selected{% endif %}>🎓 Learning</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="price">Price (₹)</label>
+                    <input id="price" name="price" type="number"
+                           min="0" step="0.01" value="{{ course.price }}" required>
+                </div>
+
+                <div class="field">
+                    <label for="status">Status</label>
+                    <select id="status" name="status">
+                        <option value="draft" {% if course.status == "draft" %}selected{% endif %}>Draft</option>
+                        <option value="published" {% if course.status == "published" %}selected{% endif %}>Published</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="button" type="submit">Save Changes</button>
+                <a class="button back" href="{% url 'my_courses' %}">Cancel</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

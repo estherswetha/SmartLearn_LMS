@@ -1,0 +1,616 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SmartLearn</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        /* Voice navigation */
+        .voice-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 24px 0;
+            padding: 22px 24px;
+            border-radius: 16px;
+            background: linear-gradient(120deg, #eaf1ff, #e9fff0);
+            border: 1px solid #d7e5f7;
+        }
+
+        .voice-navigation h2 {
+            margin: 0 0 8px;
+            color: #24528a;
+        }
+
+        .voice-navigation p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .voice-navigation .voice-help {
+            color: #53647d;
+        }
+
+        #voiceButton {
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            background: #24528a;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #voiceButton:hover {
+            background: #193e6b;
+        }
+
+        #voiceButton:disabled {
+            opacity: .65;
+            cursor: wait;
+        }
+
+        #voiceStatus {
+            margin-top: 10px !important;
+            color: #24528a;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        /* Sidebar links */
+        .sidebar-menu .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            text-decoration: none;
+        }
+
+        .sidebar-menu .sidebar-item .icon {
+            min-width: 24px;
+        }
+
+        .sidebar-menu button.sidebar-item {
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sidebar-menu button.sidebar-item:hover,
+        .sidebar-menu button.sidebar-item[aria-expanded="true"] {
+            background: #fff0e9;
+            color: #e65d36;
+        }
+
+        /* Products submenu */
+        .products-submenu {
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            bottom: 0;
+            left: 250px;
+            width: 210px;
+            padding: 20px 12px;
+            overflow-y: auto;
+            background: #fff;
+            border-right: 1px solid #e5e8eb;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, .06);
+        }
+
+        .products-submenu[hidden] {
+            display: none !important;
+        }
+
+        .products-submenu h3 {
+            margin: 0 0 16px;
+            padding: 0 9px;
+            color: #596370;
+            font-size: 11px;
+            letter-spacing: .5px;
+        }
+
+        .product-sub-link {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-height: 38px;
+            margin-bottom: 4px;
+            padding: 9px;
+            border-radius: 6px;
+            color: #4d5661;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .product-sub-link:hover,
+        .product-sub-link.active {
+            background: #fff0e9;
+            color: #e65d36;
+        }
+
+        .product-spark,
+        .product-badge {
+            margin-left: auto;
+        }
+
+        .product-spark {
+            color: #ff875b;
+        }
+
+        .product-badge {
+            display: inline-grid;
+            width: 18px;
+            height: 18px;
+            place-items: center;
+            border-radius: 6px;
+            background: #e6c4ff;
+            color: #7834a6;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            .products-submenu {
+                left: 0;
+                top: 0;
+                width: min(260px, 85vw);
+                box-shadow: 8px 0 25px rgba(0, 0, 0, .16);
+            }
+
+            .voice-navigation {
+                padding: 18px;
+            }
+
+            #voiceButton {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="dashboard">
+
+    <!-- MAIN SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo">
+                <div class="logo-icon">🎓</div>
+                Smart<span>Learn</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="{% url 'dashboard' %}" class="sidebar-item active">
+                <span class="icon">🏠</span><span>Home</span>
+            </a>
+
+            <a href="{% url 'my_courses' %}" class="sidebar-item">
+                <span class="icon">📚</span><span>My Courses</span>
+            </a>
+
+            <!-- PRODUCTS BUTTON OPENS SUBMENU -->
+            <button type="button"
+                    class="sidebar-item"
+                    id="productsToggle"
+                    aria-expanded="false"
+                    aria-controls="productsSubmenu">
+                <span class="icon">🛍️</span><span>Products</span>
+            </button>
+
+            <a href="{% url 'module_page' 'library' %}" class="sidebar-item">
+                <span class="icon">📖</span><span>Library</span>
+            </a>
+
+            <a href="{% url 'module_page' 'sales' %}" class="sidebar-item">
+                <span class="icon">🕒</span><span>Sales</span>
+            </a>
+
+            <a href="{% url 'module_page' 'analytics' %}" class="sidebar-item">
+                <span class="icon">📈</span><span>Reports</span>
+            </a>
+
+            <a href="{% url 'module_page' 'site-settings' %}" class="sidebar-item">
+                <span class="icon">🌐</span><span>Site</span>
+            </a>
+
+            <a href="{% url 'module_page' 'students' %}" class="sidebar-item">
+                <span class="icon">👥</span><span>Users</span>
+            </a>
+
+            <a href="{% url 'module_page' 'email-campaigns' %}" class="sidebar-item">
+                <span class="icon">✉️</span><span>Emails</span>
+            </a>
+
+            <!-- EXISTING SMARTLEARN MODULES -->
+            <a href="{% url 'module_page' 'languages' %}" class="sidebar-item">
+                <span class="icon">🌐</span><span>Language AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'videos' %}" class="sidebar-item">
+                <span class="icon">🎥</span><span>Video AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'summary' %}" class="sidebar-item">
+                <span class="icon">📄</span><span>Summary AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'notes' %}" class="sidebar-item">
+                <span class="icon">📝</span><span>Notes AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'tutor' %}" class="sidebar-item">
+                <span class="icon">👨‍🏫</span><span>Tutor AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'adaptive' %}" class="sidebar-item">
+                <span class="icon">🎯</span><span>Adaptive AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'quizzes' %}" class="sidebar-item">
+                <span class="icon">🧪</span><span>Quiz AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'analytics' %}" class="sidebar-item">
+                <span class="icon">📊</span><span>Analytics AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'gamification' %}" class="sidebar-item">
+                <span class="icon">🎮</span><span>Gamification</span>
+            </a>
+
+            <a href="{% url 'module_page' 'voice' %}" class="sidebar-item">
+                <span class="icon">🎤</span><span>Voice AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'learntwin' %}" class="sidebar-item">
+                <span class="icon">🧠</span><span>LearnTwin</span>
+            </a>
+
+            <a href="{% url 'module_page' 'community' %}" class="sidebar-item">
+                <span class="icon">👥</span><span>Community</span>
+            </a>
+
+            <a href="{% url 'module_page' 'offline' %}" class="sidebar-item">
+                <span class="icon">⬇️</span><span>Offline</span>
+            </a>
+
+            <a href="{% url 'module_page' 'career' %}" class="sidebar-item">
+                <span class="icon">💼</span><span>Career AI</span>
+            </a>
+
+            <a href="{% url 'module_page' 'portfolio' %}" class="sidebar-item">
+                <span class="icon">🏆</span><span>Portfolio</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'module_page' 'learning' %}">
+                <p>🌱 <strong>Keep Learning</strong><br>Keep Growing! →</p>
+            </a>
+        </div>
+    </aside>
+
+    <!-- PRODUCTS SUBMENU -->
+    <aside class="products-submenu" id="productsSubmenu" hidden>
+        <h3>PRODUCTS</h3>
+
+        <a href="{% url 'my_courses' %}" class="product-sub-link active">
+            <span>▧</span><span>Courses</span>
+        </a>
+
+        <a href="{% url 'module_page' 'workshops' %}" class="product-sub-link">
+            <span>◉</span><span>Live Workshops</span>
+        </a>
+
+        <a href="{% url 'module_page' 'scorm-courses' %}" class="product-sub-link">
+            <span>▤</span><span>SCORM Courses</span>
+            <span class="product-spark">✦</span>
+        </a>
+
+        <a href="{% url 'module_page' 'assessments' %}" class="product-sub-link">
+            <span>☑</span><span>Assessments</span>
+            <span class="product-badge">B</span>
+        </a>
+
+        <a href="{% url 'module_page' 'community' %}" class="product-sub-link">
+            <span>♧</span><span>Community</span>
+            <span class="product-badge">B</span>
+        </a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="search">
+                🔍
+                <input type="text"
+                       placeholder="Search courses, lessons, or anything..."
+                       id="dashboardSearch">
+            </div>
+
+            <div class="top-actions">
+                <select class="language-select">
+                    <option>🌐 English</option>
+                    <option>🇮🇳 தமிழ்</option>
+                    <option>🇮🇳 हिन्दी</option>
+                    <option>🇮🇳 తెలుగు</option>
+                </select>
+
+                <div class="notification">🔔</div>
+
+                <div class="profile">
+                    <div class="profile-avatar">👩</div>
+                    Swetha <span>⌄</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <section class="hero">
+                <div class="hero-text">
+                    <h1>Welcome to<br><span>SmartLearn</span></h1>
+                    <p>Your AI-powered Learning Management System.</p>
+                    <p>Learn. Practice. Test. Improve.</p>
+
+                    <div class="language-buttons">
+                        <a href="{% url 'module_page' 'english' %}" class="language-btn">🇬🇧 English</a>
+                        <a href="{% url 'module_page' 'tamil' %}" class="language-btn">🇮🇳 தமிழ்</a>
+                        <a href="{% url 'module_page' 'hindi' %}" class="language-btn">🇮🇳 हिन्दी</a>
+                        <a href="{% url 'module_page' 'telugu' %}" class="language-btn">🇮🇳 తెలుగు</a>
+                    </div>
+                </div>
+
+                <div class="hero-illustration">👩‍💻 📚 💡</div>
+            </section>
+
+            <!-- VOICE NAVIGATION -->
+            <section class="voice-navigation" aria-labelledby="voiceNavigationTitle">
+                <div>
+                    <h2 id="voiceNavigationTitle">🎙️ Voice Navigation</h2>
+                    <p class="voice-help">
+                        Open a SmartLearn module by speaking its name.
+                        For example, say “Learning”, “Video AI”,
+                        “Quiz AI”, or “Analytics AI”.
+                    </p>
+                    <p id="voiceStatus" role="status" aria-live="polite">
+                        Ready. Click the button and say a module name.
+                    </p>
+                </div>
+
+                <button type="button" id="voiceButton">
+                    🎤 Speak to Open a Module
+                </button>
+            </section>
+
+            <!-- QUICK ACCESS -->
+            <section class="quick-access">
+                <h3>Quick Access</h3>
+                <div class="quick-list">
+                    <a href="{% url 'my_courses' %}" class="quick-btn">🎓 My Courses <span>→</span></a>
+                    <a href="{% url 'module_page' 'analytics' %}" class="quick-btn">📊 My Progress <span>→</span></a>
+                    <a href="{% url 'module_page' 'quizzes' %}" class="quick-btn">📝 Take a Quiz <span>→</span></a>
+                    <a href="{% url 'module_page' 'portfolio' %}" class="quick-btn">🏆 View Certificates <span>→</span></a>
+                    <a href="/admin/" class="quick-btn">🔐 Admin Panel <span>→</span></a>
+                </div>
+            </section>
+
+            <!-- SMARTLEARN MODULES -->
+            <div class="section-title">
+                <h2>✨ Explore SmartLearn Modules</h2>
+                <a href="{% url 'all_modules' %}" class="small-btn">All Modules →</a>
+            </div>
+
+            <div class="modules" id="moduleCards">
+                <a href="{% url 'module_page' 'learning' %}" class="module-card">
+                    <div class="module-icon">🎓</div><h3>Learning</h3><p>Courses &amp; lessons</p>
+                </a>
+                <a href="{% url 'module_page' 'languages' %}" class="module-card">
+                    <div class="module-icon">🌐</div><h3>Language AI</h3><p>Multi-language translation</p>
+                </a>
+                <a href="{% url 'module_page' 'videos' %}" class="module-card">
+                    <div class="module-icon">▶️</div><h3>Video AI</h3><p>Captions + transcription</p>
+                </a>
+                <a href="{% url 'module_page' 'summary' %}" class="module-card">
+                    <div class="module-icon">📄</div><h3>Summary AI</h3><p>Video/lesson summarization</p>
+                </a>
+                <a href="{% url 'module_page' 'notes' %}" class="module-card">
+                    <div class="module-icon">📝</div><h3>Notes AI</h3><p>Automatic notes</p>
+                </a>
+                <a href="{% url 'module_page' 'tutor' %}" class="module-card">
+                    <div class="module-icon">🤖</div><h3>Tutor AI</h3><p>Personal AI teacher</p>
+                </a>
+                <a href="{% url 'module_page' 'adaptive' %}" class="module-card">
+                    <div class="module-icon">🎯</div><h3>Adaptive AI</h3><p>Personalized learning path</p>
+                </a>
+                <a href="{% url 'module_page' 'quizzes' %}" class="module-card">
+                    <div class="module-icon">🧪</div><h3>Quiz AI</h3><p>Automatic question generation</p>
+                </a>
+                <a href="{% url 'module_page' 'analytics' %}" class="module-card">
+                    <div class="module-icon">📊</div><h3>Analytics AI</h3><p>Performance analysis</p>
+                </a>
+                <a href="{% url 'module_page' 'gamification' %}" class="module-card">
+                    <div class="module-icon">🎮</div><h3>Gamification</h3><p>XP, badges, levels</p>
+                </a>
+                <a href="{% url 'module_page' 'voice' %}" class="module-card">
+                    <div class="module-icon">🎤</div><h3>Voice AI</h3><p>Voice learning</p>
+                </a>
+                <a href="{% url 'module_page' 'learntwin' %}" class="module-card">
+                    <div class="module-icon">🧠</div><h3>LearnTwin</h3><p>Personal learning intelligence</p>
+                </a>
+                <a href="{% url 'module_page' 'community' %}" class="module-card">
+                    <div class="module-icon">👥</div><h3>Community</h3><p>Study groups</p>
+                </a>
+                <a href="{% url 'module_page' 'offline' %}" class="module-card">
+                    <div class="module-icon">⬇️</div><h3>Offline</h3><p>Download &amp; sync</p>
+                </a>
+                <a href="{% url 'module_page' 'career' %}" class="module-card">
+                    <div class="module-icon">💼</div><h3>Career AI</h3><p>Skill &amp; career recommendations</p>
+                </a>
+                <a href="{% url 'module_page' 'portfolio' %}" class="module-card">
+                    <div class="module-icon">🏆</div><h3>Portfolio</h3><p>Certificates + skills</p>
+                </a>
+            </div>
+
+            <div class="bottom-cards">
+                <div class="bottom-card">
+                    <h2>🎯 Your Goals. Our AI. A Smarter You.</h2>
+                    <p>Personalized learning. Better results.</p>
+                    <a href="{% url 'module_page' 'learning' %}" class="small-btn">Start Learning →</a>
+                </div>
+
+                <div class="bottom-card green">
+                    <h2>📈 Track Your Progress</h2>
+                    <p>See your growth, earn badges, achieve more!</p>
+                    <a href="{% url 'module_page' 'analytics' %}" class="small-btn">View Analytics →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    /* Products submenu toggle */
+    const productsToggle = document.getElementById("productsToggle");
+    const productsSubmenu = document.getElementById("productsSubmenu");
+
+    productsToggle.addEventListener("click", function () {
+        const isOpen = this.getAttribute("aria-expanded") === "true";
+
+        productsSubmenu.hidden = isOpen;
+        this.setAttribute("aria-expanded", String(!isOpen));
+    });
+
+    /* Voice navigation */
+    const voiceButton = document.getElementById("voiceButton");
+    const voiceStatus = document.getElementById("voiceStatus");
+
+    const moduleRoutes = [
+        {names: ["video ai", "videos", "video"], url: "{% url 'module_page' 'videos' %}"},
+        {names: ["summary ai", "summary", "summarization"], url: "{% url 'module_page' 'summary' %}"},
+        {names: ["language ai", "languages", "language"], url: "{% url 'module_page' 'languages' %}"},
+        {names: ["adaptive ai", "adaptive"], url: "{% url 'module_page' 'adaptive' %}"},
+        {names: ["quiz ai", "quizzes", "quiz"], url: "{% url 'module_page' 'quizzes' %}"},
+        {names: ["notes ai", "notes"], url: "{% url 'module_page' 'notes' %}"},
+        {names: ["voice ai", "voice"], url: "{% url 'module_page' 'voice' %}"},
+        {names: ["learntwin", "learn twin"], url: "{% url 'module_page' 'learntwin' %}"},
+        {names: ["gamification", "rewards", "games"], url: "{% url 'module_page' 'gamification' %}"},
+        {names: ["learning", "lessons", "learn"], url: "{% url 'module_page' 'learning' %}"},
+        {names: ["tutor ai", "tutor"], url: "{% url 'module_page' 'tutor' %}"},
+        {names: ["analytics ai", "analytics", "progress"], url: "{% url 'module_page' 'analytics' %}"},
+        {names: ["community"], url: "{% url 'module_page' 'community' %}"},
+        {names: ["career ai", "careers", "career"], url: "{% url 'module_page' 'career' %}"},
+        {names: ["portfolio", "certificates"], url: "{% url 'module_page' 'portfolio' %}"},
+        {names: ["offline"], url: "{% url 'module_page' 'offline' %}"}
+    ];
+
+    voiceButton.addEventListener("click", function () {
+        const SpeechRecognition = window.SpeechRecognition ||
+                                  window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            voiceStatus.textContent =
+                "Voice recognition is not supported in this browser. Please use Google Chrome.";
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-IN";
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        voiceButton.disabled = true;
+        voiceButton.textContent = "🎙️ Listening...";
+        voiceStatus.textContent = "Listening. Say a module name.";
+
+        recognition.onresult = function (event) {
+            const spokenText = event.results[0][0].transcript
+                .toLowerCase()
+                .replace(/[^a-z0-9\s]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+
+            voiceStatus.textContent = 'You said: "' + spokenText + '"';
+
+            if (spokenText.includes("dashboard") || spokenText === "home") {
+                window.location.href = "{% url 'dashboard' %}";
+                return;
+            }
+
+            if (spokenText.includes("my courses") || spokenText === "courses") {
+                window.location.href = "{% url 'my_courses' %}";
+                return;
+            }
+
+            if (spokenText.includes("all modules")) {
+                window.location.href = "{% url 'all_modules' %}";
+                return;
+            }
+
+            const match = moduleRoutes.find(function (route) {
+                return route.names.some(function (name) {
+                    return spokenText.includes(name);
+                });
+            });
+
+            if (match) {
+                voiceStatus.textContent = "Opening " + spokenText + "...";
+                window.location.href = match.url;
+            } else {
+                voiceStatus.textContent =
+                    "Could not match that module. Please try again.";
+            }
+        };
+
+        recognition.onerror = function (event) {
+            if (event.error === "not-allowed") {
+                voiceStatus.textContent =
+                    "Microphone access was blocked. Allow microphone access in your browser.";
+            } else {
+                voiceStatus.textContent =
+                    "Voice recognition failed. Please try again.";
+            }
+        };
+
+        recognition.onend = function () {
+            voiceButton.disabled = false;
+            voiceButton.textContent = "🎤 Speak to Open a Module";
+        };
+
+        try {
+            recognition.start();
+        } catch (error) {
+            voiceButton.disabled = false;
+            voiceButton.textContent = "🎤 Speak to Open a Module";
+            voiceStatus.textContent = "Could not start the microphone. Try again.";
+        }
+    });
+
+    /* Dashboard module search */
+    const searchInput = document.getElementById("dashboardSearch");
+    const moduleCards = document.querySelectorAll(".module-card");
+
+    searchInput.addEventListener("input", function () {
+        const query = this.value.toLowerCase().trim();
+
+        moduleCards.forEach(function (card) {
+            card.style.display =
+                card.textContent.toLowerCase().includes(query) ? "" : "none";
+        });
+    });
+});
+</script>
+
+</body>
+</html>

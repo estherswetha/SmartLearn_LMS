@@ -1,0 +1,417 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Courses | SmartLearn</title>
+<style>
+:root {
+    --purple: #635bdf;
+    --ink: #25263b;
+    --muted: #7b8195;
+    --border: #e6e9f0;
+    --bg: #f6f8fa;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px "Segoe UI", Arial, sans-serif; }
+button, input, select, textarea { font: inherit; }
+button, a { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; padding: 16px 24px; background: white;
+    border-bottom: 1px solid var(--border);
+}
+.topbar h1 { margin: 0; font-size: 20px; }
+.topbar small { color: var(--muted); font-weight: 400; }
+.top-actions { position: relative; }
+.primary {
+    border: 0; border-radius: 6px; padding: 10px 15px;
+    background: #ff713e; color: white; font-weight: 700;
+}
+.create-menu {
+    display: none; position: absolute; right: 0; top: 44px;
+    z-index: 5; min-width: 175px; padding: 6px;
+    background: white; border: 1px solid var(--border);
+    border-radius: 9px; box-shadow: 0 8px 24px #00000012;
+}
+.create-menu.open { display: block; }
+.create-menu button {
+    width: 100%; padding: 11px; border: 0;
+    background: white; text-align: left; border-radius: 6px;
+}
+.create-menu button:hover { background: #f2f1ff; color: var(--purple); }
+main { padding: 18px 24px 40px; }
+.toolbar {
+    display: grid; grid-template-columns: minmax(160px, 1fr) auto auto auto;
+    gap: 10px; margin-bottom: 20px;
+}
+.toolbar input, .toolbar select {
+    min-width: 0; padding: 11px 12px; border: 1px solid var(--border);
+    border-radius: 7px; background: white; color: #50566a;
+}
+.view-buttons { display: flex; gap: 5px; }
+.view-buttons button {
+    min-width: 39px; border: 1px solid var(--border);
+    border-radius: 7px; background: white;
+}
+.view-buttons button.active { color: var(--purple); background: #efedff; border-color: var(--purple); }
+.messages { margin-bottom: 15px; }
+.message { padding: 11px 13px; margin-bottom: 8px; border-radius: 7px; background: #e4f8ed; color: #176b43; }
+.message.error { background: #fff0f0; color: #a52a2a; }
+.course-grid {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px;
+}
+.course-card {
+    min-width: 0; overflow: hidden; background: white;
+    border: 1px solid var(--border); border-radius: 10px;
+}
+.cover {
+    position: relative; display: grid; min-height: 155px;
+    place-items: center; background: #f8f8ff;
+}
+.cover.programming { background: #f1f3ff; }
+.cover.ai { background: #f5f0ff; }
+.cover.web { background: #eefaf6; }
+.cover.data { background: #fff8ed; }
+.cover.other { background: #f0f8f1; }
+.emoji { font-size: 57px; }
+.status {
+    position: absolute; right: 9px; bottom: 9px; padding: 5px 8px;
+    border-radius: 5px; background: white; color: #16876b;
+    font-size: 10px; font-weight: 700;
+}
+.status.draft { color: #a66c00; }
+.card-body { padding: 13px; }
+.category { color: var(--purple); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.card-body h2 { margin: 7px 0; font-size: 15px; overflow-wrap: anywhere; }
+.description { min-height: 35px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.card-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px; margin-top: 13px; font-size: 11px; color: var(--muted); }
+.card-actions { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 12px; margin-top: 12px; border-top: 1px solid #f0f1f5; }
+.action { display: inline-block; padding: 8px 9px; border: 0; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.launch { background: var(--purple); color: white; }
+.edit { background: #efedff; color: var(--purple); }
+.delete { background: #fff0f0; color: #b42323; }
+.delete-form { margin-left: auto; }
+.empty {
+    grid-column: 1 / -1; padding: 55px 20px; text-align: center;
+    background: white; border: 1px dashed #d8dced; border-radius: 10px;
+}
+.empty-icon { font-size: 40px; }
+.empty h2 { font-size: 18px; }
+.empty p { color: var(--muted); }
+.course-grid.list-view { grid-template-columns: 1fr; }
+.list-view .course-card { display: grid; grid-template-columns: 150px minmax(0, 1fr); }
+.list-view .cover { min-height: 100%; }
+dialog {
+    width: min(540px, calc(100% - 24px)); max-height: 90vh; overflow-y: auto;
+    padding: 0; border: 0; border-radius: 13px;
+    box-shadow: 0 20px 70px #00000030;
+}
+dialog::backdrop { background: #1b1b3280; }
+.form-wrap { padding: 23px; }
+.form-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.form-heading h2 { margin: 0 0 16px; }
+.close { border: 0; background: #f0f1f7; border-radius: 6px; padding: 6px 10px; }
+.field { margin: 13px 0; }
+.field label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 700; }
+.field input, .field select, .field textarea {
+    width: 100%; padding: 10px; border: 1px solid #dfe2ec; border-radius: 7px;
+}
+.field textarea { min-height: 75px; resize: vertical; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+.cancel { padding: 10px 13px; border: 1px solid var(--border); border-radius: 6px; background: white; }
+@media (max-width: 1100px) { .course-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 800px) {
+    .toolbar { grid-template-columns: 1fr 1fr; }
+    .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+    main { padding: 14px; }
+    .topbar { padding: 14px; }
+    .course-grid { grid-template-columns: 1fr; }
+    .list-view .course-card { display: block; }
+    .two-col { grid-template-columns: 1fr; gap: 0; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <h1>Courses (<span id="totalCount">{{ course_count }}</span>)</h1>
+    <div class="top-actions">
+        <button type="button" class="primary" id="createMenuButton">⊕ Create ▾</button>
+        <div class="create-menu" id="createMenu">
+            <button type="button" id="createCourseButton">＋ Create course</button>
+            <button type="button" id="historyMenuButton">◷ Course history</button>
+        </div>
+    </div>
+</header>
+
+<main>
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <section class="toolbar">
+        <input id="searchCourses" type="search" placeholder="⌕  Search courses...">
+
+        <select id="categoryFilter" aria-label="Filter by category">
+            <option value="all">Filter by: All categories</option>
+            <option value="programming">Programming</option>
+            <option value="ai">Artificial Intelligence</option>
+            <option value="web">Web Development</option>
+            <option value="data">Data Science</option>
+            <option value="other">Other</option>
+        </select>
+
+        <select id="statusFilter" aria-label="Filter by status">
+            <option value="all">All statuses</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+        </select>
+
+        <select id="sortCourses" aria-label="Sort courses">
+            <option value="newest">Sort by: Created time</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name">Course name A–Z</option>
+            <option value="price-low">Price: Low to high</option>
+            <option value="price-high">Price: High to low</option>
+        </select>
+    </section>
+
+    <section class="toolbar" style="grid-template-columns:1fr auto; margin-top:-8px;">
+        <div style="color:#7b8195; font-size:12px; align-self:center;">
+            Showing <strong id="visibleCount">{{ course_count }}</strong> course(s)
+        </div>
+        <div class="view-buttons">
+            <button type="button" id="gridView" class="active" title="Grid view">▦</button>
+            <button type="button" id="listView" title="List view">☷</button>
+            <a href="{% url 'course_history' %}" class="action edit">◷ History</a>
+        </div>
+    </section>
+
+    <div class="course-grid" id="courseGrid">
+        {% for course in courses %}
+            <article class="course-card"
+                data-name="{{ course.title|lower }}"
+                data-description="{{ course.description|lower }}"
+                data-category="{{ course.category }}"
+                data-status="{{ course.status }}"
+                data-price="{{ course.price }}"
+                data-created="{{ course.created_at|date:'U' }}">
+
+                <div class="cover {{ course.category }}">
+                    <span class="emoji">{{ course.cover_emoji|default:"📚" }}</span>
+                    <span class="status {{ course.status }}">
+                        {% if course.status == "published" %}✓ Published{% else %}◷ Draft{% endif %}
+                    </span>
+                </div>
+
+                <div class="card-body">
+                    <span class="category">{{ course.get_category_display }}</span>
+                    <h2>{{ course.title }}</h2>
+                    <p class="description">
+                        {{ course.description|default:"Add a description to tell learners about this course." }}
+                    </p>
+
+                    <div class="card-meta">
+                        <strong>
+                            {% if course.price == 0 %}Free{% else %}₹{{ course.price|floatformat:2 }}{% endif %}
+                        </strong>
+                        <span>{{ course.enrolled_count }} enrolled</span>
+                    </div>
+
+                    <div class="card-actions">
+                        <a class="action launch" href="{% url 'course_launch' course.pk %}">▶ Launch</a>
+                        <a class="action edit" href="{% url 'edit_course' course.pk %}">✎ Edit</a>
+                        <form class="delete-form" method="post"
+                              action="{% url 'delete_course' course.pk %}"
+                              onsubmit="return confirm('Delete this course? Its history will be retained.');">
+                            {% csrf_token %}
+                            <button class="action delete" type="submit">🗑</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty" id="emptyCourses">
+                <div class="empty-icon">📚</div>
+                <h2>No courses yet</h2>
+                <p>Create your first course to start building your catalogue.</p>
+                <button type="button" class="primary" id="emptyCreateButton">＋ Create course</button>
+            </div>
+        {% endfor %}
+
+        <div class="empty" id="noResults" hidden>
+            <div class="empty-icon">🔎</div>
+            <h2>No matching courses</h2>
+            <p>Try another search or change the filters.</p>
+        </div>
+    </div>
+</main>
+
+<dialog id="createDialog">
+    <form class="form-wrap" method="post" action="{% url 'create_course' %}">
+        {% csrf_token %}
+        <div class="form-heading">
+            <h2>Create course</h2>
+            <button type="button" class="close" id="closeDialog">✕</button>
+        </div>
+
+        <div class="field">
+            <label for="title">Course name *</label>
+            <input id="title" name="title" maxlength="200"
+                   placeholder="e.g. Python Programming" required>
+        </div>
+
+        <div class="field">
+            <label for="description">Course description</label>
+            <textarea id="description" name="description"
+                      placeholder="What will learners learn?"></textarea>
+        </div>
+
+        <div class="two-col">
+            <div class="field">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="programming">Programming</option>
+                    <option value="ai">Artificial Intelligence</option>
+                    <option value="web">Web Development</option>
+                    <option value="data">Data Science</option>
+                    <option value="other" selected>Other</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="cover_emoji">Course cover</label>
+                <select id="cover_emoji" name="cover_emoji">
+                    <option value="📚">📚 Books</option>
+                    <option value="🐍">🐍 Python</option>
+                    <option value="🤖">🤖 AI</option>
+                    <option value="💻">💻 Web</option>
+                    <option value="📊">📊 Data</option>
+                    <option value="✨">✨ Creative</option>
+                    <option value="🎓">🎓 Learning</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="field">
+                <label for="price">Price (₹)</label>
+                <input id="price" name="price" type="number"
+                       min="0" step="0.01" value="0" required>
+            </div>
+            <div class="field">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="cancel" id="cancelDialog">Cancel</button>
+            <button type="submit" class="primary">Save course</button>
+        </div>
+    </form>
+</dialog>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dialog = document.getElementById("createDialog");
+    const menu = document.getElementById("createMenu");
+    const menuButton = document.getElementById("createMenuButton");
+    const cards = Array.from(document.querySelectorAll(".course-card"));
+    const grid = document.getElementById("courseGrid");
+    const search = document.getElementById("searchCourses");
+    const category = document.getElementById("categoryFilter");
+    const status = document.getElementById("statusFilter");
+    const sort = document.getElementById("sortCourses");
+    const noResults = document.getElementById("noResults");
+    const visibleCount = document.getElementById("visibleCount");
+
+    function openDialog() {
+        menu.classList.remove("open");
+        if (dialog && dialog.showModal) dialog.showModal();
+    }
+
+    menuButton.addEventListener("click", function () {
+        menu.classList.toggle("open");
+    });
+
+    document.getElementById("createCourseButton").addEventListener("click", openDialog);
+    document.getElementById("emptyCreateButton")?.addEventListener("click", openDialog);
+    document.getElementById("closeDialog").addEventListener("click", () => dialog.close());
+    document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
+
+    document.getElementById("historyMenuButton").addEventListener("click", function () {
+        window.location.href = "{% url 'course_history' %}";
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".top-actions")) menu.classList.remove("open");
+    });
+
+    function filterAndSort() {
+        const query = search.value.trim().toLowerCase();
+        let visible = [];
+
+        cards.forEach(function (card) {
+            const text = (card.dataset.name + " " + card.dataset.description).toLowerCase();
+            const matchesSearch = text.includes(query);
+            const matchesCategory = category.value === "all" || card.dataset.category === category.value;
+            const matchesStatus = status.value === "all" || card.dataset.status === status.value;
+            const show = matchesSearch && matchesCategory && matchesStatus;
+
+            card.hidden = !show;
+            if (show) visible.push(card);
+        });
+
+        if (sort.value === "name") {
+            visible.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+        } else if (sort.value === "oldest") {
+            visible.sort((a, b) => Number(a.dataset.created) - Number(b.dataset.created));
+        } else if (sort.value === "price-low") {
+            visible.sort((a, b) => Number(a.dataset.price) - Number(b.dataset.price));
+        } else if (sort.value === "price-high") {
+            visible.sort((a, b) => Number(b.dataset.price) - Number(a.dataset.price));
+        } else {
+            visible.sort((a, b) => Number(b.dataset.created) - Number(a.dataset.created));
+        }
+
+        visible.forEach(card => grid.insertBefore(card, noResults));
+        visibleCount.textContent = visible.length;
+        noResults.hidden = visible.length > 0 || cards.length === 0;
+    }
+
+    [search, category, status, sort].forEach(control => {
+        control.addEventListener("input", filterAndSort);
+        control.addEventListener("change", filterAndSort);
+    });
+
+    document.getElementById("gridView").addEventListener("click", function () {
+        grid.classList.remove("list-view");
+        this.classList.add("active");
+        document.getElementById("listView").classList.remove("active");
+    });
+
+    document.getElementById("listView").addEventListener("click", function () {
+        grid.classList.add("list-view");
+        this.classList.add("active");
+        document.getElementById("gridView").classList.remove("active");
+    });
+
+    filterAndSort();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,945 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Notes AI | SmartLearn</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #17233c;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #081a3b,
+                #24528A
+            );
+
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            resize: vertical;
+            border: 1px solid #d5dce8;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #24528A;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        select {
+            padding: 12px;
+            border: 1px solid #d5dce8;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: #24528A;
+            color: white;
+        }
+
+        .green-btn {
+            background: #35B957;
+            color: white;
+        }
+
+        .light-btn {
+            background: #eaf0f8;
+            color: #17233c;
+        }
+
+        .danger-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .notes-area {
+            min-height: 400px;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #52627a;
+        }
+
+        .saved-notes {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(230px, 1fr)
+            );
+
+            gap: 15px;
+        }
+
+        .note-item {
+            border: 1px solid #dce3ed;
+            padding: 18px;
+            border-radius: 14px;
+            background: #fafcff;
+        }
+
+        .note-item h3 {
+            margin-top: 0;
+        }
+
+        .note-item p {
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .empty {
+            color: #7b8798;
+            padding: 15px 0;
+        }
+
+        .back-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #24528A;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            button,
+            select {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <a href="{% url 'dashboard' %}"
+       class="back-btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>📝 Notes AI</h1>
+
+        <p>
+            Create, organize and manage your study notes
+            with AI.
+        </p>
+
+    </div>
+
+
+    <!-- AI NOTE GENERATOR -->
+
+    <div class="card">
+
+        <h2>🤖 Generate Notes with AI</h2>
+
+        <p>
+            Paste your lesson or study material below.
+            Notes AI will convert it into structured
+            study notes.
+        </p>
+
+        <textarea
+            id="studyMaterial"
+            placeholder="Paste your lesson, textbook content, transcript or study material here..."
+        ></textarea>
+
+
+        <div class="controls">
+
+            <select id="noteStyle">
+
+                <option value="Detailed Notes">
+                    Detailed Notes
+                </option>
+
+                <option value="Short Revision Notes">
+                    Short Revision Notes
+                </option>
+
+                <option value="Exam Notes">
+                    Exam Notes
+                </option>
+
+                <option value="Bullet Notes">
+                    Bullet Notes
+                </option>
+
+            </select>
+
+
+            <select id="noteLanguage">
+
+                <option value="English">
+                    English
+                </option>
+
+                <option value="Tamil">
+                    Tamil
+                </option>
+
+                <option value="Hindi">
+                    Hindi
+                </option>
+
+                <option value="Telugu">
+                    Telugu
+                </option>
+
+                <option value="Malayalam">
+                    Malayalam
+                </option>
+
+                <option value="Kannada">
+                    Kannada
+                </option>
+
+            </select>
+
+
+            <button
+                class="primary-btn"
+                onclick="generateNotes()">
+
+                🧠 Generate Notes
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="aiStatus"
+            class="status">
+
+            Ready
+
+        </div>
+
+    </div>
+
+
+    <!-- NOTE EDITOR -->
+
+    <div class="card">
+
+        <h2>📒 My Notes</h2>
+
+        <textarea
+            id="notesEditor"
+            class="notes-area"
+            placeholder="Your AI-generated notes will appear here. You can edit them..."
+        ></textarea>
+
+
+        <div class="controls">
+
+            <button
+                class="green-btn"
+                onclick="saveNote()">
+
+                💾 Save Note
+
+            </button>
+
+
+            <button
+                class="light-btn"
+                onclick="downloadNote()">
+
+                📥 Download
+
+            </button>
+
+
+            <button
+                class="light-btn"
+                onclick="shareNote()">
+
+                🔗 Share
+
+            </button>
+
+
+            <button
+                class="light-btn"
+                onclick="clearEditor()">
+
+                🗑 Clear
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SAVED NOTES -->
+
+    <div class="card">
+
+        <h2>📚 Saved Notes</h2>
+
+        <div
+            id="savedNotes"
+            class="saved-notes">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+// =====================================================
+// GET CSRF COOKIE
+// =====================================================
+
+function getCookie(name) {
+
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+
+        const cookies =
+            document.cookie.split(";");
+
+        for (let cookie of cookies) {
+
+            cookie = cookie.trim();
+
+            if (
+                cookie.substring(
+                    0,
+                    name.length + 1
+                ) === name + "="
+            ) {
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
+
+
+// =====================================================
+// GENERATE NOTES
+// =====================================================
+
+async function generateNotes() {
+
+    const material =
+        document
+            .getElementById("studyMaterial")
+            .value
+            .trim();
+
+    const style =
+        document
+            .getElementById("noteStyle")
+            .value;
+
+    const language =
+        document
+            .getElementById("noteLanguage")
+            .value;
+
+    const status =
+        document
+            .getElementById("aiStatus");
+
+
+    if (!material) {
+
+        alert(
+            "Please enter your study material first."
+        );
+
+        return;
+    }
+
+
+    status.innerText =
+        "🤖 Notes AI is creating your notes...";
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "material",
+        material
+    );
+
+    formData.append(
+        "style",
+        style
+    );
+
+    formData.append(
+        "language",
+        language
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "{% url 'notes_ai_api' %}",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "X-CSRFToken":
+                            getCookie("csrftoken")
+                    },
+
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            status.innerText =
+                "❌ " + data.error;
+
+            return;
+        }
+
+
+        document
+            .getElementById("notesEditor")
+            .value =
+                data.notes;
+
+
+        status.innerText =
+            "✅ Notes generated successfully.";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.innerText =
+            "❌ Unable to connect to Notes AI.";
+
+    }
+
+}
+
+
+// =====================================================
+// SAVE NOTE
+// =====================================================
+
+function saveNote() {
+
+    const notes =
+        document
+            .getElementById("notesEditor")
+            .value
+            .trim();
+
+
+    if (!notes) {
+
+        alert(
+            "There are no notes to save."
+        );
+
+        return;
+    }
+
+
+    let savedNotes =
+        JSON.parse(
+            localStorage.getItem(
+                "smartlearn_notes"
+            ) || "[]"
+        );
+
+
+    savedNotes.push({
+
+        id: Date.now(),
+
+        title:
+            "Study Note " +
+            (savedNotes.length + 1),
+
+        content: notes,
+
+        date:
+            new Date().toLocaleString()
+
+    });
+
+
+    localStorage.setItem(
+        "smartlearn_notes",
+        JSON.stringify(savedNotes)
+    );
+
+
+    loadSavedNotes();
+
+
+    alert(
+        "Note saved successfully!"
+    );
+
+}
+
+
+// =====================================================
+// LOAD SAVED NOTES
+// =====================================================
+
+function loadSavedNotes() {
+
+    const container =
+        document.getElementById(
+            "savedNotes"
+        );
+
+
+    const savedNotes =
+        JSON.parse(
+            localStorage.getItem(
+                "smartlearn_notes"
+            ) || "[]"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (savedNotes.length === 0) {
+
+        container.innerHTML =
+            '<div class="empty">No saved notes yet.</div>';
+
+        return;
+    }
+
+
+    savedNotes
+        .slice()
+        .reverse()
+        .forEach(note => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "note-item";
+
+
+            item.innerHTML = `
+
+                <h3>
+                    ${escapeHtml(note.title)}
+                </h3>
+
+                <p>
+                    ${escapeHtml(note.date)}
+                </p>
+
+                <div class="note-actions">
+
+                    <button
+                        class="light-btn"
+                        onclick="openNote(${note.id})">
+
+                        Open
+
+                    </button>
+
+                    <button
+                        class="danger-btn"
+                        onclick="deleteNote(${note.id})">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(item);
+
+        });
+
+}
+
+
+// =====================================================
+// OPEN NOTE
+// =====================================================
+
+function openNote(id) {
+
+    const savedNotes =
+        JSON.parse(
+            localStorage.getItem(
+                "smartlearn_notes"
+            ) || "[]"
+        );
+
+
+    const note =
+        savedNotes.find(
+            item => item.id === id
+        );
+
+
+    if (!note) {
+
+        return;
+    }
+
+
+    document
+        .getElementById("notesEditor")
+        .value =
+            note.content;
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// =====================================================
+// DELETE NOTE
+// =====================================================
+
+function deleteNote(id) {
+
+    if (
+        !confirm(
+            "Delete this note?"
+        )
+    ) {
+
+        return;
+    }
+
+
+    let savedNotes =
+        JSON.parse(
+            localStorage.getItem(
+                "smartlearn_notes"
+            ) || "[]"
+        );
+
+
+    savedNotes =
+        savedNotes.filter(
+            note => note.id !== id
+        );
+
+
+    localStorage.setItem(
+        "smartlearn_notes",
+        JSON.stringify(savedNotes)
+    );
+
+
+    loadSavedNotes();
+
+}
+
+
+// =====================================================
+// DOWNLOAD NOTE
+// =====================================================
+
+function downloadNote() {
+
+    const notes =
+        document
+            .getElementById("notesEditor")
+            .value
+            .trim();
+
+
+    if (!notes) {
+
+        alert(
+            "There are no notes to download."
+        );
+
+        return;
+    }
+
+
+    const blob =
+        new Blob(
+            [notes],
+            {
+                type: "text/plain"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        "SmartLearn_Notes.txt";
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+// =====================================================
+// SHARE NOTE
+// =====================================================
+
+async function shareNote() {
+
+    const notes =
+        document
+            .getElementById("notesEditor")
+            .value
+            .trim();
+
+
+    if (!notes) {
+
+        alert(
+            "There are no notes to share."
+        );
+
+        return;
+    }
+
+
+    if (
+        navigator.share
+    ) {
+
+        try {
+
+            await navigator.share({
+
+                title:
+                    "SmartLearn Notes",
+
+                text:
+                    notes
+
+            });
+
+        } catch (error) {
+
+            console.log(
+                "Share cancelled."
+            );
+
+        }
+
+    } else {
+
+        await navigator.clipboard.writeText(
+            notes
+        );
+
+        alert(
+            "Notes copied to clipboard."
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// CLEAR EDITOR
+// =====================================================
+
+function clearEditor() {
+
+    document
+        .getElementById("notesEditor")
+        .value = "";
+
+}
+
+
+// =====================================================
+// HTML ESCAPE
+// =====================================================
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+// =====================================================
+// LOAD NOTES WHEN PAGE OPENS
+// =====================================================
+
+loadSavedNotes();
+
+
+</script>
+
+</body>
+
+</html>

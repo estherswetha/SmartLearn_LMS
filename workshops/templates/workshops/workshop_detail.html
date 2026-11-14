@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ workshop.title }} | SmartLearn</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            padding: 30px;
+            color: #243047;
+        }
+
+        .card {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000015;
+        }
+
+        h1, h2 {
+            color: #243b64;
+        }
+
+        .button, button {
+            display: inline-block;
+            padding: 11px 15px;
+            margin: 6px 4px 6px 0;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .secondary {
+            background: #475569;
+        }
+
+        .messages {
+            background: #ecfdf5;
+            color: #166534;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .details {
+            line-height: 1.8;
+        }
+
+        input, select {
+            padding: 10px;
+            max-width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #dbe2ea;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #e8eefc;
+        }
+
+        .section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .muted {
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body>
+<div class="card">
+
+    <a href="{% url 'workshop_list' %}">
+        ← All Workshops
+    </a>
+
+    <!-- SHARE OPTIONS -->
+    <div class="section">
+        <h2>Share This Workshop</h2>
+
+        {% if workshop.meeting_url %}
+            <button type="button" onclick="copyMeetingLink()">
+                Copy Google Meet Link
+            </button>
+
+            <a class="button"
+               href="{{ workshop.meeting_url }}"
+               target="_blank"
+               rel="noopener noreferrer">
+                Open Google Meet
+            </a>
+        {% else %}
+            <p class="muted">
+                No meeting link has been added yet.
+            </p>
+        {% endif %}
+
+        <button type="button"
+                onclick="copyWorkshopLink()">
+            Copy Workshop Page Link
+        </button>
+
+        <a class="button secondary"
+           id="whatsappShare"
+           href="https://wa.me/"
+           target="_blank"
+           rel="noopener noreferrer">
+            Share on WhatsApp
+        </a>
+
+        <p id="copyMessage" aria-live="polite"></p>
+    </div>
+
+    <!-- WORKSHOP INFORMATION -->
+    <h1>{{ workshop.title }}</h1>
+
+    <div class="details">
+        <p><strong>Instructor:</strong> {{ workshop.instructor }}</p>
+        <p><strong>Topic:</strong> {{ workshop.topic }}</p>
+        <p><strong>Start time:</strong> {{ workshop.start_time }}</p>
+        <p><strong>Duration:</strong> {{ workshop.duration_minutes }} minutes</p>
+        <p><strong>Capacity:</strong> {{ workshop.capacity }}</p>
+        <p><strong>Price:</strong> {{ workshop.price }}</p>
+        <p><strong>Status:</strong> {{ workshop.status }}</p>
+        <p><strong>Description:</strong> {{ workshop.description|default:"No description added." }}</p>
+    </div>
+
+    <!-- NOTIFICATION MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <p class="messages">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <!-- REGISTRATION -->
+    <div class="section">
+        <h2>Workshop Registration</h2>
+
+        {% if registration %}
+            <p>You are registered for this workshop.</p>
+
+            {% if workshop.meeting_url %}
+                <a class="button"
+                   href="{% url 'join_workshop' workshop.pk %}">
+                    Join Workshop
+                </a>
+            {% endif %}
+
+            <form method="POST"
+                  action="{% url 'cancel_registration' workshop.pk %}">
+                {% csrf_token %}
+                <button class="secondary" type="submit">
+                    Cancel Registration
+                </button>
+            </form>
+
+        {% else %}
+            <form method="POST"
+                  action="{% url 'register_workshop' workshop.pk %}">
+                {% csrf_token %}
+
+                <p>
+                    <label for="student-name">Your name</label><br>
+                    <input id="student-name"
+                           type="text"
+                           name="name"
+                           required>
+                </p>
+
+                <p>
+                    <label for="student-email">Your email</label><br>
+                    <input id="student-email"
+                           type="email"
+                           name="email"
+                           required>
+                </p>
+
+                <button type="submit">
+                    Register for Workshop
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+    <!-- PARTICIPANT LIST AND ATTENDANCE -->
+    <div class="section">
+        <h2>Workshop Participants</h2>
+
+        <p>
+            <strong>Total registered:</strong>
+            {{ registrations|length }} / {{ workshop.capacity }}
+        </p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Participant Name</th>
+                        <th>Email</th>
+                        <th>Attendance</th>
+                        <th>Update Attendance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for person in registrations %}
+                    <tr>
+                        <td>{{ person.student_name }}</td>
+                        <td>{{ person.student_email }}</td>
+
+                        <td>
+                            {% if person.attended %}
+                                Attended
+                            {% else %}
+                                Not marked
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <form method="POST"
+                                  action="{% url 'update_workshop_attendance' workshop.pk person.pk %}">
+                                {% csrf_token %}
+
+                                <select name="attended">
+                                    <option value="yes"
+                                        {% if person.attended %}selected{% endif %}>
+                                        Attended
+                                    </option>
+
+                                    <option value="no"
+                                        {% if not person.attended %}selected{% endif %}>
+                                        Absent
+                                    </option>
+                                </select>
+
+                                <button type="submit">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">
+                            No participants have registered yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <p class="muted">
+            Attendance updates are saved to the database.
+        </p>
+    </div>
+
+    <!-- WORKSHOP HISTORY -->
+    <div class="section">
+        <h2>Workshop History</h2>
+
+        <p>
+            View workshop creation, registrations, attendance changes,
+            and completion records.
+        </p>
+
+        <a class="button"
+           href="{% url 'workshop_history' %}">
+            View Workshop History
+        </a>
+    </div>
+
+</div>
+
+<script>
+    function copyText(text) {
+        const message = document.getElementById("copyMessage");
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    message.textContent =
+                        "Link copied! You can share it now.";
+                })
+                .catch(() => {
+                    window.prompt("Copy this link:", text);
+                });
+        } else {
+            window.prompt("Copy this link:", text);
+        }
+    }
+
+    function copyMeetingLink() {
+        copyText("{{ workshop.meeting_url|escapejs }}");
+    }
+
+    function copyWorkshopLink() {
+        copyText(window.location.href);
+    }
+
+    const shareMessage =
+        "Join my SmartLearn workshop: " + window.location.href
+        {% if workshop.meeting_url %}
+        + "\nGoogle Meet: {{ workshop.meeting_url|escapejs }}"
+        {% endif %};
+
+    document.getElementById("whatsappShare").href =
+        "https://wa.me/?text=" + encodeURIComponent(shareMessage);
+</script>
+
+</body>
+</html>

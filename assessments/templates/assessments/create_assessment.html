@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Assessment | SmartLearn</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fc;
+            color: #202747;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(20, 35, 90, .08);
+        }
+
+        .card-header {
+            background: #202020;
+            color: white;
+            padding: 20px 25px;
+            font-size: 20px;
+        }
+
+        form { padding: 25px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d9deea;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .field { margin-bottom: 20px; }
+
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .check input {
+            width: auto;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        button, .cancel {
+            padding: 13px 22px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        button {
+            background: #172bce;
+            color: white;
+        }
+
+        .cancel {
+            background: #777;
+            color: white;
+        }
+
+        .errorlist { color: #d32f2f; }
+
+        @media(max-width: 650px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="card">
+
+        <div class="card-header">
+            Create Assessment
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                {{ form.non_field_errors }}
+            {% endif %}
+
+            <div class="grid">
+
+                <div class="field">
+                    <label>Assessment Title</label>
+                    {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+
+                <div class="field">
+                    <label>Select Assessment Type</label>
+                    {{ form.assessment_type }}
+                    {{ form.assessment_type.errors }}
+                </div>
+
+                <div class="field">
+                    <label>Start Date Time</label>
+                    {{ form.start_date }}
+                    {{ form.start_date.errors }}
+                </div>
+
+                <div class="field">
+                    <label>Last Date Time</label>
+                    {{ form.end_date }}
+                    {{ form.end_date.errors }}
+                </div>
+
+                <div class="field">
+                    <label>Quiz Duration (in minutes)</label>
+                    {{ form.duration }}
+                    {{ form.duration.errors }}
+                </div>
+
+                <div class="field">
+                    <label>Number of Extra Retakes</label>
+                    {{ form.extra_retakes }}
+                    {{ form.extra_retakes.errors }}
+                </div>
+
+                <div class="field">
+                    <label>Randomize Questions</label>
+                    <div class="check">
+                        {{ form.randomize_questions }}
+                        <span>Shuffle questions for students</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Auto Evaluate</label>
+                    <div class="check">
+                        {{ form.auto_evaluate }}
+                        <span>Automatically evaluate objective questions</span>
+                    </div>
+                </div>
+
+                <div class="field" style="grid-column: 1 / -1;">
+                    <label>Post Assessment Message</label>
+                    {{ form.post_message }}
+                    {{ form.post_message.errors }}
+                </div>
+
+            </div>
+
+            <div class="actions">
+                <button type="submit">Create Assessment</button>
+
+                <a href="{% url 'assessments:dashboard' %}" class="cancel">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

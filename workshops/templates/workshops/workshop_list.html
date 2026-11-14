@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SmartLearn Workshops</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        header {
+            background: #172554;
+            color: white;
+            padding: 30px 8%;
+        }
+        main {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+        .workshops {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #0001;
+        }
+        .card h2 {
+            color: #2563eb;
+        }
+        .button {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .empty {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎓 SmartLearn Workshops</h1>
+        <p>Discover workshops, learn new skills, and grow together.</p>
+    </header>
+
+    <main>
+        <h2>Explore Workshops</h2>
+        <p>Find a workshop and view its details.</p>
+
+        <p>
+            <a class="button" href="{% url 'create_workshop' %}">
+                + Create Workshop
+            </a>
+        </p>
+
+        {% if workshops %}
+        <div class="workshops">
+            {% for workshop in workshops %}
+            <div class="card">
+                <h2>{{ workshop.title }}</h2>
+                <p>{{ workshop.description|default:"Learn something new with SmartLearn."|truncatewords:25 }}</p>
+                <p><strong>Date:</strong> {{ workshop.start_date|default:"To be announced" }}</p>
+                <a class="button" href="{% url 'workshop_detail' workshop.pk %}">
+                    View Workshop
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty">
+            <h3>No workshops available yet</h3>
+            <p>Create your first workshop to get started.</p>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>

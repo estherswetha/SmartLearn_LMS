@@ -1,0 +1,1723 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Portfolio | SmartLearn</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #081a3b,
+                #24528A
+            );
+
+            color: white;
+
+            padding: 18px 35px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 25px;
+
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #35B957;
+        }
+
+        .back-btn {
+            text-decoration: none;
+
+            color: white;
+
+            background:
+                rgba(255,255,255,0.12);
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background:
+                rgba(255,255,255,0.22);
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 92%;
+
+            max-width: 1250px;
+
+            margin: 30px auto;
+        }
+
+        .page-title {
+            font-size: 32px;
+
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: #667085;
+
+            margin-bottom: 28px;
+        }
+
+        /* PROFILE */
+
+        .profile-card {
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 25px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+
+            margin-bottom: 25px;
+        }
+
+        .profile-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 90px;
+
+            height: 90px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #24528A,
+                    #35B957
+                );
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 34px;
+
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 27px;
+
+            font-weight: bold;
+
+            color: #173b70;
+
+            margin-bottom: 5px;
+        }
+
+        .profile-role {
+            color: #737e91;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+        }
+
+        .profile-location {
+            color: #8a94a6;
+
+            font-size: 13px;
+        }
+
+        .profile-actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .resume-btn {
+            border: none;
+
+            padding: 11px 17px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #eef3fa;
+
+            color: #24528A;
+        }
+
+        .resume-btn {
+            background: #35B957;
+
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #dfe8f5;
+        }
+
+        .resume-btn:hover {
+            background: #2d9f4b;
+        }
+
+        /* GRID */
+
+        .main-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 2fr)
+                minmax(280px, 1fr);
+
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            color: #173b70;
+
+            font-size: 21px;
+
+            margin-bottom: 18px;
+        }
+
+        /* ABOUT */
+
+        .about-text {
+            color: #626d80;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+        /* SKILLS */
+
+        .skill-box {
+            margin-bottom: 17px;
+        }
+
+        .skill-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+            font-size: 13px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+        }
+
+        .skill-percent {
+            color: #737e91;
+        }
+
+        .skill-bar {
+            width: 100%;
+
+            height: 9px;
+
+            background: #edf0f5;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+
+            background: #35B957;
+
+            border-radius: 10px;
+        }
+
+        /* PROJECTS */
+
+        .project {
+            border: 1px solid #e5e9f0;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            margin-bottom: 15px;
+
+            transition: 0.3s;
+        }
+
+        .project:hover {
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.06);
+
+            transform: translateY(-1px);
+        }
+
+        .project-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+        }
+
+        .project-title {
+            font-size: 17px;
+
+            font-weight: bold;
+
+            color: #172033;
+        }
+
+        .project-status {
+            background: #eaf8ee;
+
+            color: #248443;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+        }
+
+        .project-description {
+            color: #737e91;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            margin-bottom: 12px;
+        }
+
+        .technology {
+            display: inline-block;
+
+            background: #eef3fa;
+
+            color: #24528A;
+
+            padding: 6px 10px;
+
+            border-radius: 15px;
+
+            font-size: 11px;
+
+            margin: 3px;
+        }
+
+        .project-link {
+            display: inline-block;
+
+            margin-top: 10px;
+
+            text-decoration: none;
+
+            color: #24528A;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* CERTIFICATES */
+
+        .certificate {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 13px 0;
+
+            border-bottom:
+                1px solid #edf0f5;
+        }
+
+        .certificate:last-child {
+            border-bottom: none;
+        }
+
+        .certificate-icon {
+            width: 43px;
+
+            height: 43px;
+
+            border-radius: 10px;
+
+            background: #fff4dd;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .certificate-info {
+            flex: 1;
+        }
+
+        .certificate-name {
+            font-weight: bold;
+
+            font-size: 14px;
+
+            margin-bottom: 3px;
+        }
+
+        .certificate-provider {
+            color: #8a94a6;
+
+            font-size: 12px;
+        }
+
+        .view-certificate {
+            border: none;
+
+            background: #eef3fa;
+
+            color: #24528A;
+
+            padding: 7px 11px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+        }
+
+        .view-certificate:hover {
+            background: #24528A;
+
+            color: white;
+        }
+
+        /* EDUCATION */
+
+        .education-item {
+            border-left: 3px solid #35B957;
+
+            padding-left: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        .education-title {
+            font-size: 15px;
+
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .education-place {
+            color: #24528A;
+
+            font-size: 13px;
+
+            margin-bottom: 4px;
+        }
+
+        .education-year {
+            color: #8a94a6;
+
+            font-size: 12px;
+        }
+
+        /* SOCIAL */
+
+        .social-buttons {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+        }
+
+        .social-btn {
+            border: none;
+
+            padding: 11px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            background: #eef3fa;
+
+            color: #24528A;
+
+            font-weight: bold;
+        }
+
+        .social-btn:hover {
+            background: #24528A;
+
+            color: white;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            text-align: center;
+
+            background: #f5f8fc;
+
+            padding: 16px;
+
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+
+            font-weight: bold;
+
+            color: #24528A;
+
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: #737e91;
+
+            font-size: 12px;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+
+            z-index: 2000;
+
+            left: 0;
+
+            top: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background:
+                rgba(0,0,0,0.5);
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+
+            width: 90%;
+
+            max-width: 500px;
+
+            border-radius: 15px;
+
+            padding: 25px;
+        }
+
+        .modal-content h2 {
+            color: #173b70;
+
+            margin-bottom: 18px;
+        }
+
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #d8dee9;
+
+            border-radius: 8px;
+
+            margin-bottom: 12px;
+
+            outline: none;
+
+            font-family: inherit;
+        }
+
+        .modal-content textarea {
+            min-height: 100px;
+
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+
+            gap: 10px;
+
+            justify-content: flex-end;
+        }
+
+        .save-btn,
+        .close-btn {
+            border: none;
+
+            padding: 10px 16px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #35B957;
+
+            color: white;
+        }
+
+        .close-btn {
+            background: #eef3fa;
+
+            color: #24528A;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            .profile-left {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .profile-actions {
+                width: 100%;
+            }
+
+            .edit-btn,
+            .resume-btn {
+                flex: 1;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="logo">
+        Smart<span>Learn</span> Portfolio
+    </div>
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="back-btn"
+    >
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+
+    <h1 class="page-title">
+        🏆 My Portfolio
+    </h1>
+
+    <p class="page-description">
+        Showcase your skills, projects, achievements and learning journey.
+    </p>
+
+
+    <!-- PROFILE -->
+
+    <div class="profile-card">
+
+        <div class="profile-left">
+
+            <div class="profile-avatar">
+                S
+            </div>
+
+            <div>
+
+                <div
+                    class="profile-name"
+                    id="profileName"
+                >
+                    Swetha
+                </div>
+
+                <div class="profile-role">
+                    Python & Django Developer
+                </div>
+
+                <div class="profile-location">
+                    📍 India
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-actions">
+
+            <button
+                class="edit-btn"
+                onclick="openEditProfile()"
+            >
+                ✏️ Edit Profile
+            </button>
+
+            <button
+                class="resume-btn"
+                onclick="downloadResume()"
+            >
+                📄 Resume
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-number">
+                8
+            </div>
+
+            <div class="stat-label">
+                Projects
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+                12
+            </div>
+
+            <div class="stat-label">
+                Certificates
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+                86%
+            </div>
+
+            <div class="stat-label">
+                Learning Progress
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="main-grid">
+
+
+        <!-- LEFT COLUMN -->
+
+        <section>
+
+
+            <!-- ABOUT -->
+
+            <div class="card">
+
+                <h2>
+                    👤 About Me
+                </h2>
+
+                <p
+                    class="about-text"
+                    id="aboutText"
+                >
+                    I am a passionate learner interested in Python,
+                    Django, Artificial Intelligence and Web Development.
+                    I enjoy building real-world projects and continuously
+                    improving my programming skills.
+                </p>
+
+            </div>
+
+
+            <!-- PROJECTS -->
+
+            <div class="card">
+
+                <h2>
+                    💻 My Projects
+                </h2>
+
+
+                <div class="project">
+
+                    <div class="project-header">
+
+                        <div class="project-title">
+                            SmartLearn LMS
+                        </div>
+
+                        <span class="project-status">
+                            Completed
+                        </span>
+
+                    </div>
+
+                    <div class="project-description">
+                        An AI-powered learning management system
+                        with courses, quizzes, notes, analytics,
+                        career guidance and community features.
+                    </div>
+
+                    <span class="technology">
+                        Python
+                    </span>
+
+                    <span class="technology">
+                        Django
+                    </span>
+
+                    <span class="technology">
+                        HTML
+                    </span>
+
+                    <span class="technology">
+                        CSS
+                    </span>
+
+                    <span class="technology">
+                        JavaScript
+                    </span>
+
+                    <br>
+
+                    <a
+                        href="#"
+                        class="project-link"
+                        onclick="projectMessage('SmartLearn LMS')"
+                    >
+                        🔗 View Project
+                    </a>
+
+                </div>
+
+
+                <div class="project">
+
+                    <div class="project-header">
+
+                        <div class="project-title">
+                            The Lost Code
+                        </div>
+
+                        <span class="project-status">
+                            Completed
+                        </span>
+
+                    </div>
+
+                    <div class="project-description">
+                        A Python Pygame thriller game where
+                        players solve puzzles and escape
+                        from a digital world.
+                    </div>
+
+                    <span class="technology">
+                        Python
+                    </span>
+
+                    <span class="technology">
+                        Pygame
+                    </span>
+
+                    <span class="technology">
+                        Game Development
+                    </span>
+
+                    <br>
+
+                    <a
+                        href="#"
+                        class="project-link"
+                        onclick="projectMessage('The Lost Code')"
+                    >
+                        🔗 View Project
+                    </a>
+
+                </div>
+
+
+                <div class="project">
+
+                    <div class="project-header">
+
+                        <div class="project-title">
+                            Student Record Management
+                        </div>
+
+                        <span class="project-status">
+                            Completed
+                        </span>
+
+                    </div>
+
+                    <div class="project-description">
+                        A Python application for managing
+                        student records, marks, rankings,
+                        grades and performance reports.
+                    </div>
+
+                    <span class="technology">
+                        Python
+                    </span>
+
+                    <span class="technology">
+                        File Handling
+                    </span>
+
+                    <span class="technology">
+                        CSV
+                    </span>
+
+                    <br>
+
+                    <a
+                        href="#"
+                        class="project-link"
+                        onclick="projectMessage('Student Record Management')"
+                    >
+                        🔗 View Project
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- EDUCATION -->
+
+            <div class="card">
+
+                <h2>
+                    🎓 Education
+                </h2>
+
+
+                <div class="education-item">
+
+                    <div class="education-title">
+                        Computer Science / IT
+                    </div>
+
+                    <div class="education-place">
+                        Your Institution
+                    </div>
+
+                    <div class="education-year">
+                        Current Education
+                    </div>
+
+                </div>
+
+
+                <div class="education-item">
+
+                    <div class="education-title">
+                        Python & Django Learning
+                    </div>
+
+                    <div class="education-place">
+                        SmartLearn
+                    </div>
+
+                    <div class="education-year">
+                        Ongoing
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- RIGHT COLUMN -->
+
+        <aside>
+
+
+            <!-- SKILLS -->
+
+            <div class="card">
+
+                <h2>
+                    🛠️ My Skills
+                </h2>
+
+
+                <div class="skill-box">
+
+                    <div class="skill-header">
+
+                        <span class="skill-name">
+                            Python
+                        </span>
+
+                        <span class="skill-percent">
+                            85%
+                        </span>
+
+                    </div>
+
+                    <div class="skill-bar">
+
+                        <div
+                            class="skill-progress"
+                            style="width:85%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-box">
+
+                    <div class="skill-header">
+
+                        <span class="skill-name">
+                            Django
+                        </span>
+
+                        <span class="skill-percent">
+                            75%
+                        </span>
+
+                    </div>
+
+                    <div class="skill-bar">
+
+                        <div
+                            class="skill-progress"
+                            style="width:75%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-box">
+
+                    <div class="skill-header">
+
+                        <span class="skill-name">
+                            HTML & CSS
+                        </span>
+
+                        <span class="skill-percent">
+                            85%
+                        </span>
+
+                    </div>
+
+                    <div class="skill-bar">
+
+                        <div
+                            class="skill-progress"
+                            style="width:85%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-box">
+
+                    <div class="skill-header">
+
+                        <span class="skill-name">
+                            JavaScript
+                        </span>
+
+                        <span class="skill-percent">
+                            65%
+                        </span>
+
+                    </div>
+
+                    <div class="skill-bar">
+
+                        <div
+                            class="skill-progress"
+                            style="width:65%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-box">
+
+                    <div class="skill-header">
+
+                        <span class="skill-name">
+                            AI
+                        </span>
+
+                        <span class="skill-percent">
+                            70%
+                        </span>
+
+                    </div>
+
+                    <div class="skill-bar">
+
+                        <div
+                            class="skill-progress"
+                            style="width:70%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-box">
+
+                    <div class="skill-header">
+
+                        <span class="skill-name">
+                            SQL
+                        </span>
+
+                        <span class="skill-percent">
+                            60%
+                        </span>
+
+                    </div>
+
+                    <div class="skill-bar">
+
+                        <div
+                            class="skill-progress"
+                            style="width:60%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CERTIFICATES -->
+
+            <div class="card">
+
+                <h2>
+                    🏆 Certificates
+                </h2>
+
+
+                <div class="certificate">
+
+                    <div class="certificate-icon">
+                        🐍
+                    </div>
+
+                    <div class="certificate-info">
+
+                        <div class="certificate-name">
+                            Python Programming
+                        </div>
+
+                        <div class="certificate-provider">
+                            SmartLearn
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="view-certificate"
+                        onclick="viewCertificate('Python Programming')"
+                    >
+                        View
+                    </button>
+
+                </div>
+
+
+                <div class="certificate">
+
+                    <div class="certificate-icon">
+                        🌐
+                    </div>
+
+                    <div class="certificate-info">
+
+                        <div class="certificate-name">
+                            Web Development
+                        </div>
+
+                        <div class="certificate-provider">
+                            SmartLearn
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="view-certificate"
+                        onclick="viewCertificate('Web Development')"
+                    >
+                        View
+                    </button>
+
+                </div>
+
+
+                <div class="certificate">
+
+                    <div class="certificate-icon">
+                        🤖
+                    </div>
+
+                    <div class="certificate-info">
+
+                        <div class="certificate-name">
+                            Artificial Intelligence
+                        </div>
+
+                        <div class="certificate-provider">
+                            SmartLearn
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="view-certificate"
+                        onclick="viewCertificate('Artificial Intelligence')"
+                    >
+                        View
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SOCIAL LINKS -->
+
+            <div class="card">
+
+                <h2>
+                    🔗 Connect With Me
+                </h2>
+
+                <div class="social-buttons">
+
+                    <button
+                        class="social-btn"
+                        onclick="openSocial('GitHub')"
+                    >
+                        GitHub
+                    </button>
+
+                    <button
+                        class="social-btn"
+                        onclick="openSocial('LinkedIn')"
+                    >
+                        LinkedIn
+                    </button>
+
+                    <button
+                        class="social-btn"
+                        onclick="openSocial('Email')"
+                    >
+                        Email
+                    </button>
+
+                    <button
+                        class="social-btn"
+                        onclick="copyPortfolio()"
+                    >
+                        Share
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+<!-- EDIT PROFILE MODAL -->
+
+<div
+    class="modal"
+    id="profileModal"
+>
+
+    <div class="modal-content">
+
+        <h2>
+            ✏️ Edit Profile
+        </h2>
+
+        <input
+            type="text"
+            id="editName"
+            placeholder="Your name"
+        >
+
+        <textarea
+            id="editAbout"
+            placeholder="About you"
+        ></textarea>
+
+        <div class="modal-buttons">
+
+            <button
+                class="close-btn"
+                onclick="closeEditProfile()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="save-btn"
+                onclick="saveProfile()"
+            >
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* EDIT PROFILE */
+
+    function openEditProfile() {
+
+        document.getElementById(
+            "editName"
+        ).value =
+            document.getElementById(
+                "profileName"
+            ).textContent;
+
+        document.getElementById(
+            "editAbout"
+        ).value =
+            document.getElementById(
+                "aboutText"
+            ).textContent.trim();
+
+        document.getElementById(
+            "profileModal"
+        ).style.display = "flex";
+
+    }
+
+
+    function closeEditProfile() {
+
+        document.getElementById(
+            "profileModal"
+        ).style.display = "none";
+
+    }
+
+
+    function saveProfile() {
+
+        const name =
+            document.getElementById(
+                "editName"
+            ).value.trim();
+
+        const about =
+            document.getElementById(
+                "editAbout"
+            ).value.trim();
+
+
+        if (!name) {
+
+            alert(
+                "Please enter your name."
+            );
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "profileName"
+        ).textContent = name;
+
+
+        if (about) {
+
+            document.getElementById(
+                "aboutText"
+            ).textContent = about;
+
+        }
+
+
+        localStorage.setItem(
+            "smartlearnPortfolioName",
+            name
+        );
+
+        localStorage.setItem(
+            "smartlearnPortfolioAbout",
+            about
+        );
+
+
+        closeEditProfile();
+
+
+        alert(
+            "Your portfolio profile has been updated!"
+        );
+
+    }
+
+
+    /* LOAD PROFILE */
+
+    window.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            const savedName =
+                localStorage.getItem(
+                    "smartlearnPortfolioName"
+                );
+
+            const savedAbout =
+                localStorage.getItem(
+                    "smartlearnPortfolioAbout"
+                );
+
+
+            if (savedName) {
+
+                document.getElementById(
+                    "profileName"
+                ).textContent = savedName;
+
+            }
+
+
+            if (savedAbout) {
+
+                document.getElementById(
+                    "aboutText"
+                ).textContent = savedAbout;
+
+            }
+
+        }
+    );
+
+
+    /* RESUME */
+
+    function downloadResume() {
+
+        alert(
+            "Resume download feature is ready. You can connect this button to your Django-generated resume PDF."
+        );
+
+    }
+
+
+    /* PROJECT */
+
+    function projectMessage(projectName) {
+
+        event.preventDefault();
+
+        alert(
+            projectName +
+            " project can be connected to your GitHub repository."
+        );
+
+    }
+
+
+    /* CERTIFICATE */
+
+    function viewCertificate(certificateName) {
+
+        alert(
+            certificateName +
+            " certificate is available in your SmartLearn achievements."
+        );
+
+    }
+
+
+    /* SOCIAL */
+
+    function openSocial(platform) {
+
+        if (platform === "GitHub") {
+
+            alert(
+                "Add your GitHub profile URL here."
+            );
+
+        }
+
+        else if (platform === "LinkedIn") {
+
+            alert(
+                "Add your LinkedIn profile URL here."
+            );
+
+        }
+
+        else if (platform === "Email") {
+
+            window.location.href =
+                "mailto:your-email@example.com";
+
+        }
+
+    }
+
+
+    /* SHARE */
+
+    function copyPortfolio() {
+
+        const portfolioURL =
+            window.location.href;
+
+
+        if (navigator.clipboard) {
+
+            navigator.clipboard.writeText(
+                portfolioURL
+            );
+
+            alert(
+                "Portfolio link copied!"
+            );
+
+        }
+
+        else {
+
+            alert(
+                "Copy this page URL to share your portfolio."
+            );
+
+        }
+
+    }
+
+
+    /* CLOSE MODAL WHEN CLICKING OUTSIDE */
+
+    window.onclick = function(event) {
+
+        const modal =
+            document.getElementById(
+                "profileModal"
+            );
+
+        if (event.target === modal) {
+
+            closeEditProfile();
+
+        }
+
+    };
+
+</script>
+
+
+</body>
+
+</html>

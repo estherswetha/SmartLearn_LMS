@@ -1,0 +1,2192 @@
+{% load static %} 
+ 
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+ 
+    <title>Gamification | SmartLearn</title> 
+ 
+    <style> 
+ 
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        } 
+ 
+        body { 
+            font-family: Arial, Helvetica, sans-serif; 
+            background: #f5f8ff; 
+            color: #142653; 
+        } 
+ 
+        /* ========================================= 
+           HEADER 
+        ========================================= */ 
+ 
+        .top-header { 
+            height: 64px; 
+            background: white; 
+            border-bottom: 1px solid #e5e9f5; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 28px; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            z-index: 1000; 
+        } 
+ 
+        .brand { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+        } 
+ 
+        .brand-logo { 
+            width: 42px; 
+            height: 42px; 
+            background: linear-gradient(135deg, #315bea, #4f46e5); 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-size: 22px; 
+        } 
+ 
+        .brand-name { 
+            font-size: 25px; 
+            font-weight: 800; 
+            color: #142653; 
+        } 
+ 
+        .brand-name span { 
+            color: #315bea; 
+        } 
+ 
+        .brand-subtitle { 
+            font-size: 11px; 
+            color: #315bea; 
+            margin-top: 2px; 
+        } 
+ 
+        .profile { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        } 
+ 
+        .profile-icon { 
+            width: 38px; 
+            height: 38px; 
+            border-radius: 50%; 
+            background: #eef0ff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #4f46e5; 
+            font-size: 20px; 
+        } 
+ 
+        .profile-name { 
+            font-weight: 700; 
+        } 
+ 
+ 
+        /* ========================================= 
+           SIDEBAR 
+        ========================================= */ 
+ 
+        .sidebar { 
+            position: fixed; 
+            top: 64px; 
+            left: 0; 
+            bottom: 0; 
+            width: 265px; 
+            background: white; 
+            border-right: 1px solid #e4e9f5; 
+            padding: 25px 14px; 
+            overflow-y: auto; 
+            z-index: 900; 
+        } 
+ 
+        .sidebar-menu { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 7px; 
+        } 
+ 
+        .sidebar-item { 
+            text-decoration: none; 
+            color: #30456f; 
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            padding: 14px 15px; 
+            border-radius: 9px; 
+            font-size: 15px; 
+            font-weight: 600; 
+        } 
+ 
+        .sidebar-item:hover { 
+            background: #f0f3ff; 
+            color: #315bea; 
+        } 
+ 
+        .sidebar-item.active { 
+            background: linear-gradient(135deg, #4f46e5, #315bea); 
+            color: white; 
+            box-shadow: 0 8px 20px rgba(49, 91, 234, 0.25); 
+        } 
+ 
+        .sidebar-icon { 
+            width: 26px; 
+            text-align: center; 
+            font-size: 20px; 
+        } 
+ 
+ 
+        /* ========================================= 
+           MAIN 
+        ========================================= */ 
+ 
+        .main-content { 
+            margin-left: 265px; 
+            padding: 90px 28px 50px; 
+        } 
+ 
+        .page-header { 
+            background: linear-gradient(100deg, #f1f4ff, #e9ecff); 
+            border: 1px solid #dfe5ff; 
+            border-radius: 14px; 
+            padding: 25px; 
+            margin-bottom: 22px; 
+        } 
+ 
+        .page-header h1 { 
+            font-size: 30px; 
+            margin-bottom: 8px; 
+        } 
+ 
+        .page-header p { 
+            color: #49639c; 
+            font-size: 15px; 
+        } 
+ 
+ 
+        /* ========================================= 
+           STATS 
+        ========================================= */ 
+ 
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 18px; 
+            margin-bottom: 22px; 
+        } 
+ 
+        .stat-card { 
+            background: white; 
+            border: 1px solid #e2e8f4; 
+            border-radius: 13px; 
+            padding: 20px; 
+        } 
+ 
+        .stat-icon { 
+            font-size: 28px; 
+            margin-bottom: 12px; 
+        } 
+ 
+        .stat-title { 
+            color: #64759c; 
+            font-size: 13px; 
+            margin-bottom: 7px; 
+        } 
+ 
+        .stat-value { 
+            font-size: 27px; 
+            font-weight: 800; 
+            color: #142653; 
+        } 
+ 
+        .stat-small { 
+            color: #315bea; 
+            font-size: 12px; 
+            margin-top: 5px; 
+        } 
+ 
+ 
+        /* ========================================= 
+           CONTENT GRID 
+        ========================================= */ 
+ 
+        .content-grid { 
+            display: grid; 
+            grid-template-columns: 1.4fr 1fr; 
+            gap: 20px; 
+        } 
+ 
+        .card { 
+            background: white; 
+            border: 1px solid #e2e8f4; 
+            border-radius: 13px; 
+            padding: 22px; 
+            margin-bottom: 20px; 
+        } 
+ 
+        .card h2 { 
+            font-size: 18px; 
+            margin-bottom: 18px; 
+        } 
+ 
+ 
+        /* ========================================= 
+           LEVEL 
+        ========================================= */ 
+ 
+        .level-box { 
+            display: flex; 
+            align-items: center; 
+            gap: 18px; 
+        } 
+ 
+        .level-circle { 
+            width: 82px; 
+            height: 82px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #4f46e5, #315bea); 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 25px; 
+            font-weight: 800; 
+            flex-shrink: 0; 
+        } 
+ 
+        .level-info { 
+            flex: 1; 
+        } 
+ 
+        .level-info h3 { 
+            font-size: 20px; 
+            margin-bottom: 6px; 
+        } 
+ 
+        .level-info p { 
+            color: #63739b; 
+            font-size: 13px; 
+            margin-bottom: 12px; 
+        } 
+ 
+        .progress { 
+            height: 12px; 
+            background: #e8edf8; 
+            border-radius: 20px; 
+            overflow: hidden; 
+        } 
+ 
+        .progress-bar { 
+            height: 100%; 
+            width: 68%; 
+            background: linear-gradient(90deg, #4f46e5, #315bea); 
+            border-radius: 20px; 
+        } 
+ 
+        .progress-text { 
+            margin-top: 7px; 
+            font-size: 12px; 
+            color: #63739b; 
+        } 
+ 
+ 
+        /* ========================================= 
+           STREAK 
+        ========================================= */ 
+ 
+        .streak-box { 
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+            padding: 18px; 
+            border-radius: 12px; 
+            background: linear-gradient(135deg, #fff5e8, #fffaf2); 
+            border: 1px solid #ffe0b3; 
+        } 
+ 
+        .streak-icon { 
+            font-size: 48px; 
+        } 
+ 
+        .streak-number { 
+            font-size: 30px; 
+            font-weight: 800; 
+            color: #e87516; 
+        } 
+ 
+        .streak-text { 
+            color: #80684d; 
+            font-size: 13px; 
+        } 
+ 
+ 
+        /* ========================================= 
+           BADGES 
+        ========================================= */ 
+ 
+        .badges { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 14px; 
+        } 
+ 
+        .badge { 
+            border: 1px solid #e1e7f2; 
+            border-radius: 12px; 
+            padding: 18px 10px; 
+            text-align: center; 
+            background: #fbfcff; 
+        } 
+ 
+        .badge-icon { 
+            font-size: 34px; 
+            margin-bottom: 9px; 
+        } 
+ 
+        .badge h4 { 
+            font-size: 13px; 
+            margin-bottom: 5px; 
+        } 
+ 
+        .badge p { 
+            color: #7180a0; 
+            font-size: 11px; 
+            line-height: 1.4; 
+        } 
+ 
+ 
+        /* ========================================= 
+           DAILY GOAL 
+        ========================================= */ 
+ 
+        .goal-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 10px; 
+            font-size: 14px; 
+            font-weight: 700; 
+        } 
+ 
+        .goal-progress { 
+            height: 13px; 
+            background: #e9edf6; 
+            border-radius: 20px; 
+            overflow: hidden; 
+        } 
+ 
+        .goal-fill { 
+            width: 75%; 
+            height: 100%; 
+            background: #20b96b; 
+            border-radius: 20px; 
+        } 
+ 
+ 
+        /* ========================================= 
+           ACHIEVEMENTS 
+        ========================================= */ 
+ 
+        .achievement { 
+            display: flex; 
+            align-items: center; 
+            gap: 14px; 
+            padding: 13px 0; 
+            border-bottom: 1px solid #edf0f6; 
+        } 
+ 
+        .achievement:last-child { 
+            border-bottom: none; 
+        } 
+ 
+        .achievement-icon { 
+            width: 42px; 
+            height: 42px; 
+            border-radius: 10px; 
+            background: #eef1ff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 22px; 
+        } 
+ 
+        .achievement-info { 
+            flex: 1; 
+        } 
+ 
+        .achievement-info h4 { 
+            font-size: 14px; 
+            margin-bottom: 4px; 
+        } 
+ 
+        .achievement-info p { 
+            font-size: 12px; 
+            color: #7180a0; 
+        } 
+ 
+        .xp { 
+            font-weight: 800; 
+            color: #315bea; 
+            font-size: 13px; 
+        } 
+ 
+ 
+        /* ========================================= 
+           MINI GAME - CATCH THE STAR 
+        ========================================= */ 
+ 
+        .game-card { 
+            background: white; 
+            border: 1px solid #e2e8f4; 
+            border-radius: 13px; 
+            padding: 22px; 
+            margin-bottom: 20px; 
+        } 
+ 
+        .game-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 15px; 
+        } 
+ 
+        .game-header h2 { 
+            font-size: 20px; 
+            margin: 0; 
+        } 
+ 
+        .game-description { 
+            color: #63739b; 
+            font-size: 13px; 
+            line-height: 1.6; 
+            margin-bottom: 15px; 
+        } 
+ 
+        .game-stats { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            margin-bottom: 15px; 
+        } 
+ 
+        .game-stat { 
+            background: #f5f7ff; 
+            border: 1px solid #e1e6f5; 
+            border-radius: 10px; 
+            padding: 12px; 
+            text-align: center; 
+        } 
+ 
+        .game-stat-title { 
+            font-size: 11px; 
+            color: #7180a0; 
+            margin-bottom: 5px; 
+        } 
+ 
+        .game-stat-value { 
+            font-size: 21px; 
+            font-weight: 800; 
+            color: #315bea; 
+        } 
+ 
+        .game-area { 
+            height: 300px; 
+            background: linear-gradient(135deg, #101a3d, #1d3d7a); 
+            border-radius: 13px; 
+            position: relative; 
+            overflow: hidden; 
+            border: 3px solid #dfe5ff; 
+        } 
+ 
+        .game-message { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            color: white; 
+            text-align: center; 
+            width: 90%; 
+            pointer-events: none; 
+        } 
+ 
+        .game-message h3 { 
+            font-size: 24px; 
+            margin-bottom: 8px; 
+        } 
+ 
+        .game-message p { 
+            color: #dce5ff; 
+            font-size: 13px; 
+            line-height: 1.5; 
+        } 
+ 
+        .star { 
+            position: absolute; 
+            display: none; 
+            width: 55px; 
+            height: 55px; 
+            border-radius: 50%; 
+            background: white; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 34px; 
+            cursor: pointer; 
+            user-select: none; 
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7); 
+            transition: transform 0.1s; 
+        } 
+ 
+        .star:hover { 
+            transform: scale(1.12); 
+        } 
+ 
+        .game-buttons { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 15px; 
+        } 
+ 
+        .game-button { 
+            border: none; 
+            border-radius: 9px; 
+            padding: 12px 20px; 
+            font-size: 14px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            background: linear-gradient(135deg, #4f46e5, #315bea); 
+            color: white; 
+            box-shadow: 0 7px 15px rgba(49, 91, 234, 0.2); 
+        } 
+ 
+        .game-button:hover { 
+            transform: translateY(-1px); 
+        } 
+ 
+        .game-button:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+            transform: none; 
+        } 
+ 
+        .game-result { 
+            margin-top: 15px; 
+            padding: 13px; 
+            background: #f0fff7; 
+            border: 1px solid #c9f1dc; 
+            border-radius: 10px; 
+            color: #18794e; 
+            font-size: 13px; 
+            display: none; 
+        } 
+ 
+ 
+        /* ========================================= 
+           COMPUTER GAME - CODE BUG HUNTER 
+        ========================================= */ 
+ 
+        .bug-game { 
+            background: white; 
+            border: 1px solid #e2e8f4; 
+            border-radius: 13px; 
+            padding: 22px; 
+            margin-bottom: 20px; 
+        } 
+ 
+        .bug-game-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 15px; 
+        } 
+ 
+        .bug-game-header h2 { 
+            font-size: 20px; 
+            margin: 0; 
+        } 
+ 
+        .bug-game-description { 
+            color: #63739b; 
+            font-size: 13px; 
+            line-height: 1.6; 
+            margin-bottom: 15px; 
+        } 
+ 
+        .code-box { 
+            background: #101827; 
+            border: 2px solid #263b62; 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+            overflow-x: auto; 
+        } 
+ 
+        .code-box pre { 
+            margin: 0; 
+            color: #dbeafe; 
+            font-family: Consolas, "Courier New", monospace; 
+            font-size: 14px; 
+            line-height: 1.7; 
+            white-space: pre-wrap; 
+        } 
+ 
+        .bug-question { 
+            background: #f5f7ff; 
+            border: 1px solid #e1e6f5; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            font-size: 14px; 
+            font-weight: 700; 
+            color: #142653; 
+        } 
+ 
+        .bug-options { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+        } 
+ 
+        .bug-option { 
+            border: 1px solid #d9e0ef; 
+            background: white; 
+            color: #30456f; 
+            border-radius: 9px; 
+            padding: 13px 10px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.15s; 
+        } 
+ 
+        .bug-option:hover { 
+            background: #eef2ff; 
+            border-color: #315bea; 
+            color: #315bea; 
+        } 
+ 
+        .bug-option.correct { 
+            background: #eafaf2; 
+            border-color: #20b96b; 
+            color: #18794e; 
+        } 
+ 
+        .bug-option.wrong { 
+            background: #fff0f0; 
+            border-color: #e05252; 
+            color: #b42318; 
+        } 
+ 
+        .bug-game-stats { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            margin-bottom: 15px; 
+        } 
+ 
+        .bug-stat { 
+            background: #f5f7ff; 
+            border: 1px solid #e1e6f5; 
+            border-radius: 10px; 
+            padding: 12px; 
+            text-align: center; 
+        } 
+ 
+        .bug-stat-title { 
+            font-size: 11px; 
+            color: #7180a0; 
+            margin-bottom: 5px; 
+        } 
+ 
+        .bug-stat-value { 
+            font-size: 21px; 
+            font-weight: 800; 
+            color: #315bea; 
+        } 
+ 
+        .bug-result { 
+            margin-top: 15px; 
+            padding: 13px; 
+            border-radius: 10px; 
+            font-size: 13px; 
+            line-height: 1.5; 
+            display: none; 
+        } 
+ 
+        .bug-result.success { 
+            background: #f0fff7; 
+            border: 1px solid #c9f1dc; 
+            color: #18794e; 
+        } 
+ 
+        .bug-result.error { 
+            background: #fff4f4; 
+            border: 1px solid #ffd0d0; 
+            color: #b42318; 
+        } 
+ 
+        .bug-next-button { 
+            border: none; 
+            border-radius: 9px; 
+            padding: 12px 20px; 
+            font-size: 14px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            background: linear-gradient(135deg, #4f46e5, #315bea); 
+            color: white; 
+            margin-top: 12px; 
+            display: none; 
+        } 
+ 
+ 
+        /* ========================================= 
+           RESPONSIVE 
+        ========================================= */ 
+ 
+        @media (max-width: 1100px) { 
+ 
+            .stats-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            } 
+ 
+            .content-grid { 
+                grid-template-columns: 1fr; 
+            } 
+        } 
+ 
+        @media (max-width: 700px) { 
+ 
+            .sidebar { 
+                width: 210px; 
+            } 
+ 
+            .main-content { 
+                margin-left: 210px; 
+            } 
+ 
+            .stats-grid { 
+                grid-template-columns: 1fr; 
+            } 
+ 
+            .badges { 
+                grid-template-columns: repeat(2, 1fr); 
+            } 
+ 
+            .game-stats { 
+                grid-template-columns: 1fr; 
+            } 
+ 
+            .bug-game-stats { 
+                grid-template-columns: 1fr; 
+            } 
+ 
+            .bug-options { 
+                grid-template-columns: 1fr; 
+            } 
+        } 
+ 
+    </style> 
+</head> 
+ 
+<body> 
+ 
+ 
+<!-- ========================================= 
+     HEADER 
+========================================= --> 
+ 
+<header class="top-header"> 
+ 
+    <div class="brand"> 
+ 
+        <div class="brand-logo"> 
+            🎮 
+        </div> 
+ 
+        <div> 
+ 
+            <div class="brand-name"> 
+                Smart<span>Learn</span> 
+            </div> 
+ 
+            <div class="brand-subtitle"> 
+                Learn • Practice • Grow 
+            </div> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+    <div class="profile"> 
+ 
+        <div class="profile-icon"> 
+            👤 
+        </div> 
+ 
+        <span class="profile-name"> 
+            Swetha 
+        </span> 
+ 
+    </div> 
+ 
+</header> 
+ 
+ 
+ 
+<!-- ========================================= 
+     SIDEBAR 
+========================================= --> 
+ 
+<aside class="sidebar"> 
+ 
+    <nav class="sidebar-menu"> 
+ 
+        <a href="{% url 'dashboard' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">⌂</span> 
+            Dashboard 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'learning' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">📖</span> 
+            Learning 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'languages' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">🌐</span> 
+            Languages 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'videos' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">▶</span> 
+            Videos 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'summary' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">📄</span> 
+            Summary AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'notes' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">📝</span> 
+            Notes AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'tutor' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">👤</span> 
+            Tutor AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'adaptive' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">📊</span> 
+            Adaptive AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'quizzes' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">🏆</span> 
+            Quiz AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'analytics' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">📈</span> 
+            Analytics AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'gamification' %}" 
+           class="sidebar-item active"> 
+            <span class="sidebar-icon">🎮</span> 
+            Gamification 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'voice' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">🎤</span> 
+            Voice AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'learntwin' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">🤖</span> 
+            LearnTwin 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'community' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">👥</span> 
+            Community 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'offline' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">📥</span> 
+            Offline 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'career' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">💼</span> 
+            Career AI 
+        </a> 
+ 
+        <a href="{% url 'module_page' 'portfolio' %}" class="sidebar-item"> 
+            <span class="sidebar-icon">🏆</span> 
+            Portfolio 
+        </a> 
+ 
+    </nav> 
+ 
+</aside> 
+ 
+ 
+ 
+<!-- ========================================= 
+     MAIN CONTENT 
+========================================= --> 
+ 
+<main class="main-content"> 
+ 
+ 
+    <section class="page-header"> 
+ 
+        <h1> 
+            🎮 Gamification 
+        </h1> 
+ 
+        <p> 
+            Turn your learning journey into an exciting achievement experience. 
+            Earn XP, maintain streaks, unlock badges and reach new levels. 
+        </p> 
+ 
+    </section> 
+ 
+ 
+ 
+    <!-- ========================================= 
+         STATS 
+    ========================================= --> 
+ 
+    <section class="stats-grid"> 
+ 
+        <div class="stat-card"> 
+ 
+            <div class="stat-icon"> 
+                ⭐ 
+            </div> 
+ 
+            <div class="stat-title"> 
+                Total XP 
+            </div> 
+ 
+            <div class="stat-value" id="totalXP"> 
+                2,450 
+            </div> 
+ 
+            <div class="stat-small" id="weeklyXP"> 
+                +120 this week 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <div class="stat-card"> 
+ 
+            <div class="stat-icon"> 
+                🔥 
+            </div> 
+ 
+            <div class="stat-title"> 
+                Learning Streak 
+            </div> 
+ 
+            <div class="stat-value"> 
+                7 Days 
+            </div> 
+ 
+            <div class="stat-small"> 
+                Keep it going! 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <div class="stat-card"> 
+ 
+            <div class="stat-icon"> 
+                🏆 
+            </div> 
+ 
+            <div class="stat-title"> 
+                Badges Earned 
+            </div> 
+ 
+            <div class="stat-value"> 
+                8 
+            </div> 
+ 
+            <div class="stat-small"> 
+                4 more available 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <div class="stat-card"> 
+ 
+            <div class="stat-icon"> 
+                🎯 
+            </div> 
+ 
+            <div class="stat-title"> 
+                Current Level 
+            </div> 
+ 
+            <div class="stat-value"> 
+                Level 5 
+            </div> 
+ 
+            <div class="stat-small"> 
+                550 XP to Level 6 
+            </div> 
+ 
+        </div> 
+ 
+    </section> 
+ 
+ 
+ 
+    <!-- ========================================= 
+         MINI GAME 1 - CATCH THE STAR 
+    ========================================= --> 
+ 
+    <section class="game-card"> 
+ 
+        <div class="game-header"> 
+ 
+            <h2> 
+                🎯 Catch the Star 
+            </h2> 
+ 
+        </div> 
+ 
+        <p class="game-description"> 
+            Take a short break and test your reaction speed! 
+            Click the ⭐ as many times as you can before the timer reaches zero. 
+            Every star gives you <strong>10 XP</strong>. 
+        </p> 
+ 
+ 
+        <div class="game-stats"> 
+ 
+            <div class="game-stat"> 
+ 
+                <div class="game-stat-title"> 
+                    SCORE 
+                </div> 
+ 
+                <div class="game-stat-value" id="gameScore"> 
+                    0 
+                </div> 
+ 
+            </div> 
+ 
+ 
+            <div class="game-stat"> 
+ 
+                <div class="game-stat-title"> 
+                    TIME 
+                </div> 
+ 
+                <div class="game-stat-value"> 
+                    <span id="gameTime">20</span>s 
+                </div> 
+ 
+            </div> 
+ 
+ 
+            <div class="game-stat"> 
+ 
+                <div class="game-stat-title"> 
+                    XP EARNED 
+                </div> 
+ 
+                <div class="game-stat-value" id="gameXP"> 
+                    0 
+                </div> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <div class="game-area" id="gameArea"> 
+ 
+            <div class="game-message" id="gameMessage"> 
+ 
+                <h3> 
+                    ⭐ Ready? 
+                </h3> 
+ 
+                <p> 
+                    Click START GAME and catch the stars! 
+                </p> 
+ 
+            </div> 
+ 
+ 
+            <div class="star" id="star"> 
+                ⭐ 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <div class="game-buttons"> 
+ 
+            <button 
+                type="button" 
+                class="game-button" 
+                id="startGameButton" 
+                onclick="startStarGame()"> 
+                ▶ Start Game 
+            </button> 
+ 
+            <button 
+                type="button" 
+                class="game-button" 
+                id="resetGameButton" 
+                onclick="resetStarGame()"> 
+                ↻ Reset 
+            </button> 
+ 
+        </div> 
+ 
+ 
+        <div class="game-result" id="gameResult"> 
+        </div> 
+ 
+    </section> 
+ 
+ 
+ 
+    <!-- ========================================= 
+         MINI GAME 2 - CODE BUG HUNTER 
+    ========================================= --> 
+ 
+    <section class="bug-game"> 
+ 
+        <div class="bug-game-header"> 
+ 
+            <h2> 
+                💻 Code Bug Hunter 
+            </h2> 
+ 
+        </div> 
+ 
+        <p class="bug-game-description"> 
+            Test your programming skills! Find the bug or error in the Python code. 
+            Choose the correct answer and earn <strong>20 XP</strong> for every correct answer. 
+        </p> 
+ 
+ 
+        <div class="bug-game-stats"> 
+ 
+            <div class="bug-stat"> 
+ 
+                <div class="bug-stat-title"> 
+                    SCORE 
+                </div> 
+ 
+                <div class="bug-stat-value" id="bugScore"> 
+                    0 
+                </div> 
+ 
+            </div> 
+ 
+ 
+            <div class="bug-stat"> 
+ 
+                <div class="bug-stat-title"> 
+                    QUESTIONS 
+                </div> 
+ 
+                <div class="bug-stat-value" id="bugQuestions"> 
+                    0 
+                </div> 
+ 
+            </div> 
+ 
+ 
+            <div class="bug-stat"> 
+ 
+                <div class="bug-stat-title"> 
+                    XP EARNED 
+                </div> 
+ 
+                <div class="bug-stat-value" id="bugXP"> 
+                    0 
+                </div> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <div class="code-box"> 
+ 
+            <pre id="bugCode">Click START GAME to load a Python challenge.</pre> 
+ 
+        </div> 
+ 
+ 
+        <div class="bug-question" id="bugQuestion"> 
+            Find the bug or choose "Nothing is wrong". 
+        </div> 
+ 
+ 
+        <div class="bug-options" id="bugOptions"> 
+ 
+            <button type="button" class="bug-option" disabled> 
+                Option 1 
+            </button> 
+ 
+            <button type="button" class="bug-option" disabled> 
+                Option 2 
+            </button> 
+ 
+            <button type="button" class="bug-option" disabled> 
+                Option 3 
+            </button> 
+ 
+        </div> 
+ 
+ 
+        <div class="game-buttons"> 
+ 
+            <button 
+                type="button" 
+                class="game-button" 
+                id="bugStartButton" 
+                onclick="startBugHunter()"> 
+                ▶ Start Game 
+            </button> 
+ 
+            <button 
+                type="button" 
+                class="game-button" 
+                onclick="resetBugHunter()"> 
+                ↻ Reset 
+            </button> 
+ 
+        </div> 
+ 
+ 
+        <div class="bug-result" id="bugResult"> 
+        </div> 
+ 
+        <button 
+            type="button" 
+            class="bug-next-button" 
+            id="bugNextButton" 
+            onclick="loadRandomBug()"> 
+            Next Challenge → 
+        </button> 
+ 
+    </section> 
+ 
+ 
+ 
+    <div class="content-grid"> 
+ 
+ 
+        <!-- ===================================== 
+             LEFT COLUMN 
+        ====================================== --> 
+ 
+        <div> 
+ 
+ 
+            <!-- LEVEL --> 
+ 
+            <section class="card"> 
+ 
+                <h2> 
+                    ⭐ Your Level Progress 
+                </h2> 
+ 
+                <div class="level-box"> 
+ 
+                    <div class="level-circle"> 
+                        5 
+                    </div> 
+ 
+                    <div class="level-info"> 
+ 
+                        <h3> 
+                            Knowledge Explorer 
+                        </h3> 
+ 
+                        <p> 
+                            You are making great progress! 
+                        </p> 
+ 
+                        <div class="progress"> 
+ 
+                            <div class="progress-bar"></div> 
+ 
+                        </div> 
+ 
+                        <div class="progress-text"> 
+                            2,450 / 3,000 XP 
+                        </div> 
+ 
+                    </div> 
+ 
+                </div> 
+ 
+            </section> 
+ 
+ 
+ 
+            <!-- STREAK --> 
+ 
+            <section class="card"> 
+ 
+                <h2> 
+                    🔥 Learning Streak 
+                </h2> 
+ 
+                <div class="streak-box"> 
+ 
+                    <div class="streak-icon"> 
+                        🔥 
+                    </div> 
+ 
+                    <div> 
+ 
+                        <div class="streak-number"> 
+                            7 Days 
+                        </div> 
+ 
+                        <div class="streak-text"> 
+                            You have learned for 7 consecutive days. 
+                            Complete today's goal to continue your streak! 
+                        </div> 
+ 
+                    </div> 
+ 
+                </div> 
+ 
+            </section> 
+ 
+ 
+ 
+            <!-- BADGES --> 
+ 
+            <section class="card"> 
+ 
+                <h2> 
+                    🏅 Your Badges 
+                </h2> 
+ 
+                <div class="badges"> 
+ 
+                    <div class="badge"> 
+                        <div class="badge-icon">🌟</div> 
+                        <h4>First Step</h4> 
+                        <p>Completed your first lesson.</p> 
+                    </div> 
+ 
+                    <div class="badge"> 
+                        <div class="badge-icon">🔥</div> 
+                        <h4>7 Day Streak</h4> 
+                        <p>Learned for 7 days continuously.</p> 
+                    </div> 
+ 
+                    <div class="badge"> 
+                        <div class="badge-icon">🧠</div> 
+                        <h4>Quick Learner</h4> 
+                        <p>Completed 10 learning activities.</p> 
+                    </div> 
+ 
+                    <div class="badge"> 
+                        <div class="badge-icon">🎯</div> 
+                        <h4>Quiz Master</h4> 
+                        <p>Scored above 80% in quizzes.</p> 
+                    </div> 
+ 
+                    <div class="badge"> 
+                        <div class="badge-icon">📚</div> 
+                        <h4>Bookworm</h4> 
+                        <p>Completed multiple study materials.</p> 
+                    </div> 
+ 
+                    <div class="badge"> 
+                        <div class="badge-icon">🚀</div> 
+                        <h4>Fast Progress</h4> 
+                        <p>Reached a new level quickly.</p> 
+                    </div> 
+ 
+                </div> 
+ 
+            </section> 
+ 
+        </div> 
+ 
+ 
+ 
+        <!-- ===================================== 
+             RIGHT COLUMN 
+        ====================================== --> 
+ 
+        <div> 
+ 
+ 
+            <!-- DAILY GOAL --> 
+ 
+            <section class="card"> 
+ 
+                <h2> 
+                    🎯 Today's Goal 
+                </h2> 
+ 
+                <div class="goal-row"> 
+ 
+                    <span> 
+                        Learning Progress 
+                    </span> 
+ 
+                    <span> 
+                        75% 
+                    </span> 
+ 
+                </div> 
+ 
+                <div class="goal-progress"> 
+ 
+                    <div class="goal-fill"></div> 
+ 
+                </div> 
+ 
+                <p style="margin-top:12px;color:#63739b;font-size:13px;"> 
+                    45 minutes of 60 minutes completed. 
+                </p> 
+ 
+            </section> 
+ 
+ 
+ 
+            <!-- ACHIEVEMENTS --> 
+ 
+            <section class="card"> 
+ 
+                <h2> 
+                    🏆 Recent Achievements 
+                </h2> 
+ 
+                <div class="achievement"> 
+ 
+                    <div class="achievement-icon"> 
+                        🎯 
+                    </div> 
+ 
+                    <div class="achievement-info"> 
+ 
+                        <h4> 
+                            Quiz Master 
+                        </h4> 
+ 
+                        <p> 
+                            Scored 90% in Python Quiz 
+                        </p> 
+ 
+                    </div> 
+ 
+                    <div class="xp"> 
+                        +50 XP 
+                    </div> 
+ 
+                </div> 
+ 
+ 
+                <div class="achievement"> 
+ 
+                    <div class="achievement-icon"> 
+                        📖 
+                    </div> 
+ 
+                    <div class="achievement-info"> 
+ 
+                        <h4> 
+                            Lesson Completed 
+                        </h4> 
+ 
+                        <p> 
+                            Completed Python Variables 
+                        </p> 
+ 
+                    </div> 
+ 
+                    <div class="xp"> 
+                        +30 XP 
+                    </div> 
+ 
+                </div> 
+ 
+ 
+                <div class="achievement"> 
+ 
+                    <div class="achievement-icon"> 
+                        🔥 
+                    </div> 
+ 
+                    <div class="achievement-info"> 
+ 
+                        <h4> 
+                            Streak Extended 
+                        </h4> 
+ 
+                        <p> 
+                            Reached a 7 day streak 
+                        </p> 
+ 
+                    </div> 
+ 
+                    <div class="xp"> 
+                        +70 XP 
+                    </div> 
+ 
+                </div> 
+ 
+ 
+                <div class="achievement"> 
+ 
+                    <div class="achievement-icon"> 
+                        📝 
+                    </div> 
+ 
+                    <div class="achievement-info"> 
+ 
+                        <h4> 
+                            Study Notes 
+                        </h4> 
+ 
+                        <p> 
+                            Created AI learning notes 
+                        </p> 
+ 
+                    </div> 
+ 
+                    <div class="xp"> 
+                        +20 XP 
+                    </div> 
+ 
+                </div> 
+ 
+            </section> 
+ 
+ 
+ 
+            <!-- NEXT ACHIEVEMENT --> 
+ 
+            <section class="card"> 
+ 
+                <h2> 
+                    🚀 Next Achievement 
+                </h2> 
+ 
+                <div style="font-size:42px;margin-bottom:12px;"> 
+                    💎 
+                </div> 
+ 
+                <h3 style="margin-bottom:8px;"> 
+                    Diamond Learner 
+                </h3> 
+ 
+                <p style="font-size:13px;color:#63739b;line-height:1.6;"> 
+                    Earn 5,000 total XP to unlock this special badge. 
+                </p> 
+ 
+                <div class="goal-progress" style="margin-top:15px;"> 
+ 
+                    <div 
+                        class="goal-fill" 
+                        style="width:49%;background:#8b5cf6;"> 
+                    </div> 
+ 
+                </div> 
+ 
+                <p style="margin-top:8px;font-size:12px;color:#63739b;"> 
+                    2,450 / 5,000 XP 
+                </p> 
+ 
+            </section> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+</main> 
+ 
+ 
+ 
+<!-- ========================================= 
+     MINI GAME JAVASCRIPT 
+========================================= --> 
+ 
+<script> 
+ 
+    /* ========================================= 
+       CATCH THE STAR GAME 
+    ========================================= */ 
+ 
+    let gameScore = 0; 
+    let gameTime = 20; 
+    let gameXP = 0; 
+    let gameRunning = false; 
+    let gameTimer = null; 
+ 
+    const gameArea = document.getElementById("gameArea"); 
+    const star = document.getElementById("star"); 
+ 
+    const gameScoreElement = document.getElementById("gameScore"); 
+    const gameTimeElement = document.getElementById("gameTime"); 
+    const gameXPElement = document.getElementById("gameXP"); 
+ 
+    const startGameButton = document.getElementById("startGameButton"); 
+    const gameMessage = document.getElementById("gameMessage"); 
+    const gameResult = document.getElementById("gameResult"); 
+ 
+    const totalXPElement = document.getElementById("totalXP"); 
+ 
+ 
+    /* ========================================= 
+       MOVE STAR 
+    ========================================= */ 
+ 
+    function moveStar() { 
+ 
+        const areaWidth = gameArea.clientWidth; 
+        const areaHeight = gameArea.clientHeight; 
+ 
+        const starSize = 55; 
+ 
+        const maxX = areaWidth - starSize; 
+        const maxY = areaHeight - starSize; 
+ 
+        const randomX = Math.floor(Math.random() * maxX); 
+        const randomY = Math.floor(Math.random() * maxY); 
+ 
+        star.style.left = randomX + "px"; 
+        star.style.top = randomY + "px"; 
+    } 
+ 
+ 
+    /* ========================================= 
+       START GAME 
+    ========================================= */ 
+ 
+    function startStarGame() { 
+ 
+        if (gameRunning) { 
+            return; 
+        } 
+ 
+        gameScore = 0; 
+        gameTime = 20; 
+        gameXP = 0; 
+ 
+        gameRunning = true; 
+ 
+        gameScoreElement.textContent = gameScore; 
+        gameTimeElement.textContent = gameTime; 
+        gameXPElement.textContent = gameXP; 
+ 
+        gameResult.style.display = "none"; 
+ 
+        gameMessage.style.display = "none"; 
+ 
+        star.style.display = "flex"; 
+ 
+        startGameButton.disabled = true; 
+ 
+        moveStar(); 
+ 
+        gameTimer = setInterval(function() { 
+ 
+            gameTime--; 
+ 
+            gameTimeElement.textContent = gameTime; 
+ 
+            if (gameTime <= 0) { 
+ 
+                endStarGame(); 
+ 
+            } 
+ 
+        }, 1000); 
+    } 
+ 
+ 
+    /* ========================================= 
+       CATCH STAR 
+    ========================================= */ 
+ 
+    star.addEventListener("click", function() { 
+ 
+        if (!gameRunning) { 
+            return; 
+        } 
+ 
+        gameScore++; 
+ 
+        gameXP = gameScore * 10; 
+ 
+        gameScoreElement.textContent = gameScore; 
+ 
+        gameXPElement.textContent = gameXP; 
+ 
+        moveStar(); 
+ 
+    }); 
+ 
+ 
+    /* ========================================= 
+       END GAME 
+    ========================================= */ 
+ 
+    function endStarGame() { 
+ 
+        gameRunning = false; 
+ 
+        clearInterval(gameTimer); 
+ 
+        star.style.display = "none"; 
+ 
+        startGameButton.disabled = false; 
+ 
+        gameTimeElement.textContent = "0"; 
+ 
+        gameMessage.style.display = "block"; 
+ 
+        gameMessage.innerHTML = ` 
+            <h3>🎉 Game Complete!</h3> 
+            <p> 
+                You caught ${gameScore} star${gameScore === 1 ? "" : "s"}! 
+                Great job! 
+            </p> 
+        `; 
+ 
+ 
+        /* ===================================== 
+           ADD GAME XP TO DISPLAYED TOTAL XP 
+        ===================================== */ 
+ 
+        let currentTotalXP = parseInt( 
+            totalXPElement.textContent.replace(/,/g, "") 
+        ); 
+ 
+        if (isNaN(currentTotalXP)) { 
+            currentTotalXP = 2450; 
+        } 
+ 
+        currentTotalXP += gameXP; 
+ 
+        totalXPElement.textContent = 
+            currentTotalXP.toLocaleString(); 
+ 
+ 
+        /* ===================================== 
+           SHOW RESULT 
+        ===================================== */ 
+ 
+        gameResult.style.display = "block"; 
+ 
+        gameResult.innerHTML = ` 
+            ⭐ <strong>Game Result:</strong> 
+            You scored <strong>${gameScore}</strong> points 
+            and earned <strong>+${gameXP} XP</strong>. 
+            Keep learning and keep playing! 
+        `; 
+ 
+    } 
+ 
+ 
+    /* ========================================= 
+       RESET GAME 
+    ========================================= */ 
+ 
+    function resetStarGame() { 
+ 
+        clearInterval(gameTimer); 
+ 
+        gameRunning = false; 
+ 
+        gameScore = 0; 
+        gameTime = 20; 
+        gameXP = 0; 
+ 
+        gameScoreElement.textContent = "0"; 
+        gameTimeElement.textContent = "20"; 
+        gameXPElement.textContent = "0"; 
+ 
+        star.style.display = "none"; 
+ 
+        startGameButton.disabled = false; 
+ 
+        gameResult.style.display = "none"; 
+ 
+        gameMessage.style.display = "block"; 
+ 
+        gameMessage.innerHTML = ` 
+            <h3>⭐ Ready?</h3> 
+            <p> 
+                Click START GAME and catch the stars! 
+            </p> 
+        `; 
+ 
+    } 
+ 
+ 
+ 
+    /* ========================================= 
+       CODE BUG HUNTER GAME 
+    ========================================= */ 
+ 
+    const bugQuestions = [ 
+ 
+        { 
+            code: `name = "Swetha" 
+print(name)`, 
+            question: "What is wrong with this code?", 
+            options: [ 
+                "Nothing is wrong", 
+                "Missing quotation marks", 
+                "print() is not allowed" 
+            ], 
+            answer: "Nothing is wrong" 
+        }, 
+ 
+        { 
+            code: `numbers = [10, 20, 30] 
+print(numbers[3])`, 
+            question: "What error will this code cause?", 
+            options: [ 
+                "IndexError", 
+                "SyntaxError", 
+                "NameError" 
+            ], 
+            answer: "IndexError" 
+        }, 
+ 
+        { 
+            code: `age = 20 
+ 
+if age >= 18 
+    print("Adult")`, 
+            question: "What is missing in the if statement?", 
+            options: [ 
+                "A colon :", 
+                "A semicolon ;", 
+                "A comma ," 
+            ], 
+            answer: "A colon :" 
+        }, 
+ 
+        { 
+            code: `number = 10 
+result = number / 0 
+print(result)`, 
+            question: "What error will occur?", 
+            options: [ 
+                "ZeroDivisionError", 
+                "ValueError", 
+                "TypeError" 
+            ], 
+            answer: "ZeroDivisionError" 
+        }, 
+ 
+        { 
+            code: `for i in range(5) 
+    print(i)`, 
+            question: "What is missing from the for statement?", 
+            options: [ 
+                "A colon :", 
+                "A bracket ]", 
+                "A quotation mark" 
+            ], 
+            answer: "A colon :" 
+        }, 
+ 
+        { 
+            code: `student = { 
+    "name": "Swetha" 
+} 
+ 
+print(student["course"])`, 
+            question: "What error will this produce?", 
+            options: [ 
+                "KeyError", 
+                "IndexError", 
+                "ImportError" 
+            ], 
+            answer: "KeyError" 
+        }, 
+ 
+        { 
+            code: `age = "20" 
+print(age + 5)`, 
+            question: "What error will occur?", 
+            options: [ 
+                "TypeError", 
+                "KeyError", 
+                "AttributeError" 
+            ], 
+            answer: "TypeError" 
+        }, 
+ 
+        { 
+            code: `def greet(): 
+print("Hello")`, 
+            question: "What is wrong with the function?", 
+            options: [ 
+                "IndentationError", 
+                "ImportError", 
+                "KeyError" 
+            ], 
+            answer: "IndentationError" 
+        } 
+ 
+    ]; 
+ 
+ 
+    let bugScore = 0; 
+    let bugQuestionsAnswered = 0; 
+    let bugXP = 0; 
+    let currentBugQuestion = null; 
+    let bugGameStarted = false; 
+ 
+ 
+    const bugScoreElement = document.getElementById("bugScore"); 
+    const bugQuestionsElement = document.getElementById("bugQuestions"); 
+    const bugXPElement = document.getElementById("bugXP"); 
+    const bugCodeElement = document.getElementById("bugCode"); 
+    const bugQuestionElement = document.getElementById("bugQuestion"); 
+    const bugOptionsElement = document.getElementById("bugOptions"); 
+    const bugResultElement = document.getElementById("bugResult"); 
+    const bugNextButton = document.getElementById("bugNextButton"); 
+    const bugStartButton = document.getElementById("bugStartButton"); 
+ 
+ 
+    /* ========================================= 
+       START BUG HUNTER 
+    ========================================= */ 
+ 
+    function startBugHunter() { 
+ 
+        bugScore = 0; 
+        bugQuestionsAnswered = 0; 
+        bugXP = 0; 
+        bugGameStarted = true; 
+ 
+        bugScoreElement.textContent = "0"; 
+        bugQuestionsElement.textContent = "0"; 
+        bugXPElement.textContent = "0"; 
+ 
+        bugResultElement.style.display = "none"; 
+        bugNextButton.style.display = "none"; 
+ 
+        bugStartButton.disabled = true; 
+ 
+        loadRandomBug(); 
+    } 
+ 
+ 
+    /* ========================================= 
+       LOAD RANDOM BUG 
+    ========================================= */ 
+ 
+    function loadRandomBug() { 
+ 
+        if (!bugGameStarted) { 
+            return; 
+        } 
+ 
+        const randomIndex = Math.floor( 
+            Math.random() * bugQuestions.length 
+        ); 
+ 
+        currentBugQuestion = bugQuestions[randomIndex]; 
+ 
+        bugCodeElement.textContent = currentBugQuestion.code; 
+ 
+        bugQuestionElement.textContent = 
+            currentBugQuestion.question; 
+ 
+        bugOptionsElement.innerHTML = ""; 
+ 
+        currentBugQuestion.options.forEach(function(option) { 
+ 
+            const button = document.createElement("button"); 
+ 
+            button.type = "button"; 
+            button.className = "bug-option"; 
+            button.textContent = option; 
+ 
+            button.addEventListener("click", function() { 
+                checkBugAnswer(option, button); 
+            }); 
+ 
+            bugOptionsElement.appendChild(button); 
+ 
+        }); 
+ 
+        bugResultElement.style.display = "none"; 
+        bugNextButton.style.display = "none"; 
+    } 
+ 
+ 
+    /* ========================================= 
+       CHECK BUG ANSWER 
+    ========================================= */ 
+ 
+    function checkBugAnswer(selectedAnswer, selectedButton) { 
+ 
+        if (!bugGameStarted || !currentBugQuestion) { 
+            return; 
+        } 
+ 
+        const optionButtons = 
+            bugOptionsElement.querySelectorAll(".bug-option"); 
+ 
+        optionButtons.forEach(function(button) { 
+            button.disabled = true; 
+        }); 
+ 
+        bugQuestionsAnswered++; 
+ 
+        bugQuestionsElement.textContent = 
+            bugQuestionsAnswered; 
+ 
+        if (selectedAnswer === currentBugQuestion.answer) { 
+ 
+            bugScore++; 
+            bugXP += 20; 
+ 
+            bugScoreElement.textContent = bugScore; 
+            bugXPElement.textContent = bugXP; 
+ 
+            selectedButton.classList.add("correct"); 
+ 
+            bugResultElement.className = "bug-result success"; 
+            bugResultElement.style.display = "block"; 
+ 
+            bugResultElement.innerHTML = ` 
+                ✅ <strong>Correct!</strong> 
+                Great job! You found the correct answer. 
+                <strong>+20 XP</strong> earned. 
+            `; 
+ 
+            addBugXPToTotal(20); 
+ 
+        } else { 
+ 
+            selectedButton.classList.add("wrong"); 
+ 
+            optionButtons.forEach(function(button) { 
+ 
+                if (button.textContent === currentBugQuestion.answer) { 
+                    button.classList.add("correct"); 
+                } 
+ 
+            }); 
+ 
+            bugResultElement.className = "bug-result error"; 
+            bugResultElement.style.display = "block"; 
+ 
+            bugResultElement.innerHTML = ` 
+                ❌ <strong>Not quite!</strong> 
+                The correct answer is 
+                <strong>${currentBugQuestion.answer}</strong>. 
+            `; 
+ 
+        } 
+ 
+        bugNextButton.style.display = "inline-block"; 
+    } 
+ 
+ 
+    /* ========================================= 
+       ADD BUG HUNTER XP TO TOTAL XP 
+    ========================================= */ 
+ 
+    function addBugXPToTotal(amount) { 
+ 
+        let currentTotalXP = parseInt( 
+            totalXPElement.textContent.replace(/,/g, "") 
+        ); 
+ 
+        if (isNaN(currentTotalXP)) { 
+            currentTotalXP = 2450; 
+        } 
+ 
+        currentTotalXP += amount; 
+ 
+        totalXPElement.textContent = 
+            currentTotalXP.toLocaleString(); 
+    } 
+ 
+ 
+    /* ========================================= 
+       RESET BUG HUNTER 
+    ========================================= */ 
+ 
+    function resetBugHunter() { 
+ 
+        bugScore = 0; 
+        bugQuestionsAnswered = 0; 
+        bugXP = 0; 
+        currentBugQuestion = null; 
+        bugGameStarted = false; 
+ 
+        bugScoreElement.textContent = "0"; 
+        bugQuestionsElement.textContent = "0"; 
+        bugXPElement.textContent = "0"; 
+ 
+        bugCodeElement.textContent = 
+            "Click START GAME to load a Python challenge."; 
+ 
+        bugQuestionElement.textContent = 
+            'Find the bug or choose "Nothing is wrong".'; 
+ 
+        bugOptionsElement.innerHTML = ` 
+            <button type="button" class="bug-option" disabled> 
+                Option 1 
+            </button> 
+ 
+            <button type="button" class="bug-option" disabled> 
+                Option 2 
+            </button> 
+ 
+            <button type="button" class="bug-option" disabled> 
+                Option 3 
+            </button> 
+        `; 
+ 
+        bugResultElement.style.display = "none"; 
+        bugNextButton.style.display = "none"; 
+        bugStartButton.disabled = false; 
+    } 
+ 
+</script> 
+ 
+</body> 
+</html>

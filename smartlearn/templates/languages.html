@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language AI | SmartLearn</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172554;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #24528A, #35B957);
+            color: white;
+            padding: 35px;
+            border-radius: 22px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #24528A;
+        }
+
+        .language-row,
+        .translator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 15px;
+            margin-top: 8px;
+        }
+
+        textarea {
+            min-height: 160px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+        }
+
+        .btn,
+        .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 9px;
+            background: #24528A;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn:hover,
+        .back-btn:hover {
+            background: #35B957;
+        }
+
+        .translation-box {
+            padding: 18px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            min-width: 0;
+        }
+
+        .translation-box h3 {
+            margin-top: 0;
+        }
+
+        .output {
+            min-height: 100px;
+            background: white;
+            padding: 15px;
+            border-radius: 9px;
+            border: 1px solid #d1d5db;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .word-card,
+        .feature-card {
+            padding: 22px;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            background: #ffffff;
+        }
+
+        .word-card strong {
+            color: #24528A;
+            font-size: 18px;
+        }
+
+        .pronunciation-box {
+            background: #eef7ff;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #24528A;
+        }
+
+        .word-display {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 15px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .conversation {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            min-height: 150px;
+        }
+
+        .ai-message,
+        .user-message {
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .ai-message {
+            background: #e0f2fe;
+        }
+
+        .user-message {
+            background: #dcfce7;
+            text-align: right;
+        }
+
+        .goal-box {
+            background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+            padding: 22px;
+            border-radius: 15px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 75%;
+            background: linear-gradient(90deg, #24528A, #35B957);
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 15px;
+            }
+
+            .translator-grid,
+            .language-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 25px;
+            }
+
+            .section {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>🌐 Language AI</h1>
+        <p>Translate, practice, improve and communicate in different languages.</p>
+    </div>
+
+    <!-- AI TRANSLATOR -->
+    <div class="section">
+        <h2>🔄 AI Translator</h2>
+
+        <div class="language-row">
+            <div>
+                <label for="fromLanguage"><strong>From Language</strong></label>
+                <select id="fromLanguage">
+                    <option value="English">🇬🇧 English</option>
+                    <option value="Tamil">🇮🇳 Tamil</option>
+                    <option value="Hindi">🇮🇳 Hindi</option>
+                    <option value="French">🇫🇷 French</option>
+                    <option value="German">🇩🇪 German</option>
+                    <option value="Spanish">🇪🇸 Spanish</option>
+                    <option value="Japanese">🇯🇵 Japanese</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="toLanguage"><strong>To Language</strong></label>
+                <select id="toLanguage">
+                    <option value="Tamil">🇮🇳 Tamil</option>
+                    <option value="English">🇬🇧 English</option>
+                    <option value="Hindi">🇮🇳 Hindi</option>
+                    <option value="French">🇫🇷 French</option>
+                    <option value="German">🇩🇪 German</option>
+                    <option value="Spanish">🇪🇸 Spanish</option>
+                    <option value="Japanese">🇯🇵 Japanese</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="translator-grid">
+            <div class="translation-box">
+                <h3>✍️ Your Text</h3>
+                <textarea id="sourceText" placeholder="Type or paste your text here..."></textarea>
+            </div>
+
+            <div class="translation-box">
+                <h3>🌐 Translation</h3>
+                <div id="translationOutput" class="output" aria-live="polite">
+                    Your translation will appear here.
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" id="translateButton" onclick="translateText()">
+            🔄 Translate
+        </button>
+    </div>
+
+    <!-- PRONUNCIATION -->
+    <div class="section">
+        <h2>🗣️ Pronunciation Practice</h2>
+
+        <div class="pronunciation-box">
+            <p>Enter a word or sentence and listen to its pronunciation.</p>
+
+            <input
+                type="text"
+                id="pronunciationText"
+                placeholder="Enter a word or sentence..."
+            >
+
+            <br><br>
+
+            <label for="pronunciationLanguage"><strong>Pronunciation Language</strong></label>
+            <select id="pronunciationLanguage">
+                <option value="en-US">English</option>
+                <option value="ta-IN">Tamil</option>
+                <option value="hi-IN">Hindi</option>
+                <option value="fr-FR">French</option>
+                <option value="de-DE">German</option>
+                <option value="es-ES">Spanish</option>
+                <option value="ja-JP">Japanese</option>
+            </select>
+
+            <br><br>
+
+            <button class="btn" onclick="speakText()">🔊 Listen</button>
+            <button class="btn" onclick="stopSpeaking()">⏹ Stop</button>
+
+            <div id="wordDisplay" class="word-display"></div>
+        </div>
+    </div>
+
+    <!-- CONVERSATION PRACTICE -->
+    <div class="section">
+        <h2>💬 AI Conversation Practice</h2>
+        <p>Practice real-life conversations in English.</p>
+
+        <label for="conversationType"><strong>Choose a situation</strong></label>
+        <select id="conversationType">
+            <option>Job Interview</option>
+            <option>College Presentation</option>
+            <option>Travel</option>
+            <option>Customer Service</option>
+            <option>Daily Conversation</option>
+            <option>Group Discussion</option>
+        </select>
+
+        <br><br>
+
+        <div class="conversation">
+            <div class="ai-message">
+                🤖 <strong>Practice prompt:</strong>
+                <span id="conversationPrompt">Hello! Let's practice together. Tell me about yourself.</span>
+            </div>
+
+            <div id="conversationResponse" class="user-message" aria-live="polite">
+                Your response will appear here.
+            </div>
+
+            <div id="conversationFeedback" class="ai-message" aria-live="polite"></div>
+        </div>
+
+        <br>
+
+        <input
+            type="text"
+            id="conversationInput"
+            placeholder="Type your response..."
+        >
+
+        <br><br>
+
+        <button class="btn" onclick="sendConversation()">💬 Send</button>
+        <button class="btn" onclick="nextConversationPrompt()">➡ Next Prompt</button>
+    </div>
+
+    <!-- WRITING IMPROVER -->
+    <div class="section">
+        <h2>✍️ Writing Improver</h2>
+        <p>Write a sentence or paragraph to receive basic writing suggestions.</p>
+
+        <textarea
+            id="writingText"
+            placeholder="Write your paragraph here..."
+        ></textarea>
+
+        <br><br>
+
+        <button class="btn" onclick="improveWriting()">✨ Improve Writing</button>
+
+        <br><br>
+
+        <div id="writingOutput" class="output" aria-live="polite">
+            Your writing feedback will appear here.
+        </div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div class="section">
+        <h2>📖 Vocabulary Builder</h2>
+
+        <div class="card-grid">
+            <div class="word-card">
+                <strong>Innovative</strong>
+                <p>Introducing new ideas or methods.</p>
+                <button class="btn" onclick="speakWord('Innovative')">🔊 Listen</button>
+            </div>
+
+            <div class="word-card">
+                <strong>Achieve</strong>
+                <p>Successfully reach a goal.</p>
+                <button class="btn" onclick="speakWord('Achieve')">🔊 Listen</button>
+            </div>
+
+            <div class="word-card">
+                <strong>Adapt</strong>
+                <p>Adjust to a new situation.</p>
+                <button class="btn" onclick="speakWord('Adapt')">🔊 Listen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LANGUAGE GOAL -->
+    <div class="section">
+        <h2>🎯 My Language Goal</h2>
+
+        <div class="goal-box">
+            <h3>🇬🇧 Improve English</h3>
+            <p>🔥 Current streak: <strong>5 days</strong></p>
+            <p>📖 Words learned: <strong>126</strong></p>
+            <p>💬 Conversations practiced: <strong>18</strong></p>
+            <p>⏱ Practice time: <strong>4h 20m</strong></p>
+
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <strong>75% Goal Progress</strong>
+        </div>
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="back-btn">← Back to Dashboard</a>
+
+</div>
+
+<script>
+    /* TRANSLATOR */
+    async function translateText() {
+        const text = document.getElementById("sourceText").value.trim();
+        const from = document.getElementById("fromLanguage").value;
+        const to = document.getElementById("toLanguage").value;
+        const output = document.getElementById("translationOutput");
+        const button = document.getElementById("translateButton");
+
+        if (!text) {
+            output.textContent = "Please enter some text first.";
+            return;
+        }
+
+        if (from === to) {
+            output.textContent = text;
+            return;
+        }
+
+        const languageCodes = {
+            English: "en",
+            Tamil: "ta",
+            Hindi: "hi",
+            French: "fr",
+            German: "de",
+            Spanish: "es",
+            Japanese: "ja"
+        };
+
+        const fromCode = languageCodes[from];
+        const toCode = languageCodes[to];
+
+        output.textContent = "🔄 Translating...";
+        button.disabled = true;
+
+        try {
+            const params = new URLSearchParams({
+                q: text,
+                langpair: `${fromCode}|${toCode}`
+            });
+
+            const response = await fetch(
+                `https://api.mymemory.translated.net/get?${params.toString()}`
+            );
+
+            if (!response.ok) {
+                throw new Error("Translation request failed.");
+            }
+
+            const data = await response.json();
+            const translation = data?.responseData?.translatedText;
+
+            if (!translation || data?.responseStatus !== 200) {
+                throw new Error(data?.responseDetails || "No translation returned.");
+            }
+
+            output.textContent = translation;
+        } catch (error) {
+            console.error("Translation error:", error);
+            output.textContent =
+                "Translation failed. Please check your internet connection or try again later.";
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+    /* PRONUNCIATION */
+    function speakText() {
+        const text = document.getElementById("pronunciationText").value.trim();
+        const language = document.getElementById("pronunciationLanguage").value;
+        const display = document.getElementById("wordDisplay");
+
+        if (!text) {
+            display.textContent = "Please enter a word or sentence first.";
+            return;
+        }
+
+        if (!("speechSynthesis" in window)) {
+            display.textContent = "Speech is not supported in this browser.";
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+        display.textContent = text;
+
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = language;
+        window.speechSynthesis.speak(speech);
+    }
+
+    function speakWord(word) {
+        if (!("speechSynthesis" in window)) {
+            alert("Speech is not supported in this browser.");
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        const speech = new SpeechSynthesisUtterance(word);
+        speech.lang = "en-US";
+        window.speechSynthesis.speak(speech);
+    }
+
+    function stopSpeaking() {
+        if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+        }
+    }
+
+    /* CONVERSATION PRACTICE - DEMO */
+    const conversationPrompts = {
+        "Job Interview": [
+            "Tell me about yourself.",
+            "What are your strengths?",
+            "Why are you interested in this role?"
+        ],
+        "College Presentation": [
+            "Introduce your presentation topic.",
+            "Explain why this topic is important.",
+            "Summarize your main point."
+        ],
+        "Travel": [
+            "Ask how to get to the railway station.",
+            "Ask for the price of a ticket.",
+            "Explain that you need help finding your hotel."
+        ],
+        "Customer Service": [
+            "Explain a problem with a product.",
+            "Ask how to return an item.",
+            "Politely ask for an update on your request."
+        ],
+        "Daily Conversation": [
+            "Tell me about your day.",
+            "Describe your favorite hobby.",
+            "What are your plans for tomorrow?"
+        ],
+        "Group Discussion": [
+            "Share your opinion on online learning.",
+            "Give one reason to support your opinion.",
+            "Politely respond to a different point of view."
+        ]
+    };
+
+    let conversationPromptIndex = 0;
+
+    function nextConversationPrompt() {
+        const type = document.getElementById("conversationType").value;
+        const prompts = conversationPrompts[type] || conversationPrompts["Daily Conversation"];
+
+        document.getElementById("conversationPrompt").textContent =
+            prompts[conversationPromptIndex % prompts.length];
+
+        conversationPromptIndex++;
+        document.getElementById("conversationResponse").textContent =
+            "Your response will appear here.";
+        document.getElementById("conversationFeedback").textContent = "";
+    }
+
+    function sendConversation() {
+        const input = document.getElementById("conversationInput");
+        const response = document.getElementById("conversationResponse");
+        const feedback = document.getElementById("conversationFeedback");
+        const text = input.value.trim();
+
+        if (!text) {
+            feedback.textContent = "Please type a response first.";
+            return;
+        }
+
+        response.textContent = "👤 You: " + text;
+
+        const words = text.split(/\s+/).filter(Boolean).length;
+        let message = "Good effort! Keep practising your English.";
+
+        if (words < 4) {
+            message = "Try writing a longer sentence with more detail.";
+        } else if (!/[.!?]$/.test(text)) {
+            message = "Your response is understandable. Try adding punctuation at the end.";
+        } else if (/^[a-z]/.test(text)) {
+            message = "Remember to begin your sentence with a capital letter.";
+        }
+
+        feedback.textContent = "💡 Practice tip: " + message;
+        input.value = "";
+    }
+
+    /* WRITING IMPROVER - BASIC LOCAL FEEDBACK */
+    function improveWriting() {
+        const text = document.getElementById("writingText").value.trim();
+        const output = document.getElementById("writingOutput");
+
+        if (!text) {
+            output.textContent = "Please write something first.";
+            return;
+        }
+
+        const suggestions = [];
+        let improved = text;
+
+        if (/^[a-z]/.test(improved)) {
+            improved = improved.charAt(0).toUpperCase() + improved.slice(1);
+            suggestions.push("Start your sentence with a capital letter.");
+        }
+
+        if (!/[.!?]$/.test(improved)) {
+            improved += ".";
+            suggestions.push("Add punctuation at the end.");
+        }
+
+        if (/\s{2,}/.test(improved)) {
+            improved = improved.replace(/\s{2,}/g, " ");
+            suggestions.push("Extra spaces have been removed.");
+        }
+
+        output.textContent =
+            "Original text:\n" + text +
+            "\n\nSuggested version:\n" + improved +
+            "\n\nSuggestions:\n" +
+            (suggestions.length ? "• " + suggestions.join("\n• ") :
+                "• Your text passed these basic checks. Review grammar and meaning manually.");
+
+    }
+</script>
+
+</body>
+</html>

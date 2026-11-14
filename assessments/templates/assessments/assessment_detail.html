@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ assessment.title }} | SmartLearn</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6fc;
+            margin: 0;
+            color: #202747;
+        }
+
+        header {
+            background: white;
+            padding: 18px 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        header a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+
+        h1 { margin-top: 0; font-size: 28px; }
+        h2 { font-size: 21px; }
+        .subtitle { color: #718096; }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            background: #f7f8fc;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-item small {
+            display: block;
+            color: #718096;
+            margin-bottom: 7px;
+        }
+
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .stat-card p {
+            color: #718096;
+            margin: 0 0 10px;
+        }
+
+        .stat-card h2 {
+            margin: 0;
+            font-size: 27px;
+            color: #2563eb;
+        }
+
+        .primary-btn, .secondary-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary-btn:hover { background: #1d4ed8; }
+
+        .secondary-btn {
+            background: #edf0f5;
+            color: #263247;
+        }
+
+        .question-card {
+            border: 1px solid #e1e5ed;
+            padding: 20px;
+            border-radius: 9px;
+            margin-top: 15px;
+            background: white;
+        }
+
+        .question-heading {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .question-number {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .question-type {
+            background: #eaf1ff;
+            color: #2563eb;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .option {
+            background: #f7f8fc;
+            border: 1px solid #e5e7eb;
+            padding: 11px;
+            margin-top: 8px;
+            border-radius: 6px;
+        }
+
+        .answer-key {
+            background: #ecfdf5;
+            border-left: 4px solid #16a34a;
+            padding: 12px;
+            margin-top: 14px;
+            border-radius: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .marks {
+            color: #15803d;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            background: #f7f8fc;
+            border: 1px dashed #cbd5e1;
+            padding: 35px 15px;
+            border-radius: 9px;
+            margin-top: 15px;
+        }
+
+        .empty-state p { color: #718096; }
+
+        .messages { margin-bottom: 15px; }
+
+        .message {
+            background: #eaf8ef;
+            color: #16753b;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 8px;
+        }
+
+        .bottom-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        @media(max-width: 650px) {
+            .details-grid, .statistics {
+                grid-template-columns: 1fr;
+            }
+
+            .card { padding: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'assessments:dashboard' %}">
+        ← Back to Assessment Centre
+    </a>
+</header>
+
+<main class="container">
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- ASSESSMENT INFORMATION -->
+
+    <section class="card">
+
+        <h1>{{ assessment.title }}</h1>
+
+        <p class="subtitle">
+            Assessment Details and Question Management
+        </p>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+                <small>Assessment Type</small>
+                <strong>{{ assessment.get_assessment_type_display }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Status</small>
+                <strong>{{ assessment.get_status_display }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Start Date</small>
+                <strong>{{ assessment.start_date|date:"d M Y, h:i A" }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Deadline</small>
+                <strong>{{ assessment.end_date|date:"d M Y, h:i A" }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Duration</small>
+                <strong>{{ assessment.duration }} minutes</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Auto Evaluate</small>
+                <strong>{{ assessment.auto_evaluate|yesno:"Yes,No" }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Extra Retakes</small>
+                <strong>{{ assessment.extra_retakes }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Randomize Questions</small>
+                <strong>{{ assessment.randomize_questions|yesno:"Yes,No" }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Post Assessment Message</small>
+                <strong>{{ assessment.post_message|default:"No message" }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <small>Created Date</small>
+                <strong>{{ assessment.created_at|date:"d M Y" }}</strong>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- QUESTION STATISTICS -->
+
+    <section class="statistics">
+
+        <div class="stat-card">
+            <p>Total Questions</p>
+            <h2>{{ total_questions }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Total Marks</p>
+            <h2>{{ total_marks }}</h2>
+        </div>
+
+    </section>
+
+    <!-- QUESTION BUILDER -->
+
+    <section class="card">
+
+        <div class="question-heading">
+            <div>
+                <h2>Assessment Questions</h2>
+                <p class="subtitle">
+                    Review the questions created for this assessment.
+                </p>
+            </div>
+
+            {% if assessment.status == "draft" %}
+                <a href="{% url 'assessments:add_question' assessment.pk %}"
+                   class="primary-btn">
+                    + Add Question
+                </a>
+            {% endif %}
+        </div>
+
+        {% for question in questions %}
+
+            <article class="question-card">
+
+                <div class="question-heading">
+                    <span class="question-number">
+                        Question {{ forloop.counter }}
+                    </span>
+
+                    <span class="question-type">
+                        {{ question.get_question_type_display }}
+                    </span>
+                </div>
+
+                <h3>{{ question.question_text }}</h3>
+
+                <!-- MCQ OPTIONS -->
+
+                {% if question.question_type == "mcq" %}
+                    <h4>Answer Options</h4>
+
+                    {% for option in question.options %}
+                        <div class="option">
+                            {{ forloop.counter }}. {{ option }}
+                        </div>
+                    {% endfor %}
+
+                <!-- MATCHING PAIRS -->
+
+                {% elif question.question_type == "matching" %}
+                    <h4>Matching Pairs</h4>
+
+                    {% for pair in question.options %}
+                        <div class="option">
+                            <strong>{{ pair.left }}</strong>
+                            &nbsp; → &nbsp;
+                            {{ pair.right }}
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+
+                <!-- TEACHER-ONLY ANSWER / GUIDANCE -->
+
+                {% if question.correct_answer %}
+                    <div class="answer-key">
+                        <strong>Teacher Answer / Evaluation Guidance:</strong>
+                        <p>{{ question.correct_answer }}</p>
+                    </div>
+                {% endif %}
+
+                <p class="marks">
+                    Marks: {{ question.marks }}
+                </p>
+
+            </article>
+
+        {% empty %}
+
+            <div class="empty-state">
+                <h3>No Questions Added Yet</h3>
+
+                <p>
+                    Start creating questions for this assessment.
+                </p>
+
+                {% if assessment.status == "draft" %}
+                    <a href="{% url 'assessments:add_question' assessment.pk %}"
+                       class="primary-btn">
+                        + Create Your First Question
+                    </a>
+                {% endif %}
+            </div>
+
+        {% endfor %}
+
+        <div class="bottom-actions">
+
+            <a href="{% url 'assessments:dashboard' %}"
+               class="secondary-btn">
+                Back to Assessments
+            </a>
+
+            {% if assessment.status == "draft" %}
+                <a href="{% url 'assessments:add_question' assessment.pk %}"
+                   class="primary-btn">
+                    + Add Another Question
+                </a>
+            {% endif %}
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

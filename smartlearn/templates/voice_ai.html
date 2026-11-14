@@ -1,0 +1,981 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Voice AI | SmartLearn</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 255px;
+            height: 100vh;
+            background: linear-gradient(180deg, #081a3b, #102a5b);
+            color: white;
+            padding: 20px 14px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo span {
+            color: #35B957;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            color: #aebbd2;
+            margin: 20px 10px 8px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+            padding: 12px 14px;
+            margin-bottom: 5px;
+            border-radius: 9px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .sidebar a.active {
+            background: #35B957;
+            color: white;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+            margin-left: 255px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: white;
+            padding: 22px 28px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .top-header h1 {
+            margin: 0;
+            color: #24528A;
+            font-size: 30px;
+        }
+
+        .top-header p {
+            margin: 8px 0 0;
+            color: #6b7280;
+        }
+
+        /* =========================
+           VOICE AI CARD
+        ========================= */
+
+        .voice-container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .voice-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+        }
+
+        .voice-icon {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #e9f8ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin: 0 auto 15px;
+        }
+
+        .voice-card h2 {
+            text-align: center;
+            margin: 5px 0;
+            color: #24528A;
+        }
+
+        .voice-description {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           LANGUAGE
+        ========================= */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #d5dbe5;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        select:focus,
+        textarea:focus {
+            border-color: #35B957;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .voice-button {
+            background: #24528A;
+            color: white;
+        }
+
+        .voice-button:hover {
+            background: #193e6b;
+        }
+
+        .send-button {
+            background: #35B957;
+            color: white;
+        }
+
+        .send-button:hover {
+            background: #269a45;
+        }
+
+        .stop-button {
+            background: #dc3545;
+            color: white;
+        }
+
+        .speak-button {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .clear-button {
+            background: #e5e7eb;
+            color: #172033;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+            margin-top: 18px;
+            padding: 12px 15px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .status.listening {
+            background: #fff1f2;
+            color: #dc2626;
+        }
+
+        /* =========================
+           CONVERSATION
+        ========================= */
+
+        .conversation {
+            margin-top: 30px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 25px;
+        }
+
+        .conversation h3 {
+            color: #24528A;
+            margin-bottom: 18px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .user-message {
+            background: #e8f1ff;
+            border-left: 4px solid #24528A;
+        }
+
+        .ai-message {
+            background: #ecfdf3;
+            border-left: 4px solid #35B957;
+        }
+
+        .message-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Smart<span>Learn</span>
+    </div>
+
+    <div class="menu-title">Main</div>
+
+    <a href="{% url 'dashboard' %}">
+        🏠 Dashboard
+    </a>
+
+    <div class="menu-title">AI Modules</div>
+
+    <a href="{% url 'module_page' 'learning' %}">
+        📚 Learning AI
+    </a>
+
+    <a href="{% url 'module_page' 'languages' %}">
+        🌐 Language AI
+    </a>
+
+    <a href="{% url 'module_page' 'videos' %}">
+        🎥 Video AI
+    </a>
+
+    <a href="{% url 'module_page' 'summary' %}">
+        📄 Summary AI
+    </a>
+
+    <a href="{% url 'module_page' 'notes' %}">
+        📝 Notes AI
+    </a>
+
+    <a href="{% url 'module_page' 'tutor' %}">
+        👨‍🏫 Tutor AI
+    </a>
+
+    <a href="{% url 'module_page' 'adaptive' %}">
+        🧠 Adaptive AI
+    </a>
+
+    <a href="{% url 'module_page' 'quizzes' %}">
+        ❓ Quiz AI
+    </a>
+
+    <a href="{% url 'module_page' 'analytics' %}">
+        📊 Analytics AI
+    </a>
+
+    <a href="{% url 'module_page' 'gamification' %}">
+        🎮 Gamification
+    </a>
+
+    <a href="{% url 'module_page' 'voice' %}" class="active">
+        🎤 Voice AI
+    </a>
+
+    <a href="{% url 'module_page' 'learntwin' %}">
+        🤖 LearnTwin
+    </a>
+
+    <a href="{% url 'module_page' 'community' %}">
+        👥 Community
+    </a>
+
+    <a href="{% url 'module_page' 'offline' %}">
+        📱 Offline Learning
+    </a>
+
+    <a href="{% url 'module_page' 'career' %}">
+        💼 Career AI
+    </a>
+
+    <a href="{% url 'module_page' 'portfolio' %}">
+        🏆 Portfolio
+    </a>
+
+</div>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="main-content">
+
+    <div class="top-header">
+        <h1>🎤 Voice AI</h1>
+        <p>Talk with your AI learning assistant using your voice.</p>
+    </div>
+
+    <div class="voice-container">
+
+        <div class="voice-card">
+
+            <div class="voice-icon">
+                🎤
+            </div>
+
+            <h2>Voice Learning Assistant</h2>
+
+            <p class="voice-description">
+                Speak your question and let SmartLearn AI help you learn.
+            </p>
+
+
+            <!-- LANGUAGE -->
+
+            <div class="form-group">
+
+                <label for="language">
+                    🌐 Select Language
+                </label>
+
+                <select id="language">
+
+                    <option value="en-IN">
+                        English
+                    </option>
+
+                    <option value="ta-IN">
+                        Tamil
+                    </option>
+
+                    <option value="hi-IN">
+                        Hindi
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TEXT -->
+
+            <div class="form-group">
+
+                <label for="message">
+                    💬 Your Question
+                </label>
+
+                <textarea
+                    id="message"
+                    placeholder="Type your question here or click Start Voice and speak..."
+                ></textarea>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-row">
+
+                <button
+                    class="voice-button"
+                    onclick="startVoice()"
+                >
+                    🎤 Start Voice
+                </button>
+
+                <button
+                    class="stop-button"
+                    onclick="stopVoice()"
+                >
+                    ⏹ Stop Listening
+                </button>
+
+                <button
+                    class="send-button"
+                    onclick="sendMessage()"
+                >
+                    🚀 Ask AI
+                </button>
+
+                <button
+                    class="speak-button"
+                    onclick="speakAnswer()"
+                >
+                    🔊 Speak Answer
+                </button>
+
+                <button
+                    class="stop-button"
+                    onclick="stopSpeaking()"
+                >
+                    🔇 Stop Voice
+                </button>
+
+                <button
+                    class="clear-button"
+                    onclick="clearChat()"
+                >
+                    🗑 Clear
+                </button>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div
+                id="status"
+                class="status"
+            >
+                Ready. Click "Start Voice" to speak.
+            </div>
+
+
+            <!-- CONVERSATION -->
+
+            <div class="conversation">
+
+                <h3>
+                    💬 Conversation
+                </h3>
+
+                <div id="conversationArea">
+
+                    <div class="message ai-message">
+
+                        <div class="message-title">
+                            SmartLearn AI
+                        </div>
+
+                        Hello Swetha! 👋
+                        Ask me anything about your studies.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     HIDDEN CSRF TOKEN
+========================= -->
+
+<form style="display:none;">
+    {% csrf_token %}
+</form>
+
+
+<script>
+
+    /* =========================================
+       SPEECH RECOGNITION
+    ========================================= */
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    let recognition = null;
+
+    let isListening = false;
+
+
+    if (SpeechRecognition) {
+
+        recognition = new SpeechRecognition();
+
+        recognition.continuous = false;
+
+        recognition.interimResults = false;
+
+        recognition.lang = "en-IN";
+
+
+        recognition.onstart = function() {
+
+            isListening = true;
+
+            const status =
+                document.getElementById("status");
+
+            status.innerText =
+                "🎤 Listening... Please speak now.";
+
+            status.classList.add("listening");
+
+        };
+
+
+        recognition.onresult = function(event) {
+
+            const transcript =
+                event.results[0][0].transcript;
+
+            document.getElementById("message").value =
+                transcript;
+
+            document.getElementById("status").innerText =
+                "✅ Voice captured successfully.";
+
+            document
+                .getElementById("status")
+                .classList.remove("listening");
+
+        };
+
+
+        recognition.onerror = function(event) {
+
+            document.getElementById("status").innerText =
+                "❌ Voice error: " + event.error;
+
+            document
+                .getElementById("status")
+                .classList.remove("listening");
+
+        };
+
+
+        recognition.onend = function() {
+
+            isListening = false;
+
+            document
+                .getElementById("status")
+                .classList.remove("listening");
+
+        };
+
+    }
+
+
+    /* =========================================
+       START VOICE
+    ========================================= */
+
+    function startVoice() {
+
+        if (!recognition) {
+
+            alert(
+                "Voice recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge."
+            );
+
+            return;
+        }
+
+        const selectedLanguage =
+            document.getElementById("language").value;
+
+        recognition.lang = selectedLanguage;
+
+        recognition.start();
+
+    }
+
+
+    /* =========================================
+       STOP VOICE
+    ========================================= */
+
+    function stopVoice() {
+
+        if (recognition && isListening) {
+
+            recognition.stop();
+
+            document.getElementById("status").innerText =
+                "⏹ Voice listening stopped.";
+
+        }
+
+    }
+
+
+    /* =========================================
+       SEND MESSAGE TO AI
+    ========================================= */
+
+    async function sendMessage() {
+
+        const message =
+            document.getElementById("message").value.trim();
+
+        const language =
+            document.getElementById("language").value;
+
+
+        if (!message) {
+
+            alert("Please type or speak a question first.");
+
+            return;
+
+        }
+
+
+        addMessage(
+            "You",
+            message,
+            "user-message"
+        );
+
+
+        document.getElementById("message").value = "";
+
+
+        document.getElementById("status").innerText =
+            "🤖 SmartLearn AI is thinking...";
+
+
+        try {
+
+            const csrfToken =
+                document.querySelector(
+                    "[name=csrfmiddlewaretoken]"
+                ).value;
+
+
+            const response = await fetch(
+                "{% url 'voice_ai_api' %}",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+
+                    body: JSON.stringify({
+
+                        message: message,
+
+                        language: language
+
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (data.success) {
+
+                addMessage(
+                    "SmartLearn AI",
+                    data.answer,
+                    "ai-message"
+                );
+
+
+                window.lastAIAnswer =
+                    data.answer;
+
+
+                document.getElementById("status").innerText =
+                    "✅ AI response received.";
+
+            }
+
+            else {
+
+                addMessage(
+                    "SmartLearn AI",
+                    "❌ " + data.error,
+                    "ai-message"
+                );
+
+
+                document.getElementById("status").innerText =
+                    "❌ Unable to get AI response.";
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+
+            addMessage(
+                "SmartLearn AI",
+                "❌ Something went wrong while connecting to the AI.",
+                "ai-message"
+            );
+
+
+            document.getElementById("status").innerText =
+                "❌ Connection error.";
+
+        }
+
+    }
+
+
+    /* =========================================
+       ADD MESSAGE
+    ========================================= */
+
+    function addMessage(
+        title,
+        text,
+        className
+    ) {
+
+        const area =
+            document.getElementById("conversationArea");
+
+
+        const messageDiv =
+            document.createElement("div");
+
+        messageDiv.className =
+            "message " + className;
+
+
+        const titleDiv =
+            document.createElement("div");
+
+        titleDiv.className =
+            "message-title";
+
+        titleDiv.innerText =
+            title;
+
+
+        const textDiv =
+            document.createElement("div");
+
+        textDiv.innerText =
+            text;
+
+
+        messageDiv.appendChild(titleDiv);
+
+        messageDiv.appendChild(textDiv);
+
+        area.appendChild(messageDiv);
+
+
+        messageDiv.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+
+
+    /* =========================================
+       TEXT TO SPEECH
+    ========================================= */
+
+    function speakAnswer() {
+
+        if (!window.lastAIAnswer) {
+
+            alert(
+                "There is no AI answer to speak yet."
+            );
+
+            return;
+
+        }
+
+
+        if (!("speechSynthesis" in window)) {
+
+            alert(
+                "Text-to-speech is not supported in this browser."
+            );
+
+            return;
+
+        }
+
+
+        speechSynthesis.cancel();
+
+
+        const language =
+            document.getElementById("language").value;
+
+
+        const speech =
+            new SpeechSynthesisUtterance(
+                window.lastAIAnswer
+            );
+
+
+        speech.lang =
+            language;
+
+
+        speech.rate = 0.95;
+
+        speech.pitch = 1;
+
+
+        speechSynthesis.speak(
+            speech
+        );
+
+
+        document.getElementById("status").innerText =
+            "🔊 Speaking AI answer...";
+
+    }
+
+
+    /* =========================================
+       STOP SPEAKING
+    ========================================= */
+
+    function stopSpeaking() {
+
+        if ("speechSynthesis" in window) {
+
+            speechSynthesis.cancel();
+
+            document.getElementById("status").innerText =
+                "⏹ AI voice stopped.";
+
+        }
+
+    }
+
+
+    /* =========================================
+       CLEAR CHAT
+    ========================================= */
+
+    function clearChat() {
+
+        document.getElementById(
+            "conversationArea"
+        ).innerHTML = "";
+
+
+        window.lastAIAnswer = "";
+
+
+        document.getElementById("status").innerText =
+            "Conversation cleared.";
+
+    }
+
+</script>
+
+</body>
+</html>

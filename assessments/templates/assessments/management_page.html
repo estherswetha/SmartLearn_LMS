@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ page_title }} | SmartLearn</title>
+<style>
+body{font-family:Arial;background:#f6f8fc;margin:0;color:#263247}
+header{background:white;padding:20px 30px;border-bottom:1px solid #ddd}
+header a{color:#2563eb;text-decoration:none}
+main{max-width:1000px;margin:35px auto;padding:20px}
+.panel{background:white;padding:22px;border:1px solid #e5e7eb;border-radius:10px;margin:15px 0}
+input{padding:11px;border:1px solid #ccc;border-radius:6px}
+button,.btn{padding:10px 15px;border:0;border-radius:6px;background:#2563eb;color:white;cursor:pointer;text-decoration:none}
+.delete{background:#dc2626}
+table{width:100%;border-collapse:collapse;background:white}
+td,th{padding:13px;border-bottom:1px solid #eee;text-align:left}
+</style>
+</head>
+<body>
+<header>
+    <a href="{% url 'assessments:dashboard' %}">← Back to Assessments</a>
+</header>
+
+<main>
+<h1>{{ page_title }}</h1>
+
+{% if messages %}
+    {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+{% endif %}
+
+{% if page_type == "questions" %}
+    <form method="GET" class="panel">
+        <input name="search" placeholder="Search questions..." value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% for question in questions %}
+    <div class="panel">
+        <strong>{{ question.assessment.title }}</strong>
+        <p>{{ question.question_text }}</p>
+        <small>{{ question.get_question_type_display }} | {{ question.marks }} marks</small>
+    </div>
+    {% empty %}
+    <div class="panel">No questions found. Add questions to an assessment first.</div>
+    {% endfor %}
+
+{% elif page_type == "tags" %}
+    <form method="POST" class="panel">
+        {% csrf_token %}
+        <h3>Create Assessment Tag</h3>
+        <input name="name" required maxlength="60" placeholder="Enter tag name">
+        <button type="submit">＋ Add Tag</button>
+    </form>
+
+    {% for tag in tags %}
+    <div class="panel">
+        {{ tag.name }}
+        <form method="POST" action="{% url 'assessments:delete_tag' tag.pk %}" style="display:inline">
+            {% csrf_token %}
+            <button class="delete" type="submit"
+                onclick="return confirm('Delete this tag?')">Delete</button>
+        </form>
+    </div>
+    {% empty %}
+    <div class="panel">No tags created yet.</div>
+    {% endfor %}
+
+{% elif page_type == "summary" %}
+    <div class="panel">
+        <h3>Total assessments: {{ total }}</h3>
+        <p>Draft: {{ drafts }}</p>
+        <p>Published: {{ published }}</p>
+        <p>Closed: {{ closed }}</p>
+        <p>Total questions: {{ question_count }}</p>
+    </div>
+
+{% elif page_type == "archive" %}
+    {% for assessment in assessments %}
+    <div class="panel">
+        <strong>{{ assessment.title }}</strong>
+        <p>{{ assessment.get_status_display }}</p>
+        <a class="btn" href="{% url 'assessments:detail' assessment.pk %}">View</a>
+        <form method="POST" action="{% url 'assessments:restore' assessment.pk %}" style="display:inline">
+            {% csrf_token %}
+            <button type="submit">Restore</button>
+        </form>
+    </div>
+    {% empty %}
+    <div class="panel">No archived assessments.</div>
+    {% endfor %}
+{% endif %}
+
+</main>
+</body>
+</html>
